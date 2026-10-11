@@ -6,6 +6,13 @@
   const COLOR = "#1a56db";
   const history = [];
 
+  // Language rule sent with every chat request (English first)
+  const LANGUAGE_RULE = {
+    role: "system",
+    content:
+      "Always reply in English. Only reply in Hindi or another language if the visitor writes to you in that language. This rule overrides any earlier language instruction.",
+  };
+
   const css = `
   #cb-btn{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;border:0;background:${COLOR};color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:99999}
   #cb-box{position:fixed;right:18px;bottom:86px;width:340px;max-width:calc(100vw - 36px);height:480px;max-height:calc(100vh - 110px);background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.25);display:none;flex-direction:column;overflow:hidden;z-index:99999;font-family:system-ui,sans-serif}
@@ -16,11 +23,11 @@
   .cb-u{align-self:flex-end;background:${COLOR};color:#fff}
   .cb-a{align-self:flex-start;background:#fff;color:#111;border:1px solid #e3e5e8}
   #cb-in{display:flex;border-top:1px solid #e3e5e8}
-  #cb-in input{flex:1;border:0;padding:12px;font-size:14px;outline:none}
+  #cb-in input{flex:1;border:0;padding:12px;font-size:14px;outline:none;color:#111;background:#fff}
   #cb-in button{border:0;background:none;color:${COLOR};font-weight:600;padding:0 14px;cursor:pointer}
   #cb-lead{display:none;flex:1;flex-direction:column;gap:10px;padding:14px;background:#f5f6f8;overflow-y:auto}
   #cb-lead p{margin:0;font-size:13px;color:#333}
-  #cb-lead input,#cb-lead textarea{border:1px solid #cfd3d8;border-radius:8px;padding:10px;font-size:14px;font-family:inherit;outline:none}
+  #cb-lead input,#cb-lead textarea{border:1px solid #cfd3d8;border-radius:8px;padding:10px;font-size:14px;font-family:inherit;outline:none;color:#111;background:#fff}
   #cb-lead textarea{min-height:90px;resize:vertical}
   #cb-lead .cb-send{background:${COLOR};color:#fff;border:0;border-radius:8px;padding:11px;font-size:14px;font-weight:600;cursor:pointer}
   #cb-lead .cb-back{background:none;border:0;color:${COLOR};cursor:pointer;font-size:13px}
@@ -74,7 +81,7 @@
     return d;
   }
 
-  add("Hi! Namaste! Ask me anything, in any language. To talk to Aryan directly, tap \"Leave a message\" at the top.", "bot");
+  add("Hi! Welcome to Mayhemic. Ask me anything about what we are building. To talk to Aryan directly, tap \"Leave a message\" at the top.", "bot");
 
   btn.onclick = () => {
     box.style.display = box.style.display === "flex" ? "none" : "flex";
@@ -131,7 +138,7 @@
       const r = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: [LANGUAGE_RULE].concat(history) }),
       });
       const { reply } = await r.json();
       wait.textContent = reply;
