@@ -62,9 +62,9 @@ p.s{color:var(--m);max-width:54ch;margin-top:22px;font-size:17px}
 @keyframes gr{to{background-position:-300% 0}}
 .btn{display:inline-block;margin-top:14px;padding:16px 38px;border:1px solid #fff;color:#fff;background:transparent;text-decoration:none;font:inherit;font-weight:700;font-size:15px;cursor:pointer;border-radius:50px;transition:background .3s,color .3s,transform .25s}
 .btn:hover{background:#fff;color:#040406}
-form{display:flex;flex-direction:column;gap:14px;max-width:480px;margin-top:30px}
-input,textarea{background:#ffffff08;border:1px solid var(--l);color:#fff;padding:16px;font:inherit;border-radius:10px;transition:border-color .3s,background .3s}
-input:focus,textarea:focus{outline:none;border-color:#9fd0ff;background:#ffffff0f}
+.cf{display:flex;flex-direction:column;gap:14px;max-width:480px;margin-top:30px}
+.cf input,.cf textarea{background:#ffffff08;border:1px solid var(--l);color:#fff;padding:16px;font:inherit;border-radius:10px;transition:border-color .3s,background .3s}
+.cf input:focus,.cf textarea:focus{outline:none;border-color:#9fd0ff;background:#ffffff0f}
 .fw{position:relative;z-index:2;font-family:Unbounded,sans-serif;font-weight:900;font-size:19vw;line-height:.82;text-align:center;white-space:nowrap;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.18);overflow:hidden;padding-top:6vh;text-transform:uppercase}
 footer{position:relative;z-index:2;padding:22px 6vw;font-size:14px;color:var(--m);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;border-top:1px solid var(--l);background:#040406}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#ld{display:none}.rv{opacity:1!important;transform:none!important;filter:none!important}h1{opacity:1}}
@@ -146,7 +146,7 @@ footer{position:relative;z-index:2;padding:22px 6vw;font-size:14px;color:var(--m
 <section id="contact">
   <h2 class="rv">Say hello</h2>
   <p class="s rv">Have an idea or a problem worth solving? Write to <a href="mailto:mayhemic.9@gmail.com">mayhemic.9@gmail.com</a> or leave a message here.</p>
-  <form class="rv" action="https://api.web3forms.com/submit" method="POST">
+  <form class="rv cf" action="https://api.web3forms.com/submit" method="POST">
     <input type="hidden" name="access_key" value="96892b45-7fc5-4a01-88e6-cb1a2880a3ca">
     <input type="hidden" name="subject" value="New message from mayhemic.in">
     <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
