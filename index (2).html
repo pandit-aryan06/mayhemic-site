@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mayhemic</title>
+<meta name="description" content="Mayhemic is a new company planning to build SaaS and automation tools.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--l:rgba(255,255,255,.16);--m:rgba(255,255,255,.66);--e:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#040406;color:#fff;font-family:Manrope,"Helvetica Neue",Arial,sans-serif;line-height:1.65;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.07;background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+:focus-visible{outline:2px solid #9fd0ff;outline-offset:3px}
+.au{position:fixed;border-radius:50%;filter:blur(110px);opacity:.2;z-index:0;animation:dr 18s ease-in-out infinite alternate}
+.a1{width:46vw;height:46vw;background:#2b52ff;left:-12vw;top:10vh}
+.a2{width:40vw;height:40vw;background:#7b3dff;right:-10vw;top:50vh;animation-delay:-9s}
+@keyframes dr{to{transform:translate(10vw,-12vh) scale(1.25)}}
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#fff,#9fd0ff);z-index:95}
+.cur{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px;border:1px solid #fffa;border-radius:50%;pointer-events:none;z-index:90;mix-blend-mode:difference;transition:width .3s,height .3s,margin .3s,background .3s}
+.cur.big{width:74px;height:74px;margin:-37px;background:#fff}
+@media(hover:none){.cur{display:none}}
+header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 6vw;z-index:70;opacity:0;transform:translateY(-100%);transition:.6s var(--e);background:#040406cc;backdrop-filter:blur(14px)}
+header.show{opacity:1;transform:none}
+header b{font-family:Unbounded,sans-serif;letter-spacing:.18em;font-size:13px}
+header a{text-decoration:none;font-size:14px;margin-left:26px;color:var(--m);transition:color .3s}
+header a:hover{color:#fff}
+section{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:16vh 6vw}
+#hero{align-items:center;text-align:center;padding:0;overflow:hidden}
+#g{position:absolute;left:50%;top:50%;width:min(92vw,92vh);height:min(92vw,92vh);transform:translate(-50%,-50%);opacity:.55}
+h1{position:relative;white-space:nowrap;font-family:Unbounded,"Arial Black",Impact,sans-serif;font-weight:900;font-size:clamp(30px,10.2vw,190px);line-height:1.1;text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.4);animation:in 1.8s var(--e) both 1.5s}
+h1::after{content:attr(data-t);position:absolute;inset:0;-webkit-text-stroke:0;background:radial-gradient(circle 280px at var(--mx,50%) var(--my,50%),#fff 0,#a9d4ff 35%,#7a63ff 65%,transparent 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes in{from{opacity:0;filter:blur(26px);transform:scale(1.08) translateY(24px)}}
+.sd{position:absolute;bottom:5vh;left:50%;width:1px;height:72px;background:var(--l);overflow:hidden}
+.sd::after{content:"";position:absolute;left:0;top:-32px;width:1px;height:32px;background:#fff;animation:sc 2.2s ease-in infinite}
+@keyframes sc{to{top:72px}}
+h2{font-family:Unbounded,sans-serif;font-weight:600;font-size:clamp(28px,5.2vw,68px);line-height:1.12;letter-spacing:-.02em;max-width:16ch}
+.big{font-family:Unbounded,sans-serif;font-weight:600;font-size:clamp(22px,3.8vw,50px);line-height:1.3;max-width:28ch;letter-spacing:-.01em}
+.big .w{display:inline-block;opacity:.14}
+p.s{color:var(--m);max-width:54ch;margin-top:22px;font-size:17px}
+.rv{opacity:0;transform:translateY(46px);filter:blur(8px);transition:opacity 1.1s var(--e),transform 1.1s var(--e),filter 1.1s var(--e)}
+.rv.in{opacity:1;transform:none;filter:none}
+.mq{position:relative;z-index:2;overflow:hidden;white-space:nowrap;border-block:1px solid var(--l);padding:26px 0}
+.mq div{display:inline-block;animation:mq 34s linear infinite;font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(28px,5.5vw,64px);color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.55);text-transform:uppercase}
+@keyframes mq{to{transform:translateX(-50%)}}
+.rows{margin-top:56px}
+.row{position:relative;display:grid;grid-template-columns:1.1fr 1.5fr auto;gap:28px;align-items:center;padding:40px 0;border-top:1px solid var(--l);transition:background .5s}
+.row:last-child{border-bottom:1px solid var(--l)}
+.row::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:0;background:linear-gradient(90deg,#fff,#9fd0ff);transition:width .9s var(--e)}
+.row:hover{background:linear-gradient(90deg,#ffffff0d,transparent)}
+.row:hover::after{width:100%}
+.row h3{font-family:Unbounded,sans-serif;font-weight:600;font-size:clamp(22px,3.2vw,42px);transition:transform .6s var(--e)}
+.row:hover h3{transform:translateX(18px)}
+.row p{color:var(--m)}
+.chip{font-size:13px;padding:6px 16px;border:1px solid var(--l);border-radius:30px;color:#bcdcff}
+@media(max-width:760px){.row{grid-template-columns:1fr;gap:12px;padding:30px 0}header a{margin-left:14px;font-size:13px}}
+.name{font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(36px,8.4vw,118px);line-height:1.05;background:linear-gradient(100deg,#fff 20%,#9fd0ff 40%,#b79cff 60%,#fff 80%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gr 8s linear infinite}
+@keyframes gr{to{background-position:-300% 0}}
+.btn{display:inline-block;margin-top:14px;padding:16px 38px;border:1px solid #fff;color:#fff;background:transparent;text-decoration:none;font:inherit;font-weight:700;font-size:15px;cursor:pointer;border-radius:50px;transition:background .3s,color .3s,transform .25s}
+.btn:hover{background:#fff;color:#040406}
+form{display:flex;flex-direction:column;gap:14px;max-width:480px;margin-top:30px}
+input,textarea{background:#ffffff08;border:1px solid var(--l);color:#fff;padding:16px;font:inherit;border-radius:10px;transition:border-color .3s,background .3s}
+input:focus,textarea:focus{outline:none;border-color:#9fd0ff;background:#ffffff0f}
+.fw{position:relative;z-index:2;font-family:Unbounded,sans-serif;font-weight:900;font-size:19vw;line-height:.82;text-align:center;white-space:nowrap;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.18);overflow:hidden;padding-top:6vh;text-transform:uppercase}
+footer{position:relative;z-index:2;padding:22px 6vw;font-size:14px;color:var(--m);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;border-top:1px solid var(--l);background:#040406}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#ld{display:none}.rv{opacity:1!important;transform:none!important;filter:none!important}h1{opacity:1}}
+#ld{position:fixed;inset:0;z-index:99;background:#040406;display:grid;place-items:center;animation:lo 1s var(--e) 1.3s forwards}
+#ld i{display:block;width:0;height:1px;background:#fff;animation:ll 1.2s var(--e) forwards}
+@keyframes ll{to{width:min(60vw,360px)}}
+@keyframes lo{from{clip-path:inset(0)}to{clip-path:inset(0 0 100% 0);visibility:hidden}}
+#hw{will-change:transform,opacity}
+.hs{padding:0;display:block;min-height:0;height:340vh}
+.hs .pin{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.fl{display:flex;align-items:center;margin-top:56px}
+.nd{padding:20px 26px;border:1px solid var(--l);border-radius:14px;background:#ffffff08;font-weight:700;white-space:nowrap;animation:gw 6s infinite}
+.nd:nth-child(3){animation-delay:1.5s}.nd:nth-child(5){animation-delay:3s}.nd:nth-child(7){animation-delay:4.5s}
+@keyframes gw{0%,22%,100%{border-color:var(--l);box-shadow:none}8%{border-color:#9fd0ff;box-shadow:0 0 34px #7a9fff66}}
+.ln{flex:1;min-width:24px;height:1px;background:var(--l);position:relative;overflow:hidden}
+.ln::after{content:"";position:absolute;top:0;left:-40%;width:40%;height:100%;background:linear-gradient(90deg,transparent,#9fd0ff,transparent);animation:tv 6s linear infinite}
+.ln:nth-child(2){--d:.6s}.ln:nth-child(4){--d:2.1s}.ln:nth-child(6){--d:3.6s}
+.ln::after{animation-delay:var(--d)}
+@keyframes tv{0%{left:-40%}25%,100%{left:100%}}
+@media(max-width:860px){.fl{flex-direction:column;align-items:stretch}.nd{text-align:center}.ln{flex:none;height:34px;width:1px;align-self:center}.ln::after{display:none}}
+#wl{position:fixed;right:22px;bottom:96px;z-index:85;max-width:min(290px,calc(100vw - 44px));padding:16px 18px;border-radius:18px 18px 4px 18px;background:#fff;color:#040406;font-size:15px;font-weight:700;line-height:1.45;box-shadow:0 20px 60px #7a9fff66;cursor:pointer;opacity:0;transform:translateY(20px) scale(.9);transform-origin:bottom right;pointer-events:none;transition:opacity .6s var(--e),transform .6s var(--e)}
+#wl.on{opacity:1;transform:none;pointer-events:auto}
+#wl small{display:block;font-weight:500;color:#555;margin-top:4px;font-size:13px}
+#wl button{position:absolute;top:-10px;left:-10px;width:26px;height:26px;border-radius:50%;border:0;background:#040406;color:#fff;cursor:pointer;font-size:15px;line-height:1}
+.ty{display:inline-flex;gap:5px;padding:6px 0}.ty i{width:7px;height:7px;border-radius:50%;background:#040406;animation:bn 1s infinite}.ty i:nth-child(2){animation-delay:.15s}.ty i:nth-child(3){animation-delay:.3s}
+@keyframes bn{50%{transform:translateY(-5px);opacity:.35}}
+#ring{position:fixed;display:none;z-index:84;border-radius:50%;pointer-events:none;border:2px solid #9fd0ff;animation:rg 2.2s infinite}
+@keyframes rg{0%{transform:scale(1);opacity:.9}100%{transform:scale(2);opacity:0}}
+#ch{position:absolute;inset:0;width:100%;height:100%}
+.msg{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none;padding:0 6vw}
+.msg h2{grid-area:1/1;max-width:none;font-weight:900;font-size:clamp(34px,7vw,100px);text-shadow:0 0 30px #040406,0 0 70px #040406,0 0 120px #040406;transition:opacity .7s,transform .7s}
+#m2{opacity:0;transform:translateY(34px)}
+.ord #m1{opacity:0;transform:translateY(-34px)}
+.ord #m2{opacity:1;transform:none}
+.shake{animation:sk .6s}
+@keyframes sk{10%{transform:translate(-10px,5px)}30%{transform:translate(11px,-6px)}50%{transform:translate(-8px,-5px)}70%{transform:translate(6px,7px)}}
+#toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:98;font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(24px,6vw,70px);opacity:0;pointer-events:none;text-align:center;text-shadow:0 0 40px #7a9fff}
+#toast.on{animation:ts 2s}
+@keyframes ts{0%{opacity:0;transform:translate(-50%,-50%) scale(.8)}15%,70%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0}}
+@keyframes bb{0%,100%{transform:none}50%{transform:translateY(-7px)}}
+#wl.on{animation:bb 2s ease-in-out 1.6s infinite}
+</style>
+</head>
+<body>
+<div id="ld"><i></i></div><div id="toast">Order restored.</div><div id="bar"></div><div class="cur" id="cur"></div>
+<div class="au a1"></div><div class="au a2"></div>
+
+<header><b>MAYHEMIC</b><nav><a href="#about">About</a><a href="#plan">Plan</a><a href="#roadmap">Idea</a><a href="#founder">Founder</a><a href="#contact">Contact</a></nav></header>
+
+<section id="hero">
+  <canvas id="g"></canvas>
+  <div id="hw"><h1 id="t" data-t="Mayhemic">Mayhemic</h1></div>
+  <div class="sd"></div>
+</section>
+
+<section id="about">
+  <p class="big" id="stmt">Mayhemic is a new company. We are starting from zero, and we plan to build SaaS and automation that give people their time back.</p>
+  <p class="s rv">No products are live yet. This page shows where we are and where we are going.</p>
+</section>
+
+<div class="mq" aria-hidden="true"><div>SaaS &nbsp;/&nbsp; Automation &nbsp;/&nbsp; Workflows &nbsp;/&nbsp; AI helpers &nbsp;/&nbsp; SaaS &nbsp;/&nbsp; Automation &nbsp;/&nbsp; Workflows &nbsp;/&nbsp; AI helpers &nbsp;/&nbsp;</div></div>
+
+<section id="plan">
+  <h2 class="rv">What we plan to build</h2>
+  <div class="rows rv">
+    <div class="row"><h3>SaaS</h3><p>Online software for one clear problem at a time. Our first idea is fee management for schools that still run on paper.</p><span class="chip">Planning</span></div>
+    <div class="row"><h3>Automation</h3><p>Tools that handle repeated work, such as reminders and daily summaries on WhatsApp, so people save hours each week.</p><span class="chip">Planning</span></div>
+    <div class="row"><h3>AI helpers</h3><p>Assistants built into our products that answer questions and take care of small tasks.</p><span class="chip">Exploring</span></div>
+  </div>
+</section>
+
+<section id="flow">
+  <h2 class="rv">An idea of how it will feel</h2>
+  <p class="s rv">A concept for our first product. Fees are tracked and parents are reminded on their own, so nobody has to chase them.</p>
+  <div class="fl rv"><div class="nd">Student list</div><div class="ln"></div><div class="nd">Fee tracking</div><div class="ln"></div><div class="nd">WhatsApp reminder</div><div class="ln"></div><div class="nd">Daily report</div></div>
+</section>
+
+<section class="hs" id="roadmap"><div class="pin"><canvas id="ch"></canvas><div class="msg"><h2 id="m1">Work is mayhem.</h2><h2 id="m2">We make it order.</h2></div></div></section>
+
+<section id="founder">
+  <p class="s rv" style="margin:0 0 16px">The person behind Mayhemic</p>
+  <div class="name rv">Aryan Mishra</div>
+  <p class="s rv">Founder and CEO, based in Lucknow, India. Mayhemic is my first company, and I am building it one careful step at a time.</p>
+</section>
+
+<section id="contact">
+  <h2 class="rv">Say hello</h2>
+  <p class="s rv">Have an idea or a problem worth solving? Write to <a href="mailto:mayhemic.9@gmail.com">mayhemic.9@gmail.com</a> or leave a message here.</p>
+  <form class="rv" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY">
+    <input type="hidden" name="subject" value="New message from mayhemic.in">
+    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+    <input name="name" placeholder="Your name" required>
+    <input name="email" type="email" placeholder="Your email" required>
+    <textarea name="message" rows="4" placeholder="Your message" required></textarea>
+    <button class="btn" type="submit">Send message</button>
+  </form>
+</section>
+
+<div class="fw" aria-hidden="true">Mayhemic</div>
+<footer><span>&copy; 2026 Mayhemic</span><span>Psst. Type &ldquo;mayhem&rdquo; on your keyboard.</span></footer>
+
+<div id="ring"></div>
+<div id="wl" role="status"><button aria-label="Close">&times;</button><span id="wt"></span><small>Tap to chat</small></div>
+<script src="chatbot.js"></script>
+<script>
+// words light up as you scroll
+var st=document.getElementById('stmt');st.innerHTML=st.textContent.split(' ').map(function(w){return '<span class="w">'+w+'&nbsp;</span>'}).join('');
+var ws=[].slice.call(st.querySelectorAll('.w')),ab=document.getElementById('about');
+function sl(){var r=ab.getBoundingClientRect(),p=Math.min(1,Math.max(0,(innerHeight*.85-r.top)/(r.height*.85)));ws.forEach(function(w,i){var k=Math.min(1,Math.max(0,p*ws.length*1.2-i));w.style.opacity=.14+.86*k})}
+// mayhem to order canvas
+var ch=document.getElementById('ch'),c2=ch.getContext('2d'),T=[],CW,CH,DP=Math.min(2,devicePixelRatio||1);
+function cs(){CW=ch.width=innerWidth*DP;CH=ch.height=innerHeight*DP;T=[];var m=innerWidth<700,cl=m?6:12,rw=m?10:6,w=CW/(cl+1),h=CH*.7/rw;for(var i=0;i<cl*rw;i++){var c=i%cl,r=Math.floor(i/cl);T.push({tx:CW/2+(c-(cl-1)/2)*w,ty:CH/2+(r-(rw-1)/2)*h,sx:Math.random()*CW,sy:Math.random()*CH,sr:(Math.random()-.5)*3.4,s:.5+Math.random()*1.5,w:w*.78,h:h*.7,k:Math.random()})}}
+cs();addEventListener('resize',cs);
+function dr(p){c2.clearRect(0,0,CW,CH);T.forEach(function(t){var u=Math.min(1,Math.max(0,(p-t.k*.35)/.65)),e=u*u*(3-2*u),x=t.sx+(t.tx-t.sx)*e,y=t.sy+(t.ty-t.sy)*e,sc=t.s+(1-t.s)*e;c2.save();c2.translate(x,y);c2.rotate(t.sr*(1-e));c2.scale(sc,sc);c2.beginPath();c2[c2.roundRect?'roundRect':'rect'](-t.w/2,-t.h/2,t.w,t.h,10*DP);c2.fillStyle='rgba('+(255-e*96|0)+','+(255-e*43|0)+',255,'+(.04+e*.2)+')';c2.fill();c2.strokeStyle='rgba(255,255,255,'+(.22+e*.5)+')';c2.lineWidth=DP;c2.stroke();c2.restore()})}
+// headline decode effect
+function scr(el){var f=el.textContent,t0=performance.now(),A='ABCDEFGHIJKLMNOPQRSTUVWXYZ';(function s(t){var k=Math.min(1,(t-t0)/900),o='';for(var i=0;i<f.length;i++)o+=(f[i]===' '||i<k*f.length)?f[i]:A[Math.floor(Math.random()*26)];el.textContent=o;if(k<1)requestAnimationFrame(s);else el.textContent=f})(t0)}
+// easter egg
+var kb='';addEventListener('keydown',function(e){if(/INPUT|TEXTAREA/.test(e.target.tagName))return;kb=(kb+e.key.toLowerCase()).slice(-6);if(kb==='mayhem'){var d=document.documentElement,t=document.getElementById('toast');d.classList.add('shake');t.classList.remove('on');void t.offsetWidth;t.classList.add('on');setTimeout(function(){d.classList.remove('shake')},700)}});
+// header, progress
+var hd=document.querySelector('header'),bar=document.getElementById('bar');
+function sc(){var h=document.documentElement;bar.style.width=(scrollY/(h.scrollHeight-innerHeight)*100)+'%';hd.classList.toggle('show',scrollY>innerHeight*.6);
+var q=Math.min(1,scrollY/innerHeight),hw=document.getElementById('hw');hw.style.opacity=1-q;hw.style.transform='scale('+(1+q*.3)+')';document.getElementById('g').style.opacity=.55*(1-q);
+var hs=document.getElementById('roadmap'),r=hs.getBoundingClientRect(),p=Math.min(1,Math.max(0,-r.top/(hs.offsetHeight-innerHeight)));dr(p);hs.classList.toggle('ord',p>.5);sl()}
+addEventListener('scroll',sc,{passive:true});sc();
+// reveal
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');if(e.target.tagName==='H2')scr(e.target);io.unobserve(e.target)}})},{threshold:.2});
+document.querySelectorAll('.rv').forEach(function(e){io.observe(e)});
+// cursor ring + hero spotlight
+var cur=document.getElementById('cur'),h1=document.getElementById('t'),cx=0,cy=0,px=0,py=0,last=-9999,ttx=0,tty=0;
+addEventListener('pointermove',function(e){px=e.clientX;py=e.clientY;last=performance.now();ttx=(px/innerWidth-.5)*.9;tty=(py/innerHeight-.5)*.6});
+document.querySelectorAll('a,button,input,textarea,.row').forEach(function(e){e.addEventListener('mouseenter',function(){cur.classList.add('big')});e.addEventListener('mouseleave',function(){cur.classList.remove('big')})});
+// sphere
+var gc=document.getElementById('g'),gx=gc.getContext('2d'),N=560,pts=[],ay=0,tx=0,ty=0,d=Math.min(innerWidth,innerHeight)*.92*devicePixelRatio;
+gc.width=gc.height=d;
+for(var i=0;i<N;i++){var y=1-2*i/(N-1),r=Math.sqrt(1-y*y),th=i*2.399963;pts.push([Math.cos(th)*r,y,Math.sin(th)*r])}
+function fr(t){
+ cx+=(px-cx)*.18;cy+=(py-cy)*.18;cur.style.transform='translate('+cx+'px,'+cy+'px)';
+ var b=h1.getBoundingClientRect(),mx,my;
+ if(t-last<2500){mx=px-b.left;my=py-b.top}else{mx=b.width*(.5+.42*Math.sin(t/1700));my=b.height*(.5+.3*Math.sin(t/1150))}
+ h1.style.setProperty('--mx',mx+'px');h1.style.setProperty('--my',my+'px');
+ tx+=(ttx-tx)*.05;ty+=(tty-ty)*.05;ay+=.0032;
+ var s=gc.width,R=s*.43,cY=Math.cos(ay+tx),sY=Math.sin(ay+tx),cX=Math.cos(.3+ty),sX=Math.sin(.3+ty);
+ gx.clearRect(0,0,s,s);
+ pts.forEach(function(p){var x1=p[0]*cY+p[2]*sY,z1=-p[0]*sY+p[2]*cY,y1=p[1]*cX-z1*sX,z2=p[1]*sX+z1*cX,a=(z2+1)/2,z=(1+a*1.8)*devicePixelRatio;gx.fillStyle='rgba(175,212,255,'+(.08+a*.8)+')';gx.fillRect(s/2+x1*R,s/2+y1*R,z,z)});
+ requestAnimationFrame(fr)}
+requestAnimationFrame(fr);
+// magnetic buttons
+document.querySelectorAll('.btn').forEach(function(b){b.addEventListener('mousemove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+(e.clientX-r.left-r.width/2)*.2+'px,'+(e.clientY-r.top-r.height/2)*.3+'px)'});b.addEventListener('mouseleave',function(){b.style.transform=''})});
+// chatbot welcome
+(function(){
+var wl=document.getElementById('wl'),wt=document.getElementById('wt'),ring=document.getElementById('ring'),L=null,done=false;
+function find(){var c=null;document.querySelectorAll('body *').forEach(function(e){if(e.closest('#wl')||e.id==='ring'||e.id==='cur'||e.id==='toast')return;var r=e.getBoundingClientRect();if(r.width>=40&&r.width<=110&&Math.abs(r.width-r.height)<14&&innerWidth-r.right<100&&innerHeight-r.bottom<100&&r.right>0)c=e});return c}
+function place(){if(done)return;L=find()||L;var r=L?L.getBoundingClientRect():{left:innerWidth-90,top:innerHeight-90,width:70,height:70,right:innerWidth-20};ring.style.cssText='display:block;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px';wl.style.right=(innerWidth-r.right)+'px';wl.style.bottom=(innerHeight-r.top+16)+'px'}
+function hide(){done=true;wl.classList.remove('on');ring.style.display='none'}
+wl.onclick=function(){if(L)L.click();hide()};
+wl.querySelector('button').onclick=function(e){e.stopPropagation();hide()};
+setInterval(place,700);
+setTimeout(function(){place();wl.classList.add('on');wt.innerHTML='<span class="ty"><i></i><i></i><i></i></span>';
+var h=new Date().getHours(),g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+setTimeout(function(){wt.textContent=g+'! Welcome to Mayhemic. Ask me what we are building. \ud83d\udc4b'},1400);
+setTimeout(hide,20000)},3200);
+})();
+</script>
+</body>
+</html>
