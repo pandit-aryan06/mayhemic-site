@@ -23,11 +23,14 @@ a{color:inherit}
 .cur{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px;border:1px solid #fffa;border-radius:50%;pointer-events:none;z-index:90;transition:width .3s,height .3s,margin .3s,background .3s}
 .cur.big{width:74px;height:74px;margin:-37px;background:rgba(255,255,255,.2)}
 @media(hover:none){.cur{display:none}}
-header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 6vw;z-index:70;opacity:0;transform:translateY(-100%);transition:.6s var(--e);background:#040406ee}
+header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 6vw;z-index:70;opacity:0;transform:translateY(-100%);transition:.6s var(--e);background:#040406ee;backdrop-filter:blur(12px)}
 header.show{opacity:1;transform:none}
 header b{font-family:Unbounded,sans-serif;letter-spacing:.18em;font-size:13px}
-header a{text-decoration:none;font-size:14px;margin-left:26px;color:var(--m);transition:color .3s}
+header nav{display:flex;align-items:center}
+header a{text-decoration:none;font-size:14px;margin-left:26px;color:var(--m);transition:color .3s,border-color .3s,background .3s}
 header a:hover{color:#fff}
+header a.portal-link{color:#fff;padding:7px 16px;border:1px solid rgba(159,208,255,.45);border-radius:30px;background:rgba(159,208,255,.08);font-weight:700}
+header a.portal-link:hover{background:#fff;color:#040406;border-color:#fff}
 section{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:16vh 6vw}
 #hero{align-items:center;text-align:center;padding:0;overflow:hidden}
 #g{position:absolute;left:50%;top:50%;width:min(92vw,92vh);height:min(92vw,92vh);transform:translate(-50%,-50%);opacity:.55}
@@ -47,7 +50,7 @@ p.s{color:var(--m);max-width:54ch;margin-top:22px;font-size:17px}
 .mq div{display:inline-block;animation:mq 34s linear infinite;font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(28px,5.5vw,64px);color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.55);text-transform:uppercase}
 @keyframes mq{to{transform:translateX(-50%)}}
 .rows{margin-top:56px}
-.row{position:relative;display:grid;grid-template-columns:1.1fr 1.5fr auto;gap:28px;align-items:center;padding:40px 0;border-top:1px solid var(--l);transition:background .5s}
+.row{position:relative;display:grid;grid-template-columns:1.1fr 1.5fr auto;gap:28px;align-items:center;padding:40px 0;border-top:1px solid var(--l);transition:background .5s;text-decoration:none}
 .row:last-child{border-bottom:1px solid var(--l)}
 .row::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:0;background:linear-gradient(90deg,#fff,#9fd0ff);transition:width .9s var(--e)}
 .row:hover{background:linear-gradient(90deg,#ffffff0d,transparent)}
@@ -55,11 +58,12 @@ p.s{color:var(--m);max-width:54ch;margin-top:22px;font-size:17px}
 .row h3{font-family:Unbounded,sans-serif;font-weight:600;font-size:clamp(22px,3.2vw,42px);transition:transform .6s var(--e)}
 .row:hover h3{transform:translateX(18px)}
 .row p{color:var(--m)}
-.chip{font-size:13px;padding:6px 16px;border:1px solid var(--l);border-radius:30px;color:#bcdcff}
-@media(max-width:760px){.row{grid-template-columns:1fr;gap:12px;padding:30px 0}header a{margin-left:14px;font-size:13px}}
+.chip{font-size:13px;padding:6px 16px;border:1px solid var(--l);border-radius:30px;color:#bcdcff;white-space:nowrap}
+.chip.live{border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,.08)}
+@media(max-width:760px){.row{grid-template-columns:1fr;gap:12px;padding:30px 0}header a{margin-left:12px;font-size:12px}}
 .name{font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(36px,8.4vw,118px);line-height:1.05;background:linear-gradient(100deg,#fff 20%,#9fd0ff 40%,#b79cff 60%,#fff 80%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gr 8s linear infinite}
 @keyframes gr{to{background-position:-300% 0}}
-.btn{display:inline-block;margin-top:14px;padding:16px 38px;border:1px solid #fff;color:#fff;background:transparent;text-decoration:none;font:inherit;font-weight:700;font-size:15px;cursor:pointer;border-radius:50px;transition:background .3s,color .3s,transform .25s}
+.btn{display:inline-block;margin-top:14px;padding:16px 38px;border:1px solid #fff;color:#fff;background:transparent;text-decoration:none;font:inherit;font-weight:700;font-size:15px;cursor:pointer;border-radius:50px;transition:background .3s,color .3s,transform .25s;width:fit-content}
 .btn:hover{background:#fff;color:#040406}
 .cf{display:flex;flex-direction:column;gap:14px;max-width:480px;margin-top:30px}
 .cf input,.cf textarea{background:#ffffff08;border:1px solid var(--l);color:#fff;padding:16px;font:inherit;border-radius:10px;transition:border-color .3s,background .3s}
@@ -102,7 +106,17 @@ footer{position:relative;z-index:2;padding:22px 6vw;font-size:14px;color:var(--m
 <div id="ld"><i></i></div><div id="toast">Order restored.</div><div id="bar"></div><div class="cur" id="cur"></div>
 <div class="au a1"></div><div class="au a2"></div>
 
-<header><b>MAYHEMIC</b><nav><a href="#about">About</a><a href="#plan">Plan</a><a href="#roadmap">Our goal</a><a href="#founder">Founder</a><a href="#contact">Contact</a></nav></header>
+<header>
+  <b>MAYHEMIC</b>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#plan">Plan</a>
+    <a href="#roadmap">Our goal</a>
+    <a href="#founder">Founder</a>
+    <a href="#contact">Contact</a>
+    <a href="fee.html" class="portal-link">Fee Portal &nearr;</a>
+  </nav>
+</header>
 
 <section id="hero">
   <canvas id="g"></canvas>
@@ -112,7 +126,10 @@ footer{position:relative;z-index:2;padding:22px 6vw;font-size:14px;color:var(--m
 
 <section id="about">
   <p class="big" id="stmt">Mayhemic is a new company. We are starting from zero, and we plan to build SaaS and automation that give people their time back.</p>
-  <p class="s rv">No products are live yet. This page shows where we are and where we are going.</p>
+  <p class="s rv">Our first school fee management and WhatsApp automation platform is now ready to explore.</p>
+  <div class="rv" style="margin-top:24px">
+    <a href="fee.html" class="btn">Launch Fee Platform &rarr;</a>
+  </div>
 </section>
 
 <div class="mq" aria-hidden="true"><div>SaaS &nbsp;/&nbsp; Automation &nbsp;/&nbsp; Workflows &nbsp;/&nbsp; AI helpers &nbsp;/&nbsp; SaaS &nbsp;/&nbsp; Automation &nbsp;/&nbsp; Workflows &nbsp;/&nbsp; AI helpers &nbsp;/&nbsp;</div></div>
@@ -120,7 +137,11 @@ footer{position:relative;z-index:2;padding:22px 6vw;font-size:14px;color:var(--m
 <section id="plan">
   <h2 class="rv">What we plan to build</h2>
   <div class="rows rv">
-    <div class="row"><h3>SaaS</h3><p>Online software built to solve one clear problem at a time, simple enough for anyone to use from day one.</p><span class="chip">Planning</span></div>
+    <a href="fee.html" class="row">
+      <h3>SaaS</h3>
+      <p>Online software built to solve one clear problem at a time—starting with our School Fee &amp; WhatsApp Receipt Platform.</p>
+      <span class="chip live">&bull; Fee Portal Live &nearr;</span>
+    </a>
     <div class="row"><h3>Automation</h3><p>Tools that handle repeated work, such as reminders and daily summaries on WhatsApp, so people save hours each week.</p><span class="chip">Planning</span></div>
     <div class="row"><h3>AI helpers</h3><p>Assistants built into our products that answer questions and take care of small tasks.</p><span class="chip">Exploring</span></div>
   </div>
@@ -159,7 +180,7 @@ footer{position:relative;z-index:2;padding:22px 6vw;font-size:14px;color:var(--m
 </section>
 
 <div class="fw" aria-hidden="true">Mayhemic</div>
-<footer><span>&copy; 2026 Mayhemic</span><span>Psst. Type &ldquo;mayhem&rdquo; on your keyboard.</span></footer>
+<footer><span>&copy; 2026 Mayhemic &middot; <a href="fee.html">Fee Portal</a></span><span>Psst. Type &ldquo;mayhem&rdquo; on your keyboard.</span></footer>
 
 <div id="ring"></div>
 <div id="wl" role="status"><button aria-label="Close">&times;</button><span id="wt"></span><small>Tap to chat</small></div>
