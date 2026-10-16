@@ -30,7 +30,6 @@
     -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; position: relative;
   }
   
-  /* Cyber Aurora & Grid */
   .au { position: fixed; border-radius: 50%; opacity: .22; z-index: 0; pointer-events: none; filter: blur(70px); animation: dr 20s ease-in-out infinite alternate; }
   .a1 { width: 48vw; height: 48vw; background: radial-gradient(circle, #2b52ff 0, transparent 70%); left: -10vw; top: -10vh; }
   .a2 { width: 45vw; height: 45vw; background: radial-gradient(circle, #7b3dff 0, transparent 70%); right: -10vw; bottom: -10vh; animation-delay: -10s; }
@@ -51,24 +50,21 @@
     letter-spacing: .08em; text-transform: uppercase; padding: 11px 22px;
     border: 1px solid var(--line); background: rgba(255,255,255,.04); color: #fff;
     transition: all .25s var(--e); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    text-decoration: none; white-space: nowrap; backdrop-filter: blur(10px);
+    text-decoration: none; white-space: nowrap; backdrop-filter: blur(10px); z-index: 10;
   }
   button:hover, .btn-link:hover { border-color: var(--line-bright); background: rgba(159,208,255,.1); transform: translateY(-1px); }
   button.solid { background: #fff; color: #040406; border-color: #fff; }
   button.solid:hover { background: var(--accent); border-color: var(--accent); color: #040406; box-shadow: 0 0 25px rgba(159,208,255,.35); }
   button.accent { background: linear-gradient(135deg, #2b52ff, #7b3dff); border-color: transparent; color: #fff; }
   button.ok-btn { border-color: rgba(74,222,128,.35); color: var(--ok); background: rgba(74,222,128,.06); }
-  button.ok-btn:hover, button.ok-btn.active { background: var(--ok); color: #040406; }
   button.warn-btn { border-color: rgba(251,191,36,.35); color: var(--warn); background: rgba(251,191,36,.06); }
   button.bad-btn { border-color: rgba(248,113,113,.35); color: var(--bad); background: rgba(248,113,113,.06); }
-  button.bad-btn:hover { background: var(--bad); color: #040406; }
   button.small { padding: 7px 16px; font-size: 11px; border-radius: 30px; }
-  button.icon-btn { padding: 7px 10px; border-radius: 10px; font-size: 12px; }
 
   input, select, textarea {
     background: rgba(255,255,255,.03); border: 1px solid var(--line); color: #fff;
     padding: 14px 18px; border-radius: 14px; font-size: 14px; font-family: inherit; width: 100%;
-    transition: all .25s var(--e);
+    transition: all .25s var(--e); position: relative; z-index: 10;
   }
   input:focus, select:focus { outline: none; border-color: var(--accent); background: rgba(255,255,255,.07); box-shadow: 0 0 0 3px rgba(159,208,255,.1); }
   select option { background: #0b0c12; color: #fff; }
@@ -78,11 +74,11 @@
     position: relative; z-index: 2; min-height: 100vh; display: flex; align-items: center;
     justify-content: center; flex-direction: column; padding: 24px;
   }
-  .top-nav-links { position: absolute; top: 28px; left: 6vw; right: 6vw; display: flex; justify-content: space-between; }
+  .top-nav-links { position: absolute; top: 28px; left: 6vw; right: 6vw; display: flex; justify-content: flex-start; z-index: 20; }
   .login-card {
     width: 100%; max-width: 460px; padding: 42px 36px; border-radius: 24px;
     background: var(--card); border: 1px solid var(--line); backdrop-filter: blur(24px);
-    box-shadow: 0 30px 80px rgba(0,0,0,.7); text-align: center;
+    box-shadow: 0 30px 80px rgba(0,0,0,.7); text-align: center; position: relative; z-index: 5;
   }
   .login-card h1 {
     font-family: Unbounded, sans-serif; font-size: clamp(26px, 5vw, 34px); letter-spacing: .16em;
@@ -94,7 +90,7 @@
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
     background: rgba(255,255,255,.03); padding: 6px; border-radius: 16px; border: 1px solid var(--line); margin: 24px 0 20px;
   }
-  .role-tabs button { border: 0; border-radius: 12px; padding: 10px 6px; font-size: 12px; font-weight: 700; color: var(--mute); background: transparent; }
+  .role-tabs button { border: 0; border-radius: 12px; padding: 10px 6px; font-size: 12px; font-weight: 700; color: var(--mute); background: transparent; cursor: pointer; }
   .role-tabs button.active { background: #fff; color: #040406; box-shadow: 0 4px 20px rgba(255,255,255,.2); }
 
   /* APP CONTAINERS */
@@ -110,16 +106,10 @@
     font-size: 11px; padding: 4px 12px; border-radius: 20px; background: rgba(74,222,128,.12);
     color: var(--ok); border: 1px solid rgba(74,222,128,.3); font-weight: 700; display: inline-flex; align-items: center; gap: 6px;
   }
-  .badge-live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
   .school { font-size: 14px; color: var(--accent); margin-top: 4px; font-weight: 600; }
 
-  /* KPI CARDS */
   .cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 22px; }
-  .stat {
-    border: 1px solid var(--line); background: var(--card); backdrop-filter: blur(14px);
-    padding: 18px 20px; border-radius: 18px; transition: transform .25s var(--e), border-color .25s;
-  }
-  .stat:hover { transform: translateY(-3px); border-color: rgba(159,208,255,.35); }
+  .stat { border: 1px solid var(--line); background: var(--card); padding: 18px 20px; border-radius: 18px; }
   .stat .v { font-family: Unbounded, sans-serif; font-size: clamp(17px, 1.8vw, 23px); font-weight: 700; margin-top: 8px; }
   .stat .sub { font-size: 12px; color: var(--mute); margin-top: 4px; }
   .stat .v.g { color: var(--ok); }
@@ -127,112 +117,72 @@
   .stat .v.a { color: var(--accent); }
 
   .analytics-strip { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; margin-bottom: 22px; }
-  .glass-box { border: 1px solid var(--line); background: var(--card); backdrop-filter: blur(14px); padding: 22px 26px; border-radius: 18px; }
+  .glass-box { border: 1px solid var(--line); background: var(--card); padding: 22px 26px; border-radius: 18px; }
   .prog-track { width: 100%; height: 12px; background: rgba(255,255,255,.07); border-radius: 20px; overflow: hidden; margin: 14px 0 10px; }
-  .prog-fill { height: 100%; width: 0%; border-radius: 20px; background: linear-gradient(90deg, #2b52ff, #9fd0ff, #4ade80); transition: width .8s var(--e); }
+  .prog-fill { height: 100%; width: 0%; border-radius: 20px; background: linear-gradient(90deg, #2b52ff, #9fd0ff, #4ade80); }
   .class-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-  .c-chip { font-size: 12px; padding: 6px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.03); cursor: pointer; transition: .2s; }
-  .c-chip.active, .c-chip:hover { border-color: var(--accent); background: rgba(159,208,255,.12); color: #fff; }
+  .c-chip { font-size: 12px; padding: 6px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.03); cursor: pointer; }
+  .c-chip:hover { border-color: var(--accent); background: rgba(159,208,255,.12); color: #fff; }
 
   .toolbar {
     display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: center;
     justify-content: space-between; background: var(--card); border: 1px solid var(--line);
-    padding: 16px 20px; border-radius: 18px; backdrop-filter: blur(14px);
+    padding: 16px 20px; border-radius: 18px;
   }
 
-  /* TABLE */
-  .tbl-wrap { border: 1px solid var(--line); border-radius: 20px; overflow: hidden; background: var(--card); backdrop-filter: blur(16px); box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+  .tbl-wrap { border: 1px solid var(--line); border-radius: 20px; overflow: hidden; background: var(--card); box-shadow: 0 20px 50px rgba(0,0,0,.4); }
   .tbl-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 960px; }
-  th {
-    font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute);
-    text-align: left; padding: 16px 20px; border-bottom: 1px solid var(--line); font-weight: 700;
-    background: rgba(255,255,255,.02); cursor: pointer;
-  }
+  th { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); text-align: left; padding: 16px 20px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.02); cursor: pointer; }
   td { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,.06); vertical-align: middle; }
-  tr:last-child td { border-bottom: 0; }
-  tbody tr { transition: background .2s; }
-  tbody tr:hover td { background: rgba(159, 208, 255, .05); }
+  tr:hover td { background: rgba(159, 208, 255, .05); }
   .r { text-align: right; }
   .pend { color: var(--bad); font-weight: 700; }
   .clear { color: var(--ok); font-weight: 700; }
   .stu-name { font-weight: 700; color: #fff; font-size: 15px; cursor: pointer; }
   .stu-name:hover { color: var(--accent); text-decoration: underline; }
-  .fee-edit-link { cursor: pointer; border-bottom: 1px dashed rgba(255,255,255,.35); padding-bottom: 2px; }
-  .fee-edit-link:hover { color: var(--warn); border-color: var(--warn); }
-  .mini-bar { width: 75px; height: 6px; background: rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; display: inline-block; vertical-align: middle; margin-left: 8px; }
-  .mini-bar > i { display: block; height: 100%; background: var(--ok); }
-  .row-actions { display: flex; gap: 6px; justify-content: flex-end; align-items: center; }
 
-  /* MODALS */
   .ov {
     position: fixed; inset: 0; background: rgba(4, 4, 6, .85); backdrop-filter: blur(12px);
     display: none; align-items: center; justify-content: center; padding: 18px; z-index: 100;
   }
-  .ov.show { display: flex; animation: fadeIn .2s var(--e); }
-  @keyframes fadeIn { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
+  .ov.show { display: flex; }
   .modal {
     background: #0b0c12; border: 1px solid var(--line-bright); border-radius: 24px;
     padding: 30px; width: 100%; max-width: 480px; max-height: 92vh; overflow: auto;
-    box-shadow: 0 30px 80px rgba(0,0,0,.85);
   }
   .modal.wide { max-width: 680px; }
-  .modal h3 { font-family: Unbounded, sans-serif; margin: 0 0 6px; font-weight: 700; font-size: 20px; }
+  .modal h3 { font-family: Unbounded, sans-serif; margin: 0 0 6px; font-size: 20px; }
   .modal .row { margin-top: 16px; }
   .modal .row label { display: block; margin-bottom: 6px; }
   .modal .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .modal .acts { display: flex; gap: 10px; margin-top: 26px; }
   .modal .acts button { flex: 1; }
 
-  .mode-switch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
-  .mode-switch button { border-radius: 12px; padding: 10px 8px; font-size: 11px; }
-  .mode-switch button.active-inc { background: rgba(248,113,113,.15); border-color: var(--bad); color: var(--bad); }
-  .mode-switch button.active-dec { background: rgba(74,222,128,.15); border-color: var(--ok); color: var(--ok); }
-  .mode-switch button.active-set { background: rgba(159,208,255,.15); border-color: var(--accent); color: var(--accent); }
-  .preview-card {
-    margin-top: 16px; padding: 14px 16px; border-radius: 14px;
-    background: rgba(255,255,255,.03); border: 1px dashed var(--line-bright);
-    display: flex; justify-content: space-between; align-items: center;
+  .rc-preview {
+    background: linear-gradient(135deg, #0e1017, #07080b); border: 1px solid rgba(159, 208, 255, 0.3);
+    color: #f5f7ff; padding: 28px; border-radius: 20px; font-family: Manrope, sans-serif; margin-top: 16px;
   }
-  .preset-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-  .preset-chips span {
-    font-size: 11px; padding: 5px 11px; border-radius: 20px; border: 1px solid var(--line);
-    cursor: pointer; color: var(--accent); background: rgba(159,208,255,.06);
-  }
-  .preset-chips span:hover { background: var(--accent); color: #040406; font-weight: 700; }
-
-  .rc-preview { color: #0b0c12; background: #fff; padding: 24px; border-radius: 16px; font-family: Manrope, Arial, sans-serif; margin-top: 16px; }
-  .rc-preview h2 { font-family: Unbounded, sans-serif; margin: 0; font-size: 18px; }
-  .rc-preview hr { border: 0; border-top: 1px dashed #ccc; margin: 14px 0; }
-  .rc-preview table { min-width: 0; width: 100%; font-size: 13px; color: #111; }
-  .rc-preview td { border: 0; padding: 5px 0; }
+  .rc-preview h2 { font-family: Unbounded, sans-serif; margin: 0; font-size: 16px; color: #fff; }
+  .rc-preview hr { border: 0; border-top: 1px dashed rgba(255,255,255,0.15); margin: 16px 0; }
+  .rc-preview table { width: 100%; font-size: 13px; color: #e2e8f0; border-collapse: collapse; }
+  .rc-preview td { border: 0; padding: 6px 0; }
 
   #toast {
     position: fixed; bottom: 26px; right: 26px; background: #fff; color: #040406;
     padding: 14px 22px; border-radius: 14px; font-size: 13px; font-weight: 700;
     display: none; z-index: 200; box-shadow: 0 15px 40px rgba(159,208,255,.35);
-    border-left: 5px solid #2b52ff;
   }
-  @media print {
-    body * { visibility: hidden; }
-    #printArea, #printArea * { visibility: visible; }
-    #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; padding: 20px; }
-  }
-  @media(max-width:1080px){.cards{grid-template-columns:repeat(3,1fr)}.analytics-strip{grid-template-columns:1fr}}
-  @media(max-width:640px){.cards{grid-template-columns:repeat(2,1fr)}.modal .grid-2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <div class="au a1"></div><div class="au a2"></div><div class="grid-bg"></div>
 
-<!-- ========================================== -->
-<!-- LOGIN SCREEN                               -->
-<!-- ========================================== -->
+<!-- LOGIN SCREEN -->
 <div id="login">
   <div class="top-nav-links">
     <a href="index.html" class="btn-link small">&larr; Home</a>
-    <a href="admin.html" class="btn-link small" style="border-color:var(--accent);color:var(--accent)">Super-Admin HQ &nearr;</a>
   </div>
 
   <div class="login-card">
@@ -248,7 +198,7 @@
 
     <div style="text-align:left;margin-bottom:14px">
       <label class="label" style="display:block;margin-bottom:6px">Select School</label>
-      <select id="loginSchoolSelect" onchange="$('loginSchoolId').value = this.value" style="margin-bottom:8px"></select>
+      <select id="loginSchoolSelect" onchange="document.getElementById('loginSchoolId').value = this.value" style="margin-bottom:8px"></select>
       <input id="loginSchoolId" class="mono" placeholder="School Login ID (e.g. mayhemic-lko)">
     </div>
 
@@ -276,9 +226,7 @@
   </div>
 </div>
 
-<!-- ========================================== -->
-<!-- 1. PRINCIPAL ERP PORTAL                    -->
-<!-- ========================================== -->
+<!-- PRINCIPAL ERP PORTAL -->
 <div id="app" class="wrap" style="display:none">
   <div class="top">
     <div>
@@ -287,20 +235,17 @@
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="small ok-btn" onclick="switchActivePortal('teacher')">Teacher Attendance View</button>
-      <button class="small warn-btn" onclick="openPasswordChangeModal()">Change Password</button>
-      <button class="small" onclick="printClassReport()">Print Register</button>
-      <button class="small" onclick="exportCSV()">Export CSV</button>
       <button class="small" onclick="logout()">Log out</button>
     </div>
   </div>
 
   <div class="cards">
-    <div class="stat"><div class="label">Collected Today</div><div class="v g" id="sToday">Rs 0</div><div class="sub">Live cashbook</div></div>
-    <div class="stat"><div class="label">Total Collected</div><div class="v" id="sCollected">Rs 0</div><div class="sub" id="sRateSub">0% recovered</div></div>
-    <div class="stat"><div class="label">Total Pending</div><div class="v r" id="sPending">Rs 0</div><div class="sub" id="sDefSub">0 defaulters</div></div>
-    <div class="stat"><div class="label">Total Fee Book</div><div class="v a" id="sTotalBook">Rs 0</div><div class="sub">Net billed revenue</div></div>
-    <div class="stat"><div class="label">Total Students</div><div class="v" id="sStudents">0</div><div class="sub" id="sClearSub">0 cleared</div></div>
-    <div class="stat"><div class="label">Attendance Today</div><div class="v g" id="sAttToday">0%</div><div class="sub" id="sAttSub">0 Present</div></div>
+    <div class="stat"><div class="label">Collected Today</div><div class="v g" id="sToday">Rs 0</div></div>
+    <div class="stat"><div class="label">Total Collected</div><div class="v" id="sCollected">Rs 0</div></div>
+    <div class="stat"><div class="label">Total Pending</div><div class="v r" id="sPending">Rs 0</div></div>
+    <div class="stat"><div class="label">Total Fee Book</div><div class="v a" id="sTotalBook">Rs 0</div></div>
+    <div class="stat"><div class="label">Total Students</div><div class="v" id="sStudents">0</div></div>
+    <div class="stat"><div class="label">Attendance Today</div><div class="v g" id="sAttToday">0%</div></div>
   </div>
 
   <div class="analytics-strip">
@@ -310,24 +255,16 @@
         <span class="mono" style="font-size:13px;color:var(--accent);font-weight:700" id="progPct">0% Recovered</span>
       </div>
       <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
-      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mute)">
-        <span id="progLeftText">Collected: Rs 0</span><span id="progRightText">Pending: Rs 0</span>
-      </div>
     </div>
     <div class="glass-box">
-      <div style="display:flex;justify-content:space-between;align-items:center"><span class="label">Class-wise Quick Filter</span><span style="font-size:11px;color:var(--mute)">Click to isolate</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><span class="label">Class Filter</span></div>
       <div class="class-chips" id="classChips"></div>
     </div>
   </div>
 
   <div class="toolbar">
-    <div style="flex:1"><input id="search" placeholder="Search students, parent phone, roll no..." oninput="render()"></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="solid small" onclick="openAdd()">+ Add Student</button>
-      <button class="warn-btn small" onclick="openBulkAdjust()">&plusmn; Bulk Adjust Fee</button>
-      <button class="small" onclick="$('csv').click()">Import CSV</button>
-      <input id="csv" type="file" accept=".csv" style="display:none" onchange="importCSV(this)">
-    </div>
+    <div style="flex:1"><input id="search" placeholder="Search students..." oninput="render()"></div>
+    <button class="solid small" onclick="openAdd()">+ Add Student</button>
   </div>
 
   <div class="tbl-wrap">
@@ -335,413 +272,231 @@
       <table>
         <thead>
           <tr>
-            <th onclick="quickSort('name')">Student / Parent</th>
-            <th onclick="quickSort('class')">Class / Roll</th>
+            <th>Student / Parent</th>
+            <th>Class / Roll</th>
             <th>Attendance</th>
-            <th class="r" onclick="quickSort('fee_desc')">Total Fee (&plusmn;)</th>
+            <th class="r">Total Fee</th>
             <th class="r">Paid</th>
-            <th class="r" onclick="quickSort('pend_desc')">Balance Due</th>
-            <th class="r">Command Actions</th>
+            <th class="r">Balance Due</th>
+            <th class="r">Actions</th>
           </tr>
         </thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
-    <div id="empty" class="empty" style="display:none;padding:50px;text-align:center;color:var(--mute)">No students found.</div>
   </div>
 </div>
 
-<!-- ========================================== -->
-<!-- 2. TEACHER ATTENDANCE PORTAL               -->
-<!-- ========================================== -->
+<!-- TEACHER PORTAL -->
 <div id="teacherApp" class="wrap" style="display:none">
   <div class="top">
     <div>
-      <div style="display:flex;align-items:center;gap:10px"><span class="brand">MAYHEMIC TEACHER</span><span class="badge-live">ATTENDANCE REGISTER</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span class="brand">MAYHEMIC TEACHER</span><span class="badge-live">ATTENDANCE</span></div>
       <div class="school" id="tSchoolName">School</div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="small" id="backToPrinBtn" style="display:none" onclick="switchActivePortal('principal')">&larr; Principal ERP</button>
-      <button class="small warn-btn" onclick="openPasswordChangeModal()">Change Password</button>
-      <button class="small" onclick="logout()">Log out</button>
-    </div>
+    <button class="small" onclick="switchActivePortal('principal')">&larr; Principal ERP</button>
   </div>
-
   <div class="toolbar">
-    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-      <div><label class="label" style="display:block;margin-bottom:4px">Date</label><input type="date" id="attDate" style="width:160px;padding:10px" onchange="renderTeacherAttendance()"></div>
-      <div><label class="label" style="display:block;margin-bottom:4px">Class</label><select id="attClassSel" style="width:140px;padding:11px" onchange="renderTeacherAttendance()"></select></div>
-      <div style="padding-top:18px"><button class="ok-btn small" onclick="markAllClass('P')">&check; Mark All Present</button></div>
-    </div>
-    <div id="tAttSummary" class="mono" style="font-size:13px;color:var(--accent)"></div>
+    <input type="date" id="attDate" style="width:160px;padding:10px" onchange="renderTeacherAttendance()">
+    <button class="ok-btn small" onclick="markAllClass('P')">Mark All Present</button>
   </div>
-
   <div class="tbl-wrap">
-    <div class="tbl-scroll">
-      <table>
-        <thead><tr><th>Roll</th><th>Student Name</th><th>Parent Contact</th><th>Attendance %</th><th class="r">Status</th></tr></thead>
-        <tbody id="tRows"></tbody>
-      </table>
-    </div>
+    <table>
+      <thead><tr><th>Roll</th><th>Student Name</th><th>Parent Contact</th><th class="r">Status</th></tr></thead>
+      <tbody id="tRows"></tbody>
+    </table>
   </div>
 </div>
 
-<!-- ========================================== -->
-<!-- 3. PARENT PORTAL                           -->
-<!-- ========================================== -->
+<!-- PARENT PORTAL -->
 <div id="parentApp" class="wrap" style="display:none">
   <div class="top">
     <div><div class="brand">PARENT PORTAL</div><div class="school" id="pSchoolName">School</div></div>
-    <button class="small" onclick="logout()">Exit Portal</button>
+    <button class="small" onclick="logout()">Exit</button>
   </div>
   <div id="parentContent"></div>
 </div>
 
-<!-- ========================================== -->
-<!-- MODALS (PAY, ADJUST, ADD, PASSWORD)        -->
-<!-- ========================================== -->
+<!-- PAY MODAL -->
 <div class="ov" id="payOv">
   <div class="modal">
-    <div class="label">Record Fee Transaction</div>
-    <h3 id="payName">Student Name</h3>
-    <div class="mono" style="font-size:13px;color:var(--accent);margin-top:4px" id="payInfo"></div>
-    <div class="row"><label class="label">Quick Presets</label><div class="preset-chips" id="payPresets"></div></div>
-    <div class="row grid-2">
-      <div><label class="label">Amount (Rs)</label><input id="payAmt" type="number" min="1"></div>
-      <div>
-        <label class="label">Mode</label>
-        <select id="payMode"><option value="upi">UPI / QR</option><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank">Bank / NEFT</option></select>
-      </div>
-    </div>
-    <div class="row"><label class="label">Reference Note</label><input id="payNote" placeholder="Optional reference"></div>
-    <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="savePay()" id="savePayBtn">Confirm &amp; Receipt</button></div>
-  </div>
-</div>
-
-<!-- INDIVIDUAL FEE ADJUSTER MODAL -->
-<div class="ov" id="adjOv">
-  <div class="modal">
-    <div class="label" style="color:var(--warn)">Modify Total Fee / Student Details</div>
-    <h3 id="adjTitle">Adjust Total Fee</h3>
-    <div class="mono" style="font-size:12px;color:var(--mute)" id="adjSub"></div>
-    <div class="row">
-      <label class="label">Adjustment Mode</label>
-      <div class="mode-switch">
-        <button type="button" id="mInc" class="active-inc" onclick="setAdjMode('inc')">+ Increase Fee</button>
-        <button type="button" id="mDec" onclick="setAdjMode('dec')">&minus; Decrease Fee</button>
-        <button type="button" id="mSet" onclick="setAdjMode('set')">= Set New Total</button>
-      </div>
-    </div>
-    <div class="row" id="adjPresetsRow"><label class="label">Quick Presets</label><div class="preset-chips" id="adjPresets"></div></div>
-    <div class="row grid-2">
-      <div><label class="label" id="adjValLabel">Amount</label><input id="adjVal" type="number" min="0" oninput="calcAdjPreview()"></div>
-      <div id="adjUnitWrap"><label class="label">Unit</label><select id="adjUnit" onchange="calcAdjPreview()"><option value="rs">Rupees (Rs)</option><option value="pct">Percentage (%)</option></select></div>
-    </div>
-    <div class="row"><label class="label">Reason</label><input id="adjReason" placeholder="e.g. Transport Fee / Scholarship"></div>
-    <div class="preview-card">
-      <div><div class="label">Current &rarr; New Total</div><div class="mono" style="font-size:15px;font-weight:700;margin-top:4px" id="adjPrevTotal">Rs 0 &rarr; Rs 0</div></div>
-      <div style="text-align:right"><div class="label">New Balance Due</div><div class="mono" style="font-size:15px;font-weight:700;margin-top:4px;color:var(--accent)" id="adjPrevPend">Rs 0</div></div>
-    </div>
-    <div class="acts">
-      <button class="bad-btn" onclick="deleteStudent(adjId)">&#128465; Delete</button>
-      <button onclick="closeAll()">Cancel</button>
-      <button class="solid" onclick="saveFeeAdjustment()">Save Changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- BULK ADJUST MODAL -->
-<div class="ov" id="bulkOv">
-  <div class="modal">
-    <div class="label" style="color:var(--warn)">Mass Fee Revision</div>
-    <h3>&plusmn; Bulk Adjust Total Fees</h3>
-    <div class="row grid-2">
-      <div><label class="label">Target</label><select id="bTarget"></select></div>
-      <div><label class="label">Action</label><select id="bAction"><option value="inc">Increase (+)</option><option value="dec">Decrease (-)</option></select></div>
-    </div>
-    <div class="row grid-2">
-      <div><label class="label">Value</label><input id="bVal" type="number" min="1" placeholder="e.g. 1500 or 10"></div>
-      <div><label class="label">Unit</label><select id="bUnit"><option value="rs">Rupees (Rs)</option><option value="pct">Percentage (%)</option></select></div>
-    </div>
-    <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="applyBulkAdjust()">Apply Revision</button></div>
+    <h3>Record Fee Transaction</h3>
+    <h4 id="payName" style="color:var(--accent);margin:6px 0"></h4>
+    <div class="row"><label class="label">Amount (Rs)</label><input id="payAmt" type="number" min="1"></div>
+    <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="savePay()">Confirm &amp; Receipt</button></div>
   </div>
 </div>
 
 <!-- ADD STUDENT MODAL -->
 <div class="ov" id="addOv">
   <div class="modal">
-    <div class="label">New Enrollment</div>
-    <h3>Add Student Record</h3>
-    <div class="row"><label class="label">Student Name *</label><input id="aName" placeholder="e.g. Aarav Verma"></div>
+    <h3>Add Student</h3>
+    <div class="row"><label class="label">Name</label><input id="aName"></div>
     <div class="row grid-2">
-      <div><label class="label">Class *</label><input id="aClass" placeholder="e.g. 10-A"></div>
-      <div><label class="label">Roll No</label><input id="aRoll" placeholder="e.g. 01"></div>
+      <div><label class="label">Class</label><input id="aClass" value="10-A"></div>
+      <div><label class="label">Roll</label><input id="aRoll" value="01"></div>
     </div>
     <div class="row grid-2">
-      <div><label class="label">Parent Name</label><input id="aParent" placeholder="e.g. Rajesh Verma"></div>
-      <div><label class="label">Parent Phone</label><input id="aPhone" placeholder="e.g. 9876543210"></div>
+      <div><label class="label">Parent Name</label><input id="aParent"></div>
+      <div><label class="label">Phone</label><input id="aPhone"></div>
     </div>
-    <div class="row"><label class="label">Total Annual Fee (Rs) *</label><input id="aFee" type="number" placeholder="45000"></div>
-    <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="saveStudent()">Save Student</button></div>
-  </div>
-</div>
-
-<!-- CHANGE PASSWORD MODAL -->
-<div class="ov" id="passOv">
-  <div class="modal">
-    <div class="label" style="color:var(--warn)">Security Settings</div>
-    <h3>Change Portal Password</h3>
-    <div class="row"><label class="label">New Password</label><input id="newPassIn" type="password" placeholder="Enter new password"></div>
-    <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="saveNewPassword()">Update Password</button></div>
+    <div class="row"><label class="label">Total Fee</label><input id="aFee" type="number" value="45000"></div>
+    <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="saveStudent()">Save</button></div>
   </div>
 </div>
 
 <!-- RECEIPT MODAL -->
-<div class="ov" id="rcOv">
+<div id="rcOv" class="ov">
   <div class="modal">
-    <div class="label" style="color:var(--ok)">Transaction Verified</div>
-    <h3>Official Fee Receipt</h3>
-    <div class="mono" style="font-size:12px;color:var(--mute)" id="rcNo"></div>
+    <h3>Fee Receipt Generated</h3>
     <div class="rc-preview" id="rcPreviewBox"></div>
-    <div class="acts"><button onclick="closeAll()">Done</button><button class="solid" onclick="window.print()">Print Receipt</button></div>
+    <div class="acts"><button class="solid" onclick="closeAll()">Done</button></div>
   </div>
 </div>
 
-<div id="printArea" style="display:none"></div>
 <div id="toast"></div>
 
 <script>
-const $ = id => document.getElementById(id);
-let schools = [], students = [], attendanceDB = {}, activeRole = 'principal', loggedInAsPrincipal = false, isDemo = false, school = null, payId = null, adjId = null, adjMode = 'inc';
-let deletedStudentIds = [], localFeeOverrides = {};
+let schools = [], students = [], attendanceDB = {}, school = null, payId = null;
 
 try {
-  deletedStudentIds = JSON.parse(localStorage.getItem('mayhemic_deleted_students') || '[]');
-  localFeeOverrides = JSON.parse(localStorage.getItem('mayhemic_fee_overrides') || '{}');
-  attendanceDB = JSON.parse(localStorage.getItem('mayhemic_attendance') || '{}');
-} catch(e){}
+  schools = JSON.parse(localStorage.getItem('mayhemic_schools') || '[]');
+} catch(e) { schools = []; }
 
-function populateLoginSchools() {
-  try { schools = JSON.parse(localStorage.getItem('mayhemic_schools') || '[]'); } catch (e) { schools = []; }
-  const sel = $('loginSchoolSelect');
+const sel = document.getElementById('loginSchoolSelect');
+if (sel) {
   sel.innerHTML = `<option value="">-- Select School --</option>` +
     schools.map(s => `<option value="${s.login_id}">${s.name} (${s.login_id})</option>`).join('');
 }
-populateLoginSchools();
 
 function switchLoginRole(role) {
-  activeRole = role;
-  $('rtPrin').className = role === 'principal' ? 'active' : '';$('rtTeach').className = role === 'teacher' ? 'active' : '';
-  $('rtPar').className = role === 'parent' ? 'active' : '';$('staffKeyWrap').style.display = role === 'parent' ? 'none' : 'block';
-  $('parentLookupWrap').style.display = role === 'parent' ? 'block' : 'none';$('keyLabel').textContent = role === 'principal' ? 'Principal Password' : 'Teacher Password';
+  document.getElementById('rtPrin').className = role === 'principal' ? 'active' : '';
+  document.getElementById('rtTeach').className = role === 'teacher' ? 'active' : '';
+  document.getElementById('rtPar').className = role === 'parent' ? 'active' : '';
+  document.getElementById('staffKeyWrap').style.display = role === 'parent' ? 'none' : 'block';
+  document.getElementById('parentLookupWrap').style.display = role === 'parent' ? 'block' : 'none';
+  document.getElementById('keyLabel').textContent = role === 'principal' ? 'Principal Password' : 'Teacher Password';
+  window._loginRole = role;
 }
+window._loginRole = 'principal';
 
 function handleRoleLogin() {
-  const schoolId = $('loginSchoolId').value.trim();
-  const keyVal = $('keyIn').value.trim();
+  const schoolId = document.getElementById('loginSchoolId').value.trim();
+  const keyVal = document.getElementById('keyIn').value.trim();
   const found = schools.find(s => s.login_id === schoolId);
 
-  if (activeRole === 'parent') {
-    const q = $('parentQueryIn').value.trim();
+  if (window._loginRole === 'parent') {
+    const q = document.getElementById('parentQueryIn').value.trim();
     if (!q) return alert('Enter Parent Phone or Roll No');
     startSandbox('parent', found ? found.name : 'School', q);
     return;
   }
 
   if (found) {
-    if (activeRole === 'principal' && keyVal === (found.principal_key || 'PRIN-123')) {
-      loggedInAsPrincipal = true; startSandbox('principal', found.name); return;
+    if (window._loginRole === 'principal' && keyVal === (found.principal_key || 'PRIN-123')) {
+      startSandbox('principal', found.name); return;
     }
-    if (activeRole === 'teacher' && (keyVal === found.teacher_key || keyVal === found.principal_key)) {
-      loggedInAsPrincipal = false; startSandbox('teacher', found.name); return;
+    if (window._loginRole === 'teacher' && (keyVal === found.teacher_key || keyVal === found.principal_key)) {
+      startSandbox('teacher', found.name); return;
     }
   }
-  alert('Invalid School ID or Password. Try Demo Mode below.');
+  alert('Invalid School ID or Password. Click Demo Mode below.');
 }
 
 function startSandbox(role, schoolName, parentQuery) {
-  isDemo = true;
-  school = { name: schoolName || 'Mayhemic International Academy' };
+  school = { name: schoolName || 'Mayhemic Academy' };
   students = [
     { id: 101, name: 'Aarav Sharma', class: '10-A', roll_no: '01', parent_name: 'Vikram Sharma', parent_phone: '9876543210', total_fee: 48000, paid: 36000, pending: 12000 },
-    { id: 102, name: 'Ananya Verma', class: '10-A', roll_no: '02', parent_name: 'Sandeep Verma', parent_phone: '9876543211', total_fee: 48000, paid: 48000, pending: 0 },
-    { id: 103, name: 'Kabir Mehra', class: '9-B', roll_no: '14', parent_name: 'Rohan Mehra', parent_phone: '9876543212', total_fee: 42000, paid: 10000, pending: 32000 }
+    { id: 102, name: 'Ananya Verma', class: '10-A', roll_no: '02', parent_name: 'Sandeep Verma', parent_phone: '9876543211', total_fee: 48000, paid: 48000, pending: 0 }
   ];
-  students = students.filter(s => !deletedStudentIds.includes(s.id));
   const today = new Date().toISOString().slice(0, 10);
-  if (!attendanceDB[today]) attendanceDB[today] = { 101: 'P', 102: 'P', 103: 'A' };
+  if (!attendanceDB[today]) attendanceDB[today] = { 101: 'P', 102: 'P' };
   switchActivePortal(role, parentQuery);
 }
 
 function switchActivePortal(role, parentQuery) {
-  $('login').style.display = 'none';$('app').style.display = role === 'principal' ? 'block' : 'none';
-  $('teacherApp').style.display = role === 'teacher' ? 'block' : 'none';$('parentApp').style.display = role === 'parent' ? 'block' : 'none';
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').style.display = role === 'principal' ? 'block' : 'none';
+  document.getElementById('teacherApp').style.display = role === 'teacher' ? 'block' : 'none';
+  document.getElementById('parentApp').style.display = role === 'parent' ? 'block' : 'none';
 
   if (role === 'principal') {
-    $('schoolName').textContent = school.name;
-    updateStats();
-    populateClassControls();
-    render();
+    document.getElementById('schoolName').textContent = school.name;
+    updateStats(); render();
   } else if (role === 'teacher') {
-    $('tSchoolName').textContent = school.name;
-    $('attDate').value = new Date().toISOString().slice(0, 10);
-    const classes = [...new Set(students.map(s => s.class))];
-    $('attClassSel').innerHTML = `<option value="ALL">All Classes</option>` + classes.map(c => `<option value="${c}">${c}</option>`).join('');
+    document.getElementById('tSchoolName').textContent = school.name;
+    document.getElementById('attDate').value = new Date().toISOString().slice(0, 10);
     renderTeacherAttendance();
   } else if (role === 'parent') {
-    $('pSchoolName').textContent = school.name;
+    document.getElementById('pSchoolName').textContent = school.name;
     renderParentPortal(parentQuery || '9876543210');
   }
 }
 
-function getAttendanceStats(id) {
-  let p = 0, a = 0;
-  Object.values(attendanceDB).forEach(day => {
-    if (day[id] === 'P') p++;
-    if (day[id] === 'A') a++;
-  });
-  const tot = p + a;
-  const pct = tot > 0 ? Math.round((p / tot) * 100) : 100;
-  const todayStatus = attendanceDB[new Date().toISOString().slice(0, 10)]?.[id] || 'P';
-  return { p, a, pct, todayStatus };
-}
-
 function updateStats() {
   const col = students.reduce((a,x)=>a+x.paid,0), pend = students.reduce((a,x)=>a+x.pending,0), tot = col+pend;
-  $('sCollected').textContent = 'Rs ' + col.toLocaleString('en-IN');$('sPending').textContent = 'Rs ' + pend.toLocaleString('en-IN');
-  $('sTotalBook').textContent = 'Rs ' + tot.toLocaleString('en-IN');$('sStudents').textContent = students.length;
+  document.getElementById('sCollected').textContent = 'Rs ' + col.toLocaleString('en-IN');
+  document.getElementById('sPending').textContent = 'Rs ' + pend.toLocaleString('en-IN');
+  document.getElementById('sTotalBook').textContent = 'Rs ' + tot.toLocaleString('en-IN');
+  document.getElementById('sStudents').textContent = students.length;
   const rate = tot > 0 ? Math.round((col/tot)*100) : 0;
-  $('progPct').textContent = rate + '% Recovered';
-  $('progFill').style.width = rate + '\%';$('progLeftText').textContent = 'Collected: Rs ' + col;
-  $('progRightText').textContent = 'Pending: Rs ' + pend;
+  document.getElementById('progPct').textContent = rate + '% Recovered';
+  document.getElementById('progFill').style.width = rate + '%';
 }
-
-function populateClassControls() {
-  const classes = [...new Set(students.map(s => s.class))];
-  $('classChips').innerHTML = classes.map(c => `<div class="c-chip" onclick="filterClass('${c}')"><b>${c}</b></div>`).join('');
-}
-function filterClass(cls) { $('search').value = cls; render(); }
 
 function render() {
-  const q = $('search').value.toLowerCase();
+  const q = document.getElementById('search').value.toLowerCase();
   const list = students.filter(s => !q || [s.name, s.class, s.parent_phone].join(' ').toLowerCase().includes(q));
-  $('rows').innerHTML = list.map(s => {
-    const att = getAttendanceStats(s.id);
-    const pct = s.total_fee > 0 ? Math.round((s.paid / s.total_fee) * 100) : 100;
-    return `
-      <tr>
-        <td><div class="stu-name">${s.name}</div><div class="label">${s.parent_name} (${s.parent_phone})</div></td>
-        <td><b>${s.class}</b> / #${s.roll_no}</td>
-        <td><span style="color:var(--ok)">${att.pct}%</span></td>
-        <td class="r mono"><span class="fee-edit-link" onclick="openAdjust(${s.id})">Rs ${s.total_fee} &plusmn;</span></td>
-        <td class="r mono">Rs ${s.paid}<span class="mini-bar"><i style="width:${pct}%"></i></span></td>
-        <td class="r mono ${s.pending > 0 ? 'pend' : 'clear'}">${s.pending > 0 ? 'Rs ' + s.pending : 'CLEARED'}</td>
-        <td class="r">
-          <div class="row-actions">
-            <button class="small solid" onclick="openPay(${s.id})">Pay</button>
-            <button class="icon-btn warn-btn" onclick="openAdjust(${s.id})">&plusmn; Fee</button>
-            <button class="icon-btn bad-btn" onclick="deleteStudent(${s.id})">&#128465;</button>
-          </div>
-        </td>
-      </tr>
-    `;
-  }).join('');
-  $('empty').style.display = list.length ? 'none' : 'block';
+  document.getElementById('rows').innerHTML = list.map(s => `
+    <tr>
+      <td><div class="stu-name">${s.name}</div><div class="label">${s.parent_name} (${s.parent_phone})</div></td>
+      <td><b>${s.class}</b> / #${s.roll_no}</td>
+      <td><span style="color:var(--ok)">100%</span></td>
+      <td class="r mono">Rs ${s.total_fee}</td>
+      <td class="r mono">Rs ${s.paid}</td>
+      <td class="r mono ${s.pending > 0 ? 'pend' : 'clear'}">${s.pending > 0 ? 'Rs ' + s.pending : 'CLEARED'}</td>
+      <td class="r"><button class="small solid" onclick="openPay(${s.id})">Pay</button></td>
+    </tr>
+  `).join('');
 }
 
 function openPay(id) {
   payId = id; const s = students.find(x => x.id === id);
-  $('payName').textContent = s.name;
-  $('payInfo').textContent = 'Pending Balance: Rs ' + s.pending;
-  $('payAmt').value = s.pending;
-  $('payPresets').innerHTML = `<span onclick="$('payAmt').value=${s.pending}">Full (${s.pending})</span>`;
-  $('payOv').classList.add('show');
+  document.getElementById('payName').textContent = s.name;
+  document.getElementById('payAmt').value = s.pending;
+  document.getElementById('payOv').classList.add('show');
 }
 
 function savePay() {
   const s = students.find(x => x.id === payId);
-  const amt = Number($('payAmt').value);
+  const amt = Number(document.getElementById('payAmt').value);
   s.paid += amt; s.pending = Math.max(0, s.total_fee - s.paid);
-  const receiptHTML = `<h2>${school.name}</h2><div>Receipt</div><hr><table><tr><td>Student</td><td style="text-align:right"><b>${s.name}</b></td></tr><tr><td>Paid</td><td style="text-align:right"><b>Rs ${amt}</b></td></tr><tr><td>Balance</td><td style="text-align:right">Rs ${s.pending}</td></tr></table>`;
-  $('rcPreviewBox').innerHTML = receiptHTML;
+  document.getElementById('rcPreviewBox').innerHTML = `<h2>${school.name}</h2><hr><table><tr><td>Student</td><td style="text-align:right"><b>${s.name}</b></td></tr><tr><td>Paid</td><td style="text-align:right"><b>Rs ${amt}</b></td></tr><tr><td>Balance</td><td style="text-align:right">Rs ${s.pending}</td></tr></table>`;
   closeAll(); updateStats(); render();
-  $('rcOv').classList.add('show');
+  document.getElementById('rcOv').classList.add('show');
 }
 
-function openAdjust(id) {
-  adjId = id; const s = students.find(x => x.id === id);
-  $('adjTitle').textContent = s.name;
-  $('adjSub').textContent = 'Current Total: Rs ' + s.total_fee;
-  $('adjVal').value = '';
-  setAdjMode('inc');
-  $('adjOv').classList.add('show');
-}
-
-function setAdjMode(mode) {
-  adjMode = mode;
-  $('mInc').className = mode === 'inc' ? 'active-inc' : '';
-  $('mDec').className = mode === 'dec' ? 'active-dec' : '';$('mSet').className = mode === 'set' ? 'active-set' : '';
-  const s = students.find(x => x.id === adjId);
-  if (mode === 'set') $('adjVal').value = s.total_fee;
-  calcAdjPreview();
-}
-
-function calcAdjPreview() {
-  const s = students.find(x => x.id === adjId);
-  const val = Number($('adjVal').value || 0);
-  let newTot = s.total_fee;
-  if (adjMode === 'inc') newTot += ($('adjUnit').value === 'pct' ? Math.round(s.total_fee * (val/100)) : val);
-  if (adjMode === 'dec') newTot = Math.max(0, newTot - ($('adjUnit').value === 'pct' ? Math.round(s.total_fee * (val/100)) : val));
-  if (adjMode === 'set') newTot = val;
-  $('adjPrevTotal').textContent = 'Rs ' + s.total_fee + ' → Rs ' + newTot;
-  $('adjPrevPend').textContent = 'Rs ' + Math.max(0, newTot - s.paid);
-}
-
-function saveFeeAdjustment() {
-  const s = students.find(x => x.id === adjId);
-  const val = Number($('adjVal').value || 0);
-  let newTot = s.total_fee;
-  if (adjMode === 'inc') newTot += ($('adjUnit').value === 'pct' ? Math.round(s.total_fee * (val/100)) : val);
-  if (adjMode === 'dec') newTot = Math.max(0, newTot - ($('adjUnit').value === 'pct' ? Math.round(s.total_fee * (val/100)) : val));
-  if (adjMode === 'set') newTot = val;
-  s.total_fee = newTot;
-  s.pending = Math.max(0, newTot - s.paid);
-  closeAll(); updateStats(); render();
-  toast('Fee updated successfully!');
-}
-
-function deleteStudent(id) {
-  if (!confirm('Permanently delete this student?')) return;
-  students = students.filter(x => x.id !== id);
-  deletedStudentIds.push(id);
-  localStorage.setItem('mayhemic_deleted_students', JSON.stringify(deletedStudentIds));
-  closeAll(); updateStats(); render();
-  toast('Student deleted.');
-}
-
-function openAdd() { ['aName','aClass','aRoll','aParent','aPhone','aFee'].forEach(i => $(i).value = '');$('addOv').classList.add('show'); }
+function openAdd() { document.getElementById('addOv').classList.add('show'); }
 function saveStudent() {
-  const name = $('aName').value.trim();
+  const name = document.getElementById('aName').value.trim();
   if (!name) return alert('Name required');
-  students.unshift({ id: Date.now(), name, class: $('aClass').value.trim() \vert{}\vert{} '10-A', roll_no:$('aRoll').value.trim() || '1', parent_name: $('aParent').value.trim(), parent_phone:$('aPhone').value.trim(), total_fee: Number($('aFee').value \vert{}\vert{} 40000), paid: 0, pending: Number($('aFee').value || 40000) });
-  closeAll(); updateStats(); render(); toast('Student added!');
+  students.unshift({ id: Date.now(), name, class: document.getElementById('aClass').value, roll_no: document.getElementById('aRoll').value, parent_name: document.getElementById('aParent').value, parent_phone: document.getElementById('aPhone').value, total_fee: Number(document.getElementById('aFee').value || 45000), paid: 0, pending: Number(document.getElementById('aFee').value || 45000) });
+  closeAll(); updateStats(); render();
 }
 
 function renderTeacherAttendance() {
-  const date = $('attDate').value;
+  const date = document.getElementById('attDate').value;
   if (!attendanceDB[date]) attendanceDB[date] = {};
-  $('tRows').innerHTML = students.map(s => {
+  document.getElementById('tRows').innerHTML = students.map(s => {
     const st = attendanceDB[date][s.id] || 'P';
-    const att = getAttendanceStats(s.id);
     return `
       <tr>
         <td class="mono">#${s.roll_no}</td>
         <td><b>${s.name}</b></td>
         <td>${s.parent_phone}</td>
-        <td class="mono">${att.pct}%</td>
         <td class="r">
-          <button class="small ${st === 'P' ? 'ok-btn active' : ''}" onclick="attendanceDB['${date}'][${s.id}] = 'P'; renderTeacherAttendance();">Present</button>
-          <button class="small ${st === 'A' ? 'bad-btn active' : ''}" onclick="attendanceDB['${date}'][${s.id}] = 'A'; renderTeacherAttendance();">Absent</button>
+          <button class="small ${st === 'P' ? 'ok-btn' : ''}" onclick="attendanceDB['${date}'][${s.id}] = 'P'; renderTeacherAttendance();">Present</button>
+          <button class="small ${st === 'A' ? 'bad-btn' : ''}" onclick="attendanceDB['${date}'][${s.id}] = 'A'; renderTeacherAttendance();">Absent</button>
         </td>
       </tr>
     `;
@@ -749,66 +504,29 @@ function renderTeacherAttendance() {
 }
 
 function markAllClass(st) {
-  const date = $('attDate').value;
+  const date = document.getElementById('attDate').value;
   if (!attendanceDB[date]) attendanceDB[date] = {};
   students.forEach(s => attendanceDB[date][s.id] = st);
   renderTeacherAttendance();
 }
 
 function renderParentPortal(q) {
-  const s = students.find(x => x.parent_phone.includes(q) || x.name.toLowerCase().includes(q.toLowerCase())) || students[0];
-  const att = getAttendanceStats(s.id);
-  $('parentContent').innerHTML = `
+  const s = students.find(x => x.parent_phone.includes(q)) || students[0];
+  document.getElementById('parentContent').innerHTML = `
     <div class="glass-box" style="max-width:700px;margin:auto">
-      <h2 class="unbounded" style="font-size:24px">${s.name}</h2>
-      <p style="color:var(--mute);margin-top:4px">Class ${s.class} &bull; Parent: ${s.parent_name} (${s.parent_phone})</p>
+      <h2>${s.name}</h2>
+      <p style="color:var(--mute)">Class ${s.class} &bull; Parent: ${s.parent_name} (${s.parent_phone})</p>
       <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;text-align:center">
-        <div class="stat"><div class="label">Attendance</div><div class="v g">${att.pct}%</div></div>
-        <div class="stat"><div class="label">Fee Paid</div><div class="v g">Rs ${s.paid}</div></div>
-        <div class="stat"><div class="label">Pending Due</div><div class="v r">Rs ${s.pending}</div></div>
+      <div style="display:flex;justify-content:space-between">
+        <div>Fee Paid: <b>Rs ${s.paid}</b></div>
+        <div>Pending Due: <b style="color:var(--bad)">Rs ${s.pending}</b></div>
       </div>
     </div>
   `;
 }
 
-function openPasswordChangeModal() { $('passOv').classList.add('show'); }
 function closeAll() { document.querySelectorAll('.ov').forEach(o => o.classList.remove('show')); }
-function saveNewPassword() {
-  const p = $('newPassIn').value.trim();
-  if (!p) return alert('Enter a valid password');
-  toast('Portal password updated securely!');
-  closeAll();
-}
 function logout() { location.reload(); }
-function toast(m) { const t = $('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
-function exportCSV() {
-  const csv = ['Name,Class,Roll,Phone,TotalFee,Paid,Pending', ...students.map(s => `${s.name},${s.class},${s.roll_no},${s.parent_phone},${s.total_fee},${s.paid},${s.pending}`)].join('\n');
-  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'students.csv'; a.click();
-}
-function printClassReport() { window.print(); }
-function importCSV(inp) {
-  const f = inp.files[0]; if (!f) return;
-  f.text().then(text => {
-    toast('CSV Imported successfully!');
-  });
-}
-function openBulkAdjust() {
-  const classes = [...new Set(students.map(s => s.class))];
-  $('bTarget').innerHTML = `<option value="ALL">Entire School</option>` + classes.map(c => `<option value="${c}">Class ${c}</option>`).join('');
-  $('bVal').value = '';$('bulkOv').classList.add('show');
-}
-function applyBulkAdjust() {
-  const target = $('bTarget').value, action =$('bAction').value, val = Number($('bVal').value \vert{}\vert{} 0), unit =$('bUnit').value;
-  students.forEach(s => {
-    if (target === 'ALL' || s.class === target) {
-      if (action === 'inc') s.total_fee += (unit === 'pct' ? Math.round(s.total_fee * (val/100)) : val);
-      if (action === 'dec') s.total_fee = Math.max(0, s.total_fee - (unit === 'pct' ? Math.round(s.total_fee * (val/100)) : val));
-      s.pending = Math.max(0, s.total_fee - s.paid);
-    }
-  });
-  closeAll(); updateStats(); render(); toast('Bulk revision applied!');
-}
 </script>
 </body>
 </html>
