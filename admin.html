@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mayhemic HQ — Super Admin Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #040406;
+    --card: rgba(14, 15, 22, 0.78);
+    --line: rgba(255, 255, 255, 0.12);
+    --line-bright: rgba(159, 208, 255, 0.45);
+    --text: #f5f7ff;
+    --mute: rgba(255, 255, 255, 0.56);
+    --accent: #9fd0ff;
+    --violet: #7b3dff;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --bad: #f87171;
+    --e: cubic-bezier(.16, 1, .3, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: Manrope, sans-serif; min-height: 100vh; overflow-x: hidden;
+  }
+  .au { position: fixed; border-radius: 50%; opacity: .22; z-index: 0; pointer-events: none; filter: blur(65px); }
+  .a1 { width: 45vw; height: 45vw; background: radial-gradient(circle, #7b3dff 0, transparent 70%); left: -10vw; top: -10vh; }
+  .a2 { width: 45vw; height: 45vw; background: radial-gradient(circle, #2b52ff 0, transparent 70%); right: -10vw; bottom: -10vh; }
+  .label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--mute); font-weight: 600; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  .unbounded { font-family: Unbounded, sans-serif; }
+
+  button, .btn-link {
+    font-family: inherit; cursor: pointer; border-radius: 40px; font-size: 12px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; padding: 11px 20px;
+    border: 1px solid var(--line); background: rgba(255,255,255,.04); color: #fff;
+    transition: all .2s var(--e); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    text-decoration: none;
+  }
+  button:hover, .btn-link:hover { border-color: var(--line-bright); background: rgba(159,208,255,.12); }
+  button.solid { background: #fff; color: #040406; border-color: #fff; }
+  button.solid:hover { background: var(--accent); border-color: var(--accent); }
+  button.danger { border-color: rgba(248,113,113,.35); color: var(--bad); background: rgba(248,113,113,.08); }
+  button.danger:hover { background: var(--bad); color: #040406; }
+  button.ok-btn { border-color: rgba(74,222,128,.35); color: var(--ok); background: rgba(74,222,128,.08); }
+  button.ok-btn:hover { background: var(--ok); color: #040406; }
+  button.small { padding: 7px 14px; font-size: 11px; }
+
+  input, select {
+    background: rgba(255,255,255,.04); border: 1px solid var(--line); color: #fff;
+    padding: 13px 16px; border-radius: 12px; font-size: 14px; font-family: inherit; width: 100%;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); background: rgba(255,255,255,.08); }
+  select option { background: #0d0e14; color: #fff; }
+
+  #adminLogin {
+    position: relative; z-index: 2; min-height: 100vh; display: flex; align-items: center;
+    justify-content: center; padding: 24px;
+  }
+  .login-card {
+    width: 100%; max-width: 420px; padding: 40px 32px; border-radius: 24px;
+    background: var(--card); border: 1px solid var(--line); backdrop-filter: blur(20px); text-align: center;
+  }
+  .wrap { position: relative; z-index: 2; max-width: 1280px; margin: auto; padding: 28px 4vw 80px; }
+  .top {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+    padding: 20px 24px; border: 1px solid var(--line); border-radius: 18px;
+    background: var(--card); backdrop-filter: blur(16px); margin-bottom: 24px;
+  }
+  .grid-main { display: grid; grid-template-columns: 380px 1fr; gap: 22px; align-items: start; }
+  .panel {
+    border: 1px solid var(--line); border-radius: 20px; background: var(--card);
+    backdrop-filter: blur(16px); padding: 24px;
+  }
+  .row { margin-top: 14px; }
+  .row label { display: block; margin-bottom: 6px; }
+  .cred-box {
+    background: rgba(255,255,255,.03); border: 1px dashed var(--line-bright);
+    padding: 12px; border-radius: 12px; margin-top: 8px; font-size: 12px;
+  }
+  .school-card {
+    border: 1px solid var(--line); border-radius: 16px; padding: 20px;
+    background: rgba(255,255,255,.02); margin-bottom: 14px; transition: border-color .2s;
+  }
+  .school-card:hover { border-color: var(--line-bright); }
+  .badge {
+    font-size: 10px; padding: 4px 10px; border-radius: 20px; font-weight: 700; text-transform: uppercase;
+  }
+  .badge.active { background: rgba(74,222,128,.15); color: var(--ok); border: 1px solid rgba(74,222,128,.3); }
+  .badge.suspended { background: rgba(248,113,113,.15); color: var(--bad); border: 1px solid rgba(248,113,113,.3); }
+  #toast {
+    position: fixed; bottom: 26px; right: 26px; background: #fff; color: #040406;
+    padding: 14px 22px; border-radius: 14px; font-size: 13px; font-weight: 700;
+    display: none; z-index: 200; border-left: 5px solid var(--violet);
+  }
+  @media (max-width: 920px) { .grid-main { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="au a1"></div><div class="au a2"></div>
+
+<!-- SUPER ADMIN LOGIN -->
+<div id="adminLogin">
+  <div class="login-card">
+    <div class="label" style="color:var(--accent)">Founder Command Center</div>
+    <h1 class="unbounded" style="font-size:28px;margin:10px 0">MAYHEMIC HQ</h1>
+    <p style="color:var(--mute);font-size:13px;margin-bottom:22px">Enter your Master Founder Passcode to provision schools, generate Principal &amp; Teacher login IDs, and manage subscriptions.</p>
+    <input id="masterPass" type="password" placeholder="Master Passcode (Default: mayhemic@admin)" style="text-align:center">
+    <button class="solid" style="width:100%;margin-top:14px;padding:14px" onclick="unlockHQ()">Unlock Super-Admin &rarr;</button>
+    <div id="hqErr" style="color:var(--bad);font-size:13px;margin-top:10px;min-height:18px"></div>
+    <div style="margin-top:18px;display:flex;justify-content:center;gap:12px">
+      <a href="index.html" class="btn-link small">&larr; Home</a>
+      <a href="fee.html" class="btn-link small">Open School ERP &nearr;</a>
+    </div>
+  </div>
+</div>
+
+<!-- SUPER ADMIN DASHBOARD -->
+<div id="hqApp" class="wrap" style="display:none">
+  <div class="top">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="unbounded" style="font-weight:800;letter-spacing:.18em">MAYHEMIC SUPER-ADMIN</span>
+        <span class="badge active">FOUNDER MODE</span>
+      </div>
+      <div style="font-size:13px;color:var(--mute);margin-top:4px">Create and manage School Login IDs, Principal Passwords, and Teacher Access Keys</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="index.html" class="btn-link small">&larr; Mayhemic.in</a>
+      <a href="fee.html" class="btn-link small" style="border-color:var(--accent);color:var(--accent)">Launch School Portal (fee.html) &nearr;</a>
+      <button class="small" onclick="lockHQ()">Lock HQ</button>
+    </div>
+  </div>
+
+  <!-- Summary Strip -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:22px">
+    <div class="panel" style="padding:18px"><div class="label">Total Onboarded Schools</div><div class="unbounded" style="font-size:26px;margin-top:8px" id="totSchools">0</div></div>
+    <div class="panel" style="padding:18px"><div class="label">Active Subscriptions</div><div class="unbounded" style="font-size:26px;margin-top:8px;color:var(--ok)" id="actSchools">0</div></div>
+    <div class="panel" style="padding:18px"><div class="label">Suspended / Trial</div><div class="unbounded" style="font-size:26px;margin-top:8px;color:var(--warn)" id="susSchools">0</div></div>
+  </div>
+
+  <div class="grid-main">
+    <!-- CREATE NEW SCHOOL FORM -->
+    <div class="panel">
+      <div class="label" style="color:var(--accent)">Provision New Tenant</div>
+      <h3 class="unbounded" style="font-size:18px;margin-top:4px">Create School Credentials</h3>
+
+      <div class="row">
+        <label class="label">School Full Name *</label>
+        <input id="sName" placeholder="e.g. City Montessori School" oninput="autoSlug()">
+      </div>
+      <div class="row">
+        <label class="label">City / Branch</label>
+        <input id="sCity" placeholder="e.g. Gomti Nagar, Lucknow">
+      </div>
+      <div class="row">
+        <label class="label">Principal / Owner WhatsApp (10 digits)</label>
+        <input id="sPhone" placeholder="e.g. 9876543210">
+      </div>
+      <div class="row">
+        <label class="label">School Login ID (Username) *</label>
+        <input id="sLoginId" class="mono" placeholder="e.g. cms-lucknow">
+      </div>
+      <div class="row">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <label class="label">Principal Password / API Key *</label>
+          <span style="font-size:11px;color:var(--accent);cursor:pointer" onclick="genRandomCredentials()">&#x21bb; Regenerate Keys</span>
+        </div>
+        <input id="sPrinKey" class="mono" placeholder="Principal password / key">
+      </div>
+      <div class="row">
+        <label class="label">Teacher Portal Password / Key *</label>
+        <input id="sTeachKey" class="mono" placeholder="Teacher password / key">
+      </div>
+      <div class="row">
+        <label class="label">Subscription Plan</label>
+        <select id="sPlan">
+          <option value="Pro ERP (Fees + Attendance)">Pro ERP (Fees + Attendance)</option>
+          <option value="Fee Tracker Standard">Fee Tracker Standard</option>
+          <option value="14-Day Free Trial">14-Day Free Trial</option>
+        </select>
+      </div>
+
+      <button class="solid" style="width:100%;margin-top:20px;padding:14px" onclick="createSchool()">+ Create School &amp; Generate Access</button>
+    </div>
+
+    <!-- LIST OF SCHOOLS -->
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div class="label">Tenant Directory</div>
+          <h3 class="unbounded" style="font-size:18px;margin-top:4px">Provisioned Schools</h3>
+        </div>
+        <input id="schSearch" placeholder="Search school name, city or ID..." style="max-width:260px;padding:9px 14px" oninput="renderSchools()">
+      </div>
+      <div id="schoolList"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API = 'https://mayhemic-api.aryanmishra8920.workers.dev';
+const MASTER_PASS = 'mayhemic@admin'; // Change your master passcode here
+const $ = id => document.getElementById(id);
+
+let schools = [];
+
+function loadSchoolsFromStorage() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('mayhemic_schools') || 'null');
+    if (saved && saved.length) {
+      schools = saved;
+    } else {
+      // Default pre-configured school so you can test right away
+      schools = [
+        {
+          id: 'sch_1',
+          name: 'Mayhemic Model School',
+          city: 'Lucknow, UP',
+          phone: '9876543210',
+          login_id: 'mayhemic-lko',
+          principal_key: 'PRIN-8920-LKO',
+          teacher_key: 'TEACH-8920-LKO',
+          plan: 'Pro ERP (Fees + Attendance)',
+          status: 'active',
+          created_at: new Date().toLocaleDateString('en-IN')
+        }
+      ];
+      saveSchoolsToStorage();
+    }
+  } catch (e) { schools = []; }
+}
+
+function saveSchoolsToStorage() {
+  try { localStorage.setItem('mayhemic_schools', JSON.stringify(schools)); } catch (e) {}
+}
+
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.style.display = 'block';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', 3400);
+}
+
+function unlockHQ() {
+  const p = $('masterPass').value.trim();
+  if (p === MASTER_PASS) {
+    sessionStorage.setItem('mayhemic_hq', '1');
+    $('adminLogin').style.display = 'none';
+    $('hqApp').style.display = 'block';
+    loadSchoolsFromStorage();
+    genRandomCredentials();
+    renderSchools();
+  } else {
+    $('hqErr').textContent = 'Invalid Master Passcode. Try: mayhemic@admin';
+  }
+}
+$('masterPass').addEventListener('keydown', e => { if (e.key === 'Enter') unlockHQ(); });
+
+function lockHQ() {
+  sessionStorage.removeItem('mayhemic_hq');
+  $('hqApp').style.display = 'none';
+  $('adminLogin').style.display = 'flex';
+  $('masterPass').value = '';
+}
+
+function autoSlug() {
+  const name = $('sName').value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  $('sLoginId').value = name ? name.slice(0, 22) : '';
+}
+
+function randCode(prefix) {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let out = '';
+  for (let i = 0; i < 6; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  return `${prefix}-${out}`;
+}
+
+function genRandomCredentials() {
+  $('sPrinKey').value = randCode('PRIN');
+  $('sTeachKey').value = randCode('TEACH');
+}
+
+async function createSchool() {
+  const name = $('sName').value.trim();
+  const city = $('sCity').value.trim() || 'India';
+  const phone = $('sPhone').value.trim();
+  const login_id = $('sLoginId').value.trim().toLowerCase();
+  const principal_key = $('sPrinKey').value.trim();
+  const teacher_key = $('sTeachKey').value.trim();
+  const plan = $('sPlan').value;
+
+  if (!name || !login_id || !principal_key || !teacher_key) {
+    return toast('Please fill School Name, Login ID, and Keys');
+  }
+  if (schools.some(s => s.login_id === login_id)) {
+    return toast('That School Login ID already exists');
+  }
+
+  const newSchool = {
+    id: 'sch_' + Date.now(),
+    name, city, phone, login_id, principal_key, teacher_key, plan,
+    status: 'active',
+    created_at: new Date().toLocaleDateString('en-IN')
+  };
+
+  schools.unshift(newSchool);
+  saveSchoolsToStorage();
+
+  // Optional sync to Cloudflare Worker if endpoint exists
+  try {
+    await fetch(API + '/api/admin/schools', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(newSchool)
+    });
+  } catch (e) {}
+
+  $('sName').value = '';
+  $('sCity').value = '';
+  $('sPhone').value = '';
+  $('sLoginId').value = '';
+  genRandomCredentials();
+  renderSchools();
+  toast(`Created credentials for ${name}!`);
+}
+
+function toggleSchoolStatus(id) {
+  const s = schools.find(x => x.id === id);
+  if (!s) return;
+  s.status = s.status === 'active' ? 'suspended' : 'active';
+  saveSchoolsToStorage();
+  renderSchools();
+  toast(`${s.name} is now ${s.status.toUpperCase()}`);
+}
+
+function deleteSchool(id) {
+  const s = schools.find(x => x.id === id);
+  if (!s) return;
+  if (!confirm(`Permanently delete school "${s.name}" and revoke its login credentials?`)) return;
+  schools = schools.filter(x => x.id !== id);
+  saveSchoolsToStorage();
+  renderSchools();
+  toast(`Deleted ${s.name}`);
+}
+
+function copyCreds(id) {
+  const s = schools.find(x => x.id === id); if (!s) return;
+  const text = `Welcome to *Mayhemic School ERP*!\n\n*School:* ${s.name}\n*Portal Link:* https://mayhemic.in/fee.html\n\n*1. Principal / Admin Login:*\n• School ID: ${s.login_id}\n• Password / Key: ${s.principal_key}\n\n*2. Teacher Portal Login:*\n• School ID: ${s.login_id}\n• Teacher Password: ${s.teacher_key}\n\n*3. Parent Portal:*\n• Parents can log in directly using their registered 10-digit phone number.`;
+  navigator.clipboard.writeText(text);
+  toast('Credentials copied to clipboard!');
+}
+
+function shareWhatsAppCreds(id) {
+  const s = schools.find(x => x.id === id); if (!s) return;
+  const cleanPhone = String(s.phone || '').replace(/\D/g, '');
+  const fullPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+  const text = `Welcome to *Mayhemic School ERP*!\n\n*School:* ${s.name}\n*Portal:* https://mayhemic.in/fee.html\n\n*Principal Login:*\n• Login ID: *${s.login_id}*\n• Password / Key: *${s.principal_key}*\n\n*Teacher Login:*\n• Login ID: *${s.login_id}*\n• Teacher Password: *${s.teacher_key}*\n\n*Parent Portal:*\n• Parents log in with their registered mobile number.`;
+  window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+function renderSchools() {
+  const q = ($('schSearch').value || '').trim().toLowerCase();
+  $('totSchools').textContent = schools.length;
+  $('actSchools').textContent = schools.filter(s => s.status === 'active').length;
+  $('susSchools').textContent = schools.filter(s => s.status !== 'active').length;
+
+  const list = schools.filter(s => !q || [s.name, s.city, s.login_id, s.principal_key].join(' ').toLowerCase().includes(q));
+  if (!list.length) {
+    $('schoolList').innerHTML = `<div style="padding:40px;text-align:center;color:var(--mute)">No schools provisioned yet. Use the form on the left.</div>`;
+    return;
+  }
+
+  $('schoolList').innerHTML = list.map(s => `
+    <div class="school-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <h4 class="unbounded" style="font-size:16px">${s.name}</h4>
+            <span class="badge ${s.status}">${s.status}</span>
+          </div>
+          <div style="font-size:12px;color:var(--mute);margin-top:4px">${s.city} &bull; ${s.plan} &bull; Created ${s.created_at}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="small" onclick="copyCreds('${s.id}')">Copy Login</button>
+          <button class="small ok-btn" onclick="shareWhatsAppCreds('${s.id}')">WhatsApp Owner</button>
+          <button class="small" onclick="toggleSchoolStatus('${s.id}')">${s.status === 'active' ? 'Suspend' : 'Activate'}</button>
+          <button class="small danger" onclick="deleteSchool('${s.id}')">Delete</button>
+        </div>
+      </div>
+
+      <div class="cred-box mono" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+        <div><span class="label">School Login ID:</span><br><b style="color:#fff">${s.login_id}</b></div>
+        <div><span class="label">Principal Password/Key:</span><br><b style="color:var(--accent)">${s.principal_key}</b></div>
+        <div><span class="label">Teacher Password/Key:</span><br><b style="color:var(--ok)">${s.teacher_key}</b></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+if (sessionStorage.getItem('mayhemic_hq') === '1') {
+  $('adminLogin').style.display = 'none';
+  $('hqApp').style.display = 'block';
+  loadSchoolsFromStorage();
+  genRandomCredentials();
+  renderSchools();
+}
+</script>
+</body>
+</html>
