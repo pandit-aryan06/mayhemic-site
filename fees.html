@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mayhemic Fees</title>
+<style>
+  :root{--bg:#000;--card:#0d0d0d;--line:#1f1f1f;--text:#f2f2f2;--mute:#8a8a8a;--ok:#4ade80;--bad:#f87171}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1100px;margin:auto;padding:24px 18px 80px}
+  .label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+  button{font-family:inherit;cursor:pointer;border-radius:4px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:11px 18px;border:1px solid #fff;background:transparent;color:#fff;transition:.15s}
+  button:hover{background:#fff;color:#000}
+  button.solid{background:#fff;color:#000}
+  button.solid:hover{background:#d4d4d4}
+  button.small{padding:7px 12px;font-size:11px}
+  input,select{background:#000;border:1px solid #2a2a2a;color:#fff;padding:12px;border-radius:4px;font-size:14px;font-family:inherit;width:100%}
+  input:focus,select:focus{outline:none;border-color:#fff}
+
+  /* login */
+  #login{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px}
+  #login h1{font-size:34px;letter-spacing:.3em;font-weight:300;margin:0 0 6px}
+  #login .box{width:100%;max-width:380px;margin-top:36px}
+  #login button{width:100%;margin-top:12px}
+  #loginErr{color:var(--bad);font-size:13px;min-height:18px;margin-top:10px}
+
+  /* top bar */
+  .top{display:flex;justify-content:space-between;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:26px}
+  .brand{font-size:15px;letter-spacing:.3em;font-weight:300}
+  .school{font-size:13px;color:var(--mute);margin-top:4px}
+
+  /* cards */
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}
+  .stat{border:1px solid var(--line);background:var(--card);padding:18px;border-radius:6px}
+  .stat .v{font-size:26px;font-weight:300;margin-top:10px}
+  .stat .v.g{color:var(--ok)} .stat .v.r{color:var(--bad)}
+
+  /* toolbar */
+  .bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+  .bar input{flex:1;min-width:200px}
+  .tabs{display:flex;gap:6px}
+  .tabs button{border-color:#2a2a2a;color:var(--mute)}
+  .tabs button.on{border-color:#fff;color:#fff}
+
+  /* table */
+  .tbl{border:1px solid var(--line);border-radius:6px;overflow-x:auto;background:var(--card)}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+  th{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);text-align:left;padding:14px;border-bottom:1px solid var(--line);font-weight:400}
+  td{padding:14px;border-bottom:1px solid #141414}
+  tr:last-child td{border-bottom:0}
+  tr:hover td{background:#111}
+  .r{text-align:right} .pend{color:var(--bad)} .clear{color:var(--ok)}
+  .empty{padding:40px;text-align:center;color:var(--mute)}
+
+  /* modal */
+  .ov{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}
+  .ov.show{display:flex}
+  .modal{background:var(--card);border:1px solid #2a2a2a;border-radius:8px;padding:24px;width:100%;max-width:420px;max-height:92vh;overflow:auto}
+  .modal h3{margin:0 0 4px;font-weight:300;letter-spacing:.1em}
+  .modal .row{margin-top:14px}
+  .modal .row label{display:block;margin-bottom:6px}
+  .modal .acts{display:flex;gap:10px;margin-top:22px}
+  .modal .acts button{flex:1}
+  .chk{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--mute)}
+  .chk input{width:auto}
+
+  /* toast */
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:12px 20px;border-radius:4px;font-size:13px;display:none;z-index:20}
+
+  /* receipt */
+  #receipt{display:none}
+  .rc{color:#000;background:#fff;padding:24px;font-family:Arial,sans-serif}
+  .rc h2{margin:0;letter-spacing:.1em} .rc hr{border:0;border-top:1px dashed #999;margin:14px 0}
+  .rc table{min-width:0;font-size:14px;color:#000} .rc td{border:0;padding:5px 0}
+  @media print{
+    body *{visibility:hidden} #receipt,#receipt *{visibility:visible}
+    #receipt{display:block;position:absolute;left:0;top:0;width:100%}
+  }
+  @media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="label">School fee platform</div>
+  <h1>MAYHEMIC</h1>
+  <div class="box">
+    <input id="keyIn" type="password" placeholder="Enter your school key" autocomplete="off">
+    <button class="solid" onclick="doLogin()">Enter</button>
+    <div id="loginErr"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="wrap" style="display:none">
+  <div class="top">
+    <div><div class="brand">MAYHEMIC</div><div class="school" id="schoolName"></div></div>
+    <button class="small" onclick="logout()">Log out</button>
+  </div>
+
+  <div class="cards">
+    <div class="stat"><div class="label">Collected today</div><div class="v g" id="sToday">-</div></div>
+    <div class="stat"><div class="label">Total collected</div><div class="v" id="sCollected">-</div></div>
+    <div class="stat"><div class="label">Total pending</div><div class="v r" id="sPending">-</div></div>
+    <div class="stat"><div class="label">Students</div><div class="v" id="sStudents">-</div></div>
+  </div>
+
+  <div class="bar">
+    <input id="search" placeholder="Search name, roll no or phone" oninput="render()">
+    <div class="tabs">
+      <button id="tabAll" class="on" onclick="setTab('all')">All</button>
+      <button id="tabDue" onclick="setTab('due')">Pending</button>
+    </div>
+  </div>
+  <div class="bar">
+    <button class="solid small" onclick="openAdd()">+ Add student</button>
+    <button class="small" onclick="$('csv').click()">Import CSV</button>
+    <button class="small" onclick="sendReminders()">Send reminders</button>
+    <button class="small" onclick="load()">Refresh</button>
+    <input id="csv" type="file" accept=".csv" style="display:none" onchange="importCSV(this)">
+  </div>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Student</th><th>Class</th><th>Parent phone</th><th class="r">Total</th><th class="r">Paid</th><th class="r">Pending</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div id="empty" class="empty" style="display:none">No students found.</div>
+  </div>
+</div>
+
+<!-- PAY MODAL -->
+<div class="ov" id="payOv"><div class="modal">
+  <h3 id="payName">Pay</h3><div class="label" id="payInfo"></div>
+  <div class="row"><label class="label">Amount (Rs)</label><input id="payAmt" type="number" min="1"></div>
+  <div class="row"><label class="label">Mode</label>
+    <select id="payMode"><option value="cash">Cash</option><option value="upi">UPI</option><option value="cheque">Cheque</option></select></div>
+  <div class="row chk"><input type="checkbox" id="payWA"> <span>Send receipt on WhatsApp</span></div>
+  <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="savePay()">Save payment</button></div>
+</div></div>
+
+<!-- ADD MODAL -->
+<div class="ov" id="addOv"><div class="modal">
+  <h3>Add student</h3>
+  <div class="row"><label class="label">Student name</label><input id="aName"></div>
+  <div class="row"><label class="label">Class</label><input id="aClass" placeholder="e.g. 5A"></div>
+  <div class="row"><label class="label">Roll no</label><input id="aRoll"></div>
+  <div class="row"><label class="label">Parent name</label><input id="aParent"></div>
+  <div class="row"><label class="label">Parent phone</label><input id="aPhone" placeholder="10 digit number"></div>
+  <div class="row"><label class="label">Total fee (Rs)</label><input id="aFee" type="number"></div>
+  <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="saveStudent()">Add</button></div>
+</div></div>
+
+<!-- RECEIPT -->
+<div class="ov" id="rcOv"><div class="modal">
+  <div id="receipt"><div class="rc" id="rcBody"></div></div>
+  <h3>Payment saved</h3><div class="label" id="rcNo"></div>
+  <div class="acts"><button onclick="closeAll()">Close</button><button class="solid" onclick="window.print()">Print receipt</button></div>
+</div></div>
+
+<div id="toast"></div>
+
+<script>
+const API = 'https://mayhemic-api.aryanmishra8920.workers.dev';
+const $ = id => document.getElementById(id);
+let KEY = '', school = null, students = [], tab = 'all', payId = null;
+
+try { KEY = sessionStorage.getItem('mk') || ''; } catch (e) {}
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr = n => 'Rs ' + Number(n || 0).toLocaleString('en-IN');
+
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.style.display = 'block';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', 3200);
+}
+
+async function api(path, opts = {}) {
+  opts.headers = { ...(opts.headers || {}), Authorization: 'Bearer ' + KEY };
+  const res = await fetch(API + path, opts);
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401) { logout(); throw new Error('Session expired'); }
+  if (!res.ok) throw new Error(data.error || 'Something went wrong');
+  return data;
+}
+
+async function doLogin() {
+  KEY = $('keyIn').value.trim();
+  $('loginErr').textContent = '';
+  if (!KEY) return;
+  try {
+    school = await api('/api/me');
+    try { sessionStorage.setItem('mk', KEY); } catch (e) {}
+    start();
+  } catch (e) { $('loginErr').textContent = 'Wrong key. Please check and try again.'; KEY = ''; }
+}
+$('keyIn').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function logout() {
+  try { sessionStorage.removeItem('mk'); } catch (e) {}
+  KEY = ''; $('app').style.display = 'none'; $('login').style.display = 'flex'; $('keyIn').value = '';
+}
+
+function start() {
+  $('login').style.display = 'none'; $('app').style.display = 'block';
+  $('schoolName').textContent = school.name;
+  load();
+}
+
+async function load() {
+  try {
+    const [s, st] = await Promise.all([api('/api/summary'), api('/api/students')]);
+    $('sToday').textContent = inr(s.collected_today);
+    $('sCollected').textContent = inr(s.total_collected);
+    $('sPending').textContent = inr(s.total_pending);
+    $('sStudents').textContent = s.total_students;
+    students = st.students; render();
+  } catch (e) { toast(e.message); }
+}
+
+function setTab(t) {
+  tab = t;
+  $('tabAll').className = t === 'all' ? 'on' : '';
+  $('tabDue').className = t === 'due' ? 'on' : '';
+  render();
+}
+
+function render() {
+  const q = $('search').value.trim().toLowerCase();
+  const list = students.filter(s =>
+    (tab === 'all' || s.pending > 0) &&
+    (!q || [s.name, s.roll_no, s.parent_phone, s.class].join(' ').toLowerCase().includes(q)));
+  $('rows').innerHTML = list.map(s => `
+    <tr>
+      <td>${esc(s.name)}<div class="label" style="margin-top:3px">${esc(s.parent_name)}</div></td>
+      <td>${esc(s.class)}${s.roll_no ? ' / ' + esc(s.roll_no) : ''}</td>
+      <td>${esc(s.parent_phone) || '<span class="label">none</span>'}</td>
+      <td class="r">${inr(s.total_fee)}</td>
+      <td class="r">${inr(s.paid)}</td>
+      <td class="r ${s.pending > 0 ? 'pend' : 'clear'}">${s.pending > 0 ? inr(s.pending) : 'Cleared'}</td>
+      <td class="r"><button class="small" onclick="openPay(${s.id})">Pay</button></td>
+    </tr>`).join('');
+  $('empty').style.display = list.length ? 'none' : 'block';
+}
+
+function closeAll() { document.querySelectorAll('.ov').forEach(o => o.classList.remove('show')); }
+
+function openPay(id) {
+  const s = students.find(x => x.id === id); if (!s) return;
+  payId = id;
+  $('payName').textContent = s.name;
+  $('payInfo').textContent = 'Pending ' + inr(s.pending);
+  $('payAmt').value = s.pending > 0 ? s.pending : '';
+  $('payWA').checked = false;
+  $('payOv').classList.add('show');
+}
+
+async function savePay() {
+  const s = students.find(x => x.id === payId);
+  const amount = parseInt($('payAmt').value);
+  if (!amount || amount <= 0) return toast('Enter a valid amount');
+  try {
+    const r = await api('/api/payments', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ student_id: payId, amount, mode: $('payMode').value, send_receipt: $('payWA').checked })
+    });
+    const left = Math.max(0, s.pending - amount);
+    $('rcBody').innerHTML = `
+      <h2>${esc(school.name)}</h2><div>Fee Receipt</div><hr>
+      <table>
+        <tr><td>Receipt no</td><td><b>${esc(r.receipt_no)}</b></td></tr>
+        <tr><td>Date</td><td>${new Date().toLocaleString('en-IN')}</td></tr>
+        <tr><td>Student</td><td>${esc(s.name)}</td></tr>
+        <tr><td>Class</td><td>${esc(s.class)}</td></tr>
+        <tr><td>Paid</td><td><b>${inr(amount)}</b> (${esc($('payMode').value)})</td></tr>
+        <tr><td>Balance</td><td>${inr(left)}</td></tr>
+      </table><hr><div style="font-size:12px">Thank you. Powered by Mayhemic</div>`;
+    $('rcNo').textContent = 'Receipt ' + r.receipt_no;
+    closeAll(); $('rcOv').classList.add('show'); load();
+  } catch (e) { toast(e.message); }
+}
+
+function openAdd() {
+  ['aName','aClass','aRoll','aParent','aPhone','aFee'].forEach(i => $(i).value = '');
+  $('addOv').classList.add('show');
+}
+
+async function saveStudent() {
+  if (!$('aName').value.trim()) return toast('Student name is required');
+  try {
+    await api('/api/students', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: $('aName').value.trim(), class: $('aClass').value.trim(), roll_no: $('aRoll').value.trim(),
+        parent_name: $('aParent').value.trim(), parent_phone: $('aPhone').value.trim(), total_fee: $('aFee').value })
+    });
+    closeAll(); toast('Student added'); load();
+  } catch (e) { toast(e.message); }
+}
+
+async function importCSV(inp) {
+  const f = inp.files[0]; if (!f) return;
+  try {
+    const r = await api('/api/students/import', { method: 'POST', body: await f.text() });
+    toast('Imported ' + r.imported + ' students' + (r.skipped.length ? ', skipped ' + r.skipped.length : ''));
+    load();
+  } catch (e) { toast(e.message); }
+  inp.value = '';
+}
+
+async function sendReminders() {
+  if (!confirm('Send WhatsApp reminder to every parent with pending fees?')) return;
+  try {
+    const r = await api('/api/remind', { method: 'POST' });
+    toast('Sent ' + r.sent + ', failed ' + r.failed + ' (of ' + r.total + ')');
+  } catch (e) { toast(e.message); }
+}
+
+document.querySelectorAll('.ov').forEach(o => o.addEventListener('click', e => { if (e.target === o) closeAll(); }));
+
+if (KEY) { api('/api/me').then(d => { school = d; start(); }).catch(() => {}); }
+</script>
+</body>
+</html>
