@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mayhemic Fees — Command Center</title>
+<title>Mayhemic ERP — Principal, Teacher &amp; Parent Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #040406;
-    --card: rgba(14, 15, 22, 0.72);
-    --card-hover: rgba(22, 24, 36, 0.88);
+    --card: rgba(14, 15, 22, 0.75);
     --line: rgba(255, 255, 255, 0.12);
     --line-bright: rgba(159, 208, 255, 0.45);
     --text: #f5f7ff;
@@ -26,16 +25,10 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
+    background: var(--bg); color: var(--text);
+    font-family: Manrope, -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden;
   }
-
-  /* Ambient Aurora & Cyber Grid */
   .au { position: fixed; border-radius: 50%; opacity: .22; z-index: 0; pointer-events: none; filter: blur(60px); animation: dr 20s ease-in-out infinite alternate; }
   .a1 { width: 45vw; height: 45vw; background: radial-gradient(circle, #2b52ff 0, transparent 70%); left: -12vw; top: -8vh; }
   .a2 { width: 42vw; height: 42vw; background: radial-gradient(circle, #7b3dff 0, transparent 70%); right: -10vw; bottom: -10vh; animation-delay: -10s; }
@@ -46,332 +39,308 @@
     background-size: 48px 48px;
     mask-image: radial-gradient(circle at 50% 30%, #000 30%, transparent 85%);
   }
-
-  /* Top Loading Bar */
   #loaderBar {
     position: fixed; top: 0; left: 0; height: 3px; width: 0%;
     background: linear-gradient(90deg, #2b52ff, #9fd0ff, #7b3dff);
     z-index: 999; transition: width .3s var(--e), opacity .3s;
-    box-shadow: 0 0 16px #9fd0ff;
   }
-
-  /* Typography & Helpers */
   .label { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--mute); font-weight: 600; }
   .mono { font-family: "JetBrains Mono", monospace; }
   .unbounded { font-family: Unbounded, sans-serif; }
 
-  /* Buttons & Inputs */
   button, .btn-link {
     font-family: inherit; cursor: pointer; border-radius: 40px; font-size: 12px; font-weight: 700;
     letter-spacing: .08em; text-transform: uppercase; padding: 11px 20px;
     border: 1px solid var(--line); background: rgba(255,255,255,.04); color: #fff;
-    transition: all .22s var(--e); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all .2s var(--e); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     text-decoration: none; white-space: nowrap;
   }
   button:hover, .btn-link:hover { border-color: var(--line-bright); background: rgba(159,208,255,.12); transform: translateY(-1px); }
-  button:active { transform: translateY(0); }
   button.solid { background: #fff; color: #040406; border-color: #fff; }
-  button.solid:hover { background: var(--accent); border-color: var(--accent); color: #040406; box-shadow: 0 0 25px rgba(159, 208, 255, .4); }
+  button.solid:hover { background: var(--accent); border-color: var(--accent); color: #040406; }
   button.accent { background: linear-gradient(135deg, #2b52ff, #7b3dff); border-color: transparent; color: #fff; }
-  button.accent:hover { box-shadow: 0 0 24px rgba(123, 61, 255, .55); filter: brightness(1.1); }
   button.ok-btn { border-color: rgba(74,222,128,.35); color: var(--ok); background: rgba(74,222,128,.07); }
-  button.ok-btn:hover { background: var(--ok); color: #040406; }
+  button.ok-btn:hover, button.ok-btn.active { background: var(--ok); color: #040406; }
+  button.warn-btn { border-color: rgba(251,191,36,.35); color: var(--warn); background: rgba(251,191,36,.07); }
+  button.warn-btn:hover, button.warn-btn.active { background: var(--warn); color: #040406; }
+  button.bad-btn { border-color: rgba(248,113,113,.35); color: var(--bad); background: rgba(248,113,113,.07); }
+  button.bad-btn:hover, button.bad-btn.active { background: var(--bad); color: #040406; }
   button.small { padding: 7px 14px; font-size: 11px; border-radius: 30px; }
   button.icon-btn { padding: 7px 10px; border-radius: 10px; font-size: 12px; }
 
   input, select, textarea {
     background: rgba(255,255,255,.04); border: 1px solid var(--line); color: #fff;
     padding: 13px 16px; border-radius: 12px; font-size: 14px; font-family: inherit; width: 100%;
-    transition: border-color .25s, background .25s, box-shadow .25s;
   }
-  input:focus, select:focus, textarea:focus {
-    outline: none; border-color: var(--accent); background: rgba(255,255,255,.08);
-    box-shadow: 0 0 0 3px rgba(159, 208, 255, .12);
-  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); background: rgba(255,255,255,.08); }
   select option { background: #0d0e14; color: #fff; }
 
-  /* LOGIN SCREEN */
+  /* LOGIN SCREEN & ROLE TABS */
   #login {
     position: relative; z-index: 2; min-height: 100vh; display: flex; align-items: center;
-    justify-content: center; flex-direction: column; text-align: center; padding: 24px;
+    justify-content: center; flex-direction: column; padding: 24px;
   }
-  .back-home {
-    position: absolute; top: 28px; left: 6vw; font-size: 13px; color: var(--mute);
-    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 16px; border: 1px solid var(--line); border-radius: 30px;
-    background: rgba(255,255,255,.03); backdrop-filter: blur(10px); transition: .25s;
+  .top-nav-links {
+    position: absolute; top: 24px; left: 5vw; right: 5vw; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
   }
-  .back-home:hover { color: #fff; border-color: #fff; }
   .login-card {
-    width: 100%; max-width: 430px; padding: 42px 34px; border-radius: 24px;
+    width: 100%; max-width: 470px; padding: 36px 32px; border-radius: 24px;
     background: var(--card); border: 1px solid var(--line); backdrop-filter: blur(20px);
-    box-shadow: 0 30px 80px rgba(0,0,0,.65);
+    box-shadow: 0 30px 80px rgba(0,0,0,.65); text-align: center; margin-top: 40px;
   }
   #login h1 {
-    font-family: Unbounded, sans-serif; font-size: clamp(26px, 5vw, 36px); letter-spacing: .16em;
-    font-weight: 900; margin: 10px 0 8px;
+    font-family: Unbounded, sans-serif; font-size: clamp(24px, 5vw, 34px); letter-spacing: .14em;
+    font-weight: 900; margin: 8px 0 6px;
     background: linear-gradient(100deg, #fff 20%, #9fd0ff 55%, #b79cff 90%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .key-wrap { position: relative; margin-top: 26px; }
-  .key-wrap input { padding-right: 48px; text-align: center; letter-spacing: .08em; }
-  .eye-btn {
-    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-    background: transparent; border: 0; color: var(--mute); padding: 6px 10px; font-size: 12px;
+  .role-tabs {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+    background: rgba(255,255,255,.03); padding: 6px; border-radius: 16px;
+    border: 1px solid var(--line); margin: 20px 0;
   }
-  .eye-btn:hover { background: transparent; color: #fff; transform: translateY(-50%); }
-  #loginErr { color: var(--bad); font-size: 13px; min-height: 20px; margin-top: 12px; }
-  .demo-divider {
-    display: flex; align-items: center; gap: 12px; margin: 20px 0 14px; color: var(--mute); font-size: 11px; text-transform: uppercase; letter-spacing: .15em;
+  .role-tabs button {
+    border: 0; border-radius: 12px; padding: 10px 6px; font-size: 11px; color: var(--mute); background: transparent;
   }
-  .demo-divider::before, .demo-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .role-tabs button.active { background: #fff; color: #040406; box-shadow: 0 4px 16px rgba(255,255,255,.2); }
 
-  /* APP CONTAINER */
-  .wrap { position: relative; z-index: 2; max-width: 1320px; margin: auto; padding: 24px 4vw 90px; }
-
-  /* Top Bar */
+  /* MAIN CONTAINERS */
+  .wrap { position: relative; z-index: 2; max-width: 1340px; margin: auto; padding: 24px 4vw 90px; }
   .top {
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
     padding: 18px 24px; border: 1px solid var(--line); border-radius: 18px;
     background: var(--card); backdrop-filter: blur(16px); margin-bottom: 24px;
   }
-  .brand-row { display: flex; align-items: center; gap: 16px; }
-  .brand { font-family: Unbounded, sans-serif; font-size: 16px; letter-spacing: .22em; font-weight: 800; }
+  .brand { font-family: Unbounded, sans-serif; font-size: 16px; letter-spacing: .2em; font-weight: 800; }
   .badge-live {
     font-size: 11px; padding: 4px 10px; border-radius: 20px; background: rgba(74,222,128,.12);
-    color: var(--ok); border: 1px solid rgba(74,222,128,.3); font-weight: 700; display: inline-flex; align-items: center; gap: 6px;
+    color: var(--ok); border: 1px solid rgba(74,222,128,.3); font-weight: 700;
   }
-  .badge-live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
   .school { font-size: 14px; color: var(--accent); margin-top: 4px; font-weight: 600; }
-  .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
   /* KPI Cards */
   .cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 20px; }
   .stat {
     border: 1px solid var(--line); background: var(--card); backdrop-filter: blur(14px);
-    padding: 18px 20px; border-radius: 16px; position: relative; overflow: hidden;
-    transition: transform .25s var(--e), border-color .25s;
+    padding: 18px 20px; border-radius: 16px;
   }
-  .stat:hover { transform: translateY(-3px); border-color: rgba(159, 208, 255, .35); }
-  .stat .v { font-family: Unbounded, sans-serif; font-size: clamp(18px, 2vw, 24px); font-weight: 700; margin-top: 10px; letter-spacing: -.02em; }
+  .stat .v { font-family: Unbounded, sans-serif; font-size: clamp(17px, 1.9vw, 23px); font-weight: 700; margin-top: 8px; }
   .stat .sub { font-size: 12px; color: var(--mute); margin-top: 4px; }
   .stat .v.g { color: var(--ok); }
   .stat .v.r { color: var(--bad); }
   .stat .v.a { color: var(--accent); }
 
-  /* Progress & Analytics Strip */
-  .analytics-strip {
-    display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; margin-bottom: 22px;
-  }
-  .glass-box {
-    border: 1px solid var(--line); background: var(--card); backdrop-filter: blur(14px);
-    padding: 20px 24px; border-radius: 16px;
-  }
-  .prog-track {
-    width: 100%; height: 12px; background: rgba(255,255,255,.07); border-radius: 20px;
-    overflow: hidden; margin: 14px 0 10px; position: relative;
-  }
-  .prog-fill {
-    height: 100%; width: 0%; border-radius: 20px;
-    background: linear-gradient(90deg, #2b52ff, #9fd0ff, #4ade80);
-    transition: width .8s var(--e);
-  }
-  .class-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; max-height: 86px; overflow-y: auto; }
-  .c-chip {
-    font-size: 12px; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--line);
-    background: rgba(255,255,255,.03); cursor: pointer; transition: .2s;
-  }
-  .c-chip:hover, .c-chip.active { border-color: var(--accent); background: rgba(159,208,255,.12); color: #fff; }
-  .c-chip b { color: var(--accent); margin-right: 4px; }
+  .analytics-strip { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .glass-box { border: 1px solid var(--line); background: var(--card); backdrop-filter: blur(14px); padding: 20px 24px; border-radius: 16px; }
+  .prog-track { width: 100%; height: 12px; background: rgba(255,255,255,.07); border-radius: 20px; overflow: hidden; margin: 14px 0 10px; }
+  .prog-fill { height: 100%; width: 0%; border-radius: 20px; background: linear-gradient(90deg, #2b52ff, #9fd0ff, #4ade80); transition: width .6s var(--e); }
+  .class-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .c-chip { font-size: 12px; padding: 6px 12px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.03); cursor: pointer; }
+  .c-chip.active, .c-chip:hover { border-color: var(--accent); background: rgba(159,208,255,.12); }
 
-  /* Control Toolbars */
   .toolbar {
     display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; align-items: center;
     justify-content: space-between; background: var(--card); border: 1px solid var(--line);
-    padding: 14px 18px; border-radius: 16px; backdrop-filter: blur(14px);
+    padding: 14px 18px; border-radius: 16px;
   }
   .search-wrap { position: relative; flex: 1; min-width: 240px; }
-  .search-wrap input { padding-left: 16px; padding-right: 70px; border-radius: 30px; }
-  .kbd-hint {
-    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-    font-size: 11px; color: var(--mute); border: 1px solid var(--line); border-radius: 6px;
-    padding: 2px 7px; pointer-events: none; font-family: "JetBrains Mono", monospace;
-  }
+  .search-wrap input { border-radius: 30px; }
   .filters-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .filters-group select { width: auto; min-width: 145px; padding: 9px 14px; border-radius: 30px; font-size: 12px; font-weight: 600; }
+  .filters-group select { width: auto; min-width: 140px; padding: 9px 14px; border-radius: 30px; font-size: 12px; font-weight: 600; }
   .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tabs button { border-color: var(--line); color: var(--mute); background: transparent; }
   .tabs button.on { border-color: var(--accent); color: #040406; background: var(--accent); }
 
-  /* Table */
-  .tbl-wrap {
-    border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
-    background: var(--card); backdrop-filter: blur(16px); box-shadow: 0 20px 50px rgba(0,0,0,.4);
-  }
+  /* Tables */
+  .tbl-wrap { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--card); }
   .tbl-scroll { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 880px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 920px; }
   th {
     font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute);
     text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--line); font-weight: 700;
-    background: rgba(255,255,255,.02); cursor: pointer; user-select: none; transition: color .2s;
+    background: rgba(255,255,255,.02); cursor: pointer;
   }
-  th:hover { color: #fff; }
-  td { padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,.06); vertical-align: middle; }
+  td { padding: 15px 18px; border-bottom: 1px solid rgba(255,255,255,.06); vertical-align: middle; }
   tr:last-child td { border-bottom: 0; }
-  tbody tr { transition: background .2s; }
-  tbody tr:hover td { background: rgba(159, 208, 255, .05); }
+  tbody tr:hover td { background: rgba(159, 208, 255, .04); }
   .r { text-align: right; }
   .pend { color: var(--bad); font-weight: 700; }
   .clear { color: var(--ok); font-weight: 700; }
-  .stu-name { font-weight: 700; color: #fff; font-size: 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+  .stu-name { font-weight: 700; color: #fff; font-size: 15px; cursor: pointer; }
   .stu-name:hover { color: var(--accent); text-decoration: underline; }
-  .mini-bar { width: 80px; height: 5px; background: rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; display: inline-block; vertical-align: middle; margin-left: 8px; }
+  .fee-edit-link { cursor: pointer; border-bottom: 1px dashed rgba(255,255,255,.35); padding-bottom: 2px; }
+  .fee-edit-link:hover { color: var(--warn); border-color: var(--warn); }
+  .mini-bar { width: 70px; height: 5px; background: rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; display: inline-block; vertical-align: middle; margin-left: 6px; }
   .mini-bar > i { display: block; height: 100%; background: var(--ok); }
   .row-actions { display: flex; gap: 6px; justify-content: flex-end; align-items: center; }
-  .empty { padding: 60px 20px; text-align: center; color: var(--mute); }
+  .empty { padding: 50px 20px; text-align: center; color: var(--mute); }
 
   /* Modals */
   .ov {
     position: fixed; inset: 0; background: rgba(4, 4, 6, .82); backdrop-filter: blur(10px);
     display: none; align-items: center; justify-content: center; padding: 18px; z-index: 100;
   }
-  .ov.show { display: flex; animation: fadeIn .2s var(--e); }
-  @keyframes fadeIn { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
+  .ov.show { display: flex; }
   .modal {
     background: #0b0c12; border: 1px solid var(--line-bright); border-radius: 22px;
-    padding: 28px; width: 100%; max-width: 460px; max-height: 92vh; overflow: auto;
-    box-shadow: 0 25px 70px rgba(0,0,0,.85);
+    padding: 28px; width: 100%; max-width: 480px; max-height: 92vh; overflow: auto;
   }
   .modal.wide { max-width: 680px; }
   .modal h3 { font-family: Unbounded, sans-serif; margin: 0 0 6px; font-weight: 700; font-size: 20px; }
-  .modal .row { margin-top: 16px; }
-  .modal .row label { display: block; margin-bottom: 7px; }
+  .modal .row { margin-top: 15px; }
+  .modal .row label { display: block; margin-bottom: 6px; }
   .modal .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .modal .acts { display: flex; gap: 10px; margin-top: 26px; }
+  .modal .acts { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
   .modal .acts button { flex: 1; }
-  .chk { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--text); cursor: pointer; user-select: none; }
-  .chk input { width: 18px; height: 18px; accent-color: var(--accent); }
+  .mode-switch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+  .mode-switch button { border-radius: 12px; padding: 10px 8px; font-size: 11px; }
+  .mode-switch button.active-inc { background: rgba(248,113,113,.15); border-color: var(--bad); color: var(--bad); }
+  .mode-switch button.active-dec { background: rgba(74,222,128,.15); border-color: var(--ok); color: var(--ok); }
+  .mode-switch button.active-set { background: rgba(159,208,255,.15); border-color: var(--accent); color: var(--accent); }
+  .preview-card {
+    margin-top: 16px; padding: 14px 16px; border-radius: 14px;
+    background: rgba(255,255,255,.03); border: 1px dashed var(--line-bright);
+    display: flex; justify-content: space-between; align-items: center;
+  }
   .preset-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
   .preset-chips span {
     font-size: 11px; padding: 5px 11px; border-radius: 20px; border: 1px solid var(--line);
-    cursor: pointer; color: var(--accent); background: rgba(159,208,255,.06); transition: .2s;
+    cursor: pointer; color: var(--accent); background: rgba(159,208,255,.06);
   }
   .preset-chips span:hover { background: var(--accent); color: #040406; font-weight: 700; }
 
-  /* Toast */
-  #toast {
-    position: fixed; bottom: 26px; right: 26px; background: #fff; color: #040406;
-    padding: 14px 22px; border-radius: 14px; font-size: 13px; font-weight: 700;
-    display: none; z-index: 200; box-shadow: 0 15px 40px rgba(159,208,255,.35);
-    border-left: 5px solid #2b52ff;
-  }
-
-  /* Printable Receipt Card */
-  .rc-preview {
-    color: #0b0c12; background: #fff; padding: 24px; border-radius: 14px;
-    font-family: Manrope, Arial, sans-serif; margin-top: 16px;
-  }
-  .rc-preview h2 { font-family: Unbounded, sans-serif; margin: 0; font-size: 18px; letter-spacing: .06em; }
+  .rc-preview { color: #0b0c12; background: #fff; padding: 24px; border-radius: 14px; font-family: Manrope, Arial, sans-serif; margin-top: 16px; }
+  .rc-preview h2 { font-family: Unbounded, sans-serif; margin: 0; font-size: 18px; }
   .rc-preview hr { border: 0; border-top: 1px dashed #ccc; margin: 14px 0; }
   .rc-preview table { min-width: 0; width: 100%; font-size: 13px; color: #111; }
   .rc-preview td { border: 0; padding: 5px 0; }
   .rc-badge { display: inline-block; padding: 3px 8px; background: #e0f2fe; color: #0369a1; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+
+  #toast {
+    position: fixed; bottom: 26px; right: 26px; background: #fff; color: #040406;
+    padding: 14px 22px; border-radius: 14px; font-size: 13px; font-weight: 700;
+    display: none; z-index: 200; border-left: 5px solid #2b52ff;
+  }
 
   @media print {
     body * { visibility: hidden; }
     #printArea, #printArea * { visibility: visible; }
     #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; padding: 20px; }
   }
-  @media (max-width: 1080px) {
-    .cards { grid-template-columns: repeat(3, 1fr); }
-    .analytics-strip { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 640px) {
-    .cards { grid-template-columns: repeat(2, 1fr); }
-    .top { padding: 14px 16px; }
-    .modal .grid-2 { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 1080px) { .cards { grid-template-columns: repeat(3, 1fr); } .analytics-strip { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .cards { grid-template-columns: repeat(2, 1fr); } .modal .grid-2 { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
 <div id="loaderBar"></div>
-<div class="au a1"></div>
-<div class="au a2"></div>
-<div class="grid-bg"></div>
+<div class="au a1"></div><div class="au a2"></div><div class="grid-bg"></div>
 
-<!-- LOGIN VIEW -->
+<!-- ========================================== -->
+<!-- MULTI-ROLE LOGIN SCREEN                    -->
+<!-- ========================================== -->
 <div id="login">
-  <a href="index.html" class="back-home">&larr; Back to Mayhemic.in</a>
-  <div class="login-card">
-    <div class="label">Mayhemic SaaS &bull; School Fee OS</div>
-    <h1>MAYHEMIC</h1>
-    <p style="color:var(--mute);font-size:14px">Automated fee tracking, instant thermal/A4 receipts, and WhatsApp parent reminders.</p>
-    <div class="key-wrap">
-      <input id="keyIn" type="password" placeholder="Enter your school security key" autocomplete="off">
-      <button type="button" class="eye-btn" onclick="toggleKeyVis()" title="Show/Hide Key" id="eyeBtn">SHOW</button>
-    </div>
-    <button class="solid" style="width:100%;margin-top:14px;padding:14px" onclick="doLogin()" id="loginBtn">Authenticate &amp; Enter &rarr;</button>
-    <div id="loginErr"></div>
+  <div class="top-nav-links">
+    <a href="index.html" class="btn-link small">&larr; Back to Mayhemic.in</a>
+    <a href="admin.html" class="btn-link small" style="border-color:var(--accent);color:var(--accent)">Mayhemic Super-Admin (HQ) &nearr;</a>
+  </div>
 
-    <div class="demo-divider">Or no key yet?</div>
-    <button type="button" class="accent" style="width:100%" onclick="startDemoMode()">Launch Interactive Demo Mode</button>
+  <div class="login-card">
+    <div class="label">Zero-Paperwork School ERP</div>
+    <h1>MAYHEMIC</h1>
+    <p style="color:var(--mute);font-size:13px">Select your portal role below to access Fee Management, Class Attendance, or Parent Ledger.</p>
+
+    <!-- 3 Role Switcher Tabs -->
+    <div class="role-tabs">
+      <button id="rtPrin" class="active" onclick="switchLoginRole('principal')">Principal / Fee</button>
+      <button id="rtTeach" onclick="switchLoginRole('teacher')">Teacher Portal</button>
+      <button id="rtPar" onclick="switchLoginRole('parent')">Parent Portal</button>
+    </div>
+
+    <!-- School Selector (Populated from admin.html or Cloud) -->
+    <div style="text-align:left;margin-bottom:12px" id="schoolSelectWrap">
+      <label class="label" style="display:block;margin-bottom:6px">Select School OR Enter School ID</label>
+      <select id="loginSchoolSelect" onchange="$('loginSchoolId').value = this.value" style="margin-bottom:8px"></select>
+      <input id="loginSchoolId" class="mono" placeholder="School Login ID (e.g. mayhemic-lko)">
+    </div>
+
+    <!-- Principal / Teacher Key Input -->
+    <div id="staffKeyWrap" style="text-align:left">
+      <label class="label" style="display:block;margin-bottom:6px" id="keyLabel">Principal Password / Security Key</label>
+      <input id="keyIn" type="password" placeholder="Enter your password or key" autocomplete="off">
+    </div>
+
+    <!-- Parent Lookup Input -->
+    <div id="parentLookupWrap" style="display:none;text-align:left">
+      <label class="label" style="display:block;margin-bottom:6px">Registered Parent Mobile No OR Roll No</label>
+      <input id="parentQueryIn" placeholder="e.g. 9876543210 or Roll No 01">
+    </div>
+
+    <button class="solid" style="width:100%;margin-top:16px;padding:14px" onclick="handleRoleLogin()" id="loginBtn">Enter Principal Portal &rarr;</button>
+    <div id="loginErr" style="color:var(--bad);font-size:13px;min-height:20px;margin-top:10px"></div>
+
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
+      <div class="label" style="margin-bottom:8px">Instant Sandbox Test Drive</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
+        <button class="small accent" onclick="startSandbox('principal')">Demo Principal</button>
+        <button class="small ok-btn" onclick="startSandbox('teacher')">Demo Teacher</button>
+        <button class="small warn-btn" onclick="startSandbox('parent')">Demo Parent</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- MAIN APPLICATION -->
+<!-- ========================================== -->
+<!-- 1. PRINCIPAL / SCHOOL ADMIN ERP PORTAL     -->
+<!-- ========================================== -->
 <div id="app" class="wrap" style="display:none">
-  <!-- Header -->
   <div class="top">
-    <div class="brand-row">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span class="brand">MAYHEMIC</span>
-          <span class="badge-live" id="modeBadge">LIVE SYNC</span>
-        </div>
-        <div class="school" id="schoolName">Loading School...</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="brand">MAYHEMIC ERP</span>
+        <span class="badge-live" id="modeBadge">PRINCIPAL PORTAL</span>
       </div>
+      <div class="school" id="schoolName">Loading School...</div>
     </div>
-    <div class="top-actions">
-      <a href="index.html" class="btn-link small">&larr; Mayhemic.in</a>
-      <button class="small" onclick="openShortcuts()" title="Keyboard Shortcuts">? Shortcuts</button>
-      <button class="small" onclick="printClassReport()">Print Report</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="small ok-btn" onclick="switchActivePortal('teacher')">Switch to Teacher View</button>
+      <button class="small warn-btn" onclick="switchActivePortal('parent')">Preview Parent View</button>
+      <button class="small" onclick="printClassReport()">Print Register</button>
       <button class="small" onclick="exportCSV()">Export CSV</button>
       <button class="small" onclick="logout()">Log out</button>
     </div>
   </div>
 
-  <!-- 6 High-Tech KPI Cards -->
+  <!-- 6 High-Tech KPI Cards (Fees + Attendance) -->
   <div class="cards">
     <div class="stat">
       <div class="label">Collected Today</div>
       <div class="v g" id="sToday">Rs 0</div>
-      <div class="sub" id="sTodaySub">Live counter</div>
+      <div class="sub">Live cashbook</div>
     </div>
     <div class="stat">
       <div class="label">Total Collected</div>
       <div class="v" id="sCollected">Rs 0</div>
-      <div class="sub" id="sRateSub">0% of total fee</div>
+      <div class="sub" id="sRateSub">0% recovered</div>
     </div>
     <div class="stat">
       <div class="label">Total Pending</div>
       <div class="v r" id="sPending">Rs 0</div>
-      <div class="sub" id="sDefSub">0 students due</div>
+      <div class="sub" id="sDefSub">0 defaulters</div>
     </div>
     <div class="stat">
       <div class="label">Total Fee Book</div>
       <div class="v a" id="sTotalBook">Rs 0</div>
-      <div class="sub">Expected revenue</div>
+      <div class="sub">Net billed fee</div>
     </div>
     <div class="stat">
-      <div class="label">Students Enrolled</div>
+      <div class="label">Total Students</div>
       <div class="v" id="sStudents">0</div>
-      <div class="sub" id="sClearSub">0 fully cleared</div>
+      <div class="sub" id="sClearSub">0 cleared</div>
     </div>
     <div class="stat">
-      <div class="label">Avg Fee / Student</div>
-      <div class="v" id="sAvg">Rs 0</div>
-      <div class="sub">Across all classes</div>
+      <div class="label">Today's Attendance</div>
+      <div class="v g" id="sAttToday">0%</div>
+      <div class="sub" id="sAttSub">0 Present / 0 Absent</div>
     </div>
   </div>
 
@@ -390,23 +359,20 @@
     </div>
     <div class="glass-box">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <span class="label">Class-wise Quick Filter</span>
+        <span class="label">Class-wise Filter &amp; Dues</span>
         <span style="font-size:11px;color:var(--mute)">Click class to isolate</span>
       </div>
       <div class="class-chips" id="classChips"></div>
     </div>
   </div>
 
-  <!-- Primary Filter & Search Bar -->
+  <!-- Filter & Search Bar -->
   <div class="toolbar">
     <div class="search-wrap">
       <input id="search" placeholder="Search student, parent, roll no, class or phone..." oninput="render()">
-      <span class="kbd-hint">/</span>
     </div>
     <div class="filters-group">
-      <select id="classFilter" onchange="render()">
-        <option value="">All Classes</option>
-      </select>
+      <select id="classFilter" onchange="render()"><option value="">All Classes</option></select>
       <select id="sortBy" onchange="render()">
         <option value="name">Sort: Name (A-Z)</option>
         <option value="pend_desc">Sort: Highest Pending</option>
@@ -418,26 +384,26 @@
         <button id="tabAll" class="small on" onclick="setTab('all')">All</button>
         <button id="tabDue" class="small" onclick="setTab('due')">Pending</button>
         <button id="tabClear" class="small" onclick="setTab('clear')">Cleared</button>
-        <button id="tabHigh" class="small" onclick="setTab('high')">&gt;50% Due</button>
       </div>
     </div>
   </div>
 
-  <!-- Action Bar -->
+  <!-- Principal Action Bar -->
   <div class="toolbar" style="padding:12px 18px">
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="solid small" onclick="openAdd()">+ Add Student (N)</button>
+      <button class="solid small" onclick="openAdd()">+ Add Student</button>
+      <button class="warn-btn small" onclick="openBulkAdjust()">&plusmn; Bulk Adjust Fee</button>
+      <button class="ok-btn small" onclick="switchActivePortal('teacher')">Mark Class Attendance</button>
       <button class="small" onclick="$('csv').click()">Import CSV</button>
       <button class="small" onclick="downloadSampleCSV()">Sample CSV</button>
-      <button class="accent small" onclick="sendReminders()">Blast WhatsApp Reminders</button>
-      <button class="small" onclick="openHistory()">Session Log (<span id="logCount">0</span>)</button>
-      <button class="small" onclick="load()">Refresh (R)</button>
+      <button class="accent small" onclick="sendReminders()">Blast Fee Reminders</button>
+      <button class="small" onclick="openHistory()">Audit Log (<span id="logCount">0</span>)</button>
       <input id="csv" type="file" accept=".csv" style="display:none" onchange="importCSV(this)">
     </div>
     <div class="label" id="showingCount">Showing 0 students</div>
   </div>
 
-  <!-- Student Table -->
+  <!-- Student Master Table (With Attendance + Fee + Delete) -->
   <div class="tbl-wrap">
     <div class="tbl-scroll">
       <table>
@@ -445,20 +411,193 @@
           <tr>
             <th onclick="quickSort('name')">Student / Parent &updownarrow;</th>
             <th onclick="quickSort('class')">Class / Roll &updownarrow;</th>
-            <th>Parent Contact</th>
-            <th class="r" onclick="quickSort('fee_desc')">Total Fee &updownarrow;</th>
-            <th class="r">Paid &amp; Progress</th>
+            <th>Attendance</th>
+            <th class="r" onclick="quickSort('fee_desc')">Total Fee (&plusmn;) &updownarrow;</th>
+            <th class="r">Paid</th>
             <th class="r" onclick="quickSort('pend_desc')">Balance Due &updownarrow;</th>
-            <th class="r">Command Actions</th>
+            <th class="r">Actions (Pay / &plusmn; / Delete)</th>
           </tr>
         </thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
-    <div id="empty" class="empty" style="display:none">
-      <div class="unbounded" style="font-size:18px;color:#fff;margin-bottom:6px">No matching students</div>
-      <div>Try clearing your search filter or add a new student record.</div>
+    <div id="empty" class="empty" style="display:none">No matching students found.</div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. TEACHER ATTENDANCE PORTAL               -->
+<!-- ========================================== -->
+<div id="teacherApp" class="wrap" style="display:none">
+  <div class="top">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="brand">MAYHEMIC TEACHER</span>
+        <span class="badge-live">ZERO-PAPER ATTENDANCE</span>
+      </div>
+      <div class="school" id="tSchoolName">School Name</div>
     </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="small" id="backToPrinBtn" style="display:none" onclick="switchActivePortal('principal')">&larr; Back to Principal ERP</button>
+      <button class="small" onclick="logout()">Log out</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <div>
+        <label class="label" style="display:block;margin-bottom:4px">Attendance Date</label>
+        <input type="date" id="attDate" style="width:170px;padding:9px 12px" onchange="renderTeacherAttendance()">
+      </div>
+      <div>
+        <label class="label" style="display:block;margin-bottom:4px">Select Class</label>
+        <select id="attClassSel" style="width:160px;padding:10px 12px" onchange="renderTeacherAttendance()"></select>
+      </div>
+      <div style="padding-top:18px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="ok-btn small" onclick="markAllClass('P')">&check; Mark All Present</button>
+        <button class="solid small" onclick="saveClassAttendance()">Save Attendance Register</button>
+      </div>
+    </div>
+    <div id="tAttSummary" class="mono" style="font-size:13px;color:var(--accent)"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Roll No</th>
+            <th>Student Name</th>
+            <th>Parent Name &amp; Phone</th>
+            <th>Overall Attendance %</th>
+            <th class="r">Mark Today's Status</th>
+            <th class="r">Absentee Alert</th>
+          </tr>
+        </thead>
+        <tbody id="tRows"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 3. PARENT / STUDENT SELF-SERVICE PORTAL    -->
+<!-- ========================================== -->
+<div id="parentApp" class="wrap" style="display:none">
+  <div class="top">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="brand">MAYHEMIC PARENT PORTAL</span>
+        <span class="badge-live">REAL-TIME STUDENT DOSSIER</span>
+      </div>
+      <div class="school" id="pSchoolName">School Name</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="small" id="pBackToPrinBtn" style="display:none" onclick="switchActivePortal('principal')">&larr; Back to Principal ERP</button>
+      <button class="small" onclick="logout()">Exit Portal</button>
+    </div>
+  </div>
+
+  <div id="parentContent"></div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODALS (ADJUST FEE, PAY, ADD, PROFILE)     -->
+<!-- ========================================== -->
+<div class="ov" id="adjOv">
+  <div class="modal">
+    <div class="label" style="color:var(--warn)">Modify Total Fee / Student Details</div>
+    <h3 id="adjTitle">Adjust Total Fee</h3>
+    <div class="mono" style="font-size:12px;color:var(--mute)" id="adjSub"></div>
+
+    <div class="row">
+      <label class="label">Select Adjustment Mode</label>
+      <div class="mode-switch">
+        <button type="button" id="mInc" class="active-inc" onclick="setAdjMode('inc')">+ Increase Fee</button>
+        <button type="button" id="mDec" onclick="setAdjMode('dec')">&minus; Decrease Fee</button>
+        <button type="button" id="mSet" onclick="setAdjMode('set')">= Set New Total</button>
+      </div>
+    </div>
+
+    <div class="row" id="adjPresetsRow">
+      <label class="label">Quick Presets &amp; Reasons</label>
+      <div class="preset-chips" id="adjPresets"></div>
+    </div>
+
+    <div class="row grid-2">
+      <div>
+        <label class="label" id="adjValLabel">Amount to Add</label>
+        <input id="adjVal" type="number" min="0" placeholder="e.g. 2000" oninput="calcAdjPreview()">
+      </div>
+      <div id="adjUnitWrap">
+        <label class="label">Calculation Unit</label>
+        <select id="adjUnit" onchange="calcAdjPreview()">
+          <option value="rs">Flat Rupees (Rs)</option>
+          <option value="pct">Percentage (%)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="label">Reason / Fee Head</label>
+      <input id="adjReason" placeholder="e.g. Scholarship 15%, Transport Fee, Late Fine">
+    </div>
+
+    <div class="preview-card">
+      <div>
+        <div class="label">Current &rarr; New Total Fee</div>
+        <div class="mono" style="font-size:15px;font-weight:700;margin-top:4px" id="adjPrevTotal">Rs 0 &rarr; Rs 0</div>
+      </div>
+      <div style="text-align:right">
+        <div class="label">New Pending Balance</div>
+        <div class="mono" style="font-size:15px;font-weight:700;margin-top:4px;color:var(--accent)" id="adjPrevPend">Rs 0</div>
+      </div>
+    </div>
+
+    <details style="margin-top:16px;border-top:1px solid var(--line);padding-top:12px">
+      <summary class="label" style="cursor:pointer;color:var(--accent)">Edit Student Name, Class or Phone &darr;</summary>
+      <div class="row grid-2">
+        <div><label class="label">Student Name</label><input id="eName"></div>
+        <div><label class="label">Class / Roll</label><div style="display:flex;gap:6px"><input id="eClass" placeholder="Class"><input id="eRoll" placeholder="Roll"></div></div>
+      </div>
+      <div class="row grid-2">
+        <div><label class="label">Parent Name</label><input id="eParent"></div>
+        <div><label class="label">Parent Phone</label><input id="ePhone"></div>
+      </div>
+    </details>
+
+    <div class="acts">
+      <button class="bad-btn" onclick="deleteStudent(adjId)">&#128465; Delete Student</button>
+      <button onclick="closeAll()">Cancel</button>
+      <button class="solid" onclick="saveFeeAdjustment()" id="saveAdjBtn">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- BULK FEE ADJUSTER -->
+<div class="ov" id="bulkOv">
+  <div class="modal">
+    <div class="label" style="color:var(--warn)">Mass Fee Revision</div>
+    <h3>&plusmn; Bulk Adjust Total Fees</h3>
+    <div class="row grid-2">
+      <div><label class="label">Target Group</label><select id="bTarget"></select></div>
+      <div>
+        <label class="label">Action</label>
+        <select id="bAction">
+          <option value="inc">+ Increase Total Fee</option>
+          <option value="dec">&minus; Decrease / Discount Fee</option>
+        </select>
+      </div>
+    </div>
+    <div class="row grid-2">
+      <div><label class="label">Value</label><input id="bVal" type="number" min="1" placeholder="e.g. 1500 or 10"></div>
+      <div>
+        <label class="label">Unit</label>
+        <select id="bUnit"><option value="rs">Flat Rupees (Rs)</option><option value="pct">Percentage (%)</option></select>
+      </div>
+    </div>
+    <div class="row"><label class="label">Reason</label><input id="bReason" placeholder="e.g. Annual Tuition Revision"></div>
+    <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="applyBulkAdjust()">Apply Bulk Revision</button></div>
   </div>
 </div>
 
@@ -468,44 +607,17 @@
     <div class="label">Record Fee Transaction</div>
     <h3 id="payName">Student Name</h3>
     <div class="mono" style="font-size:13px;color:var(--accent);margin-top:4px" id="payInfo"></div>
-
-    <div class="row">
-      <label class="label">Quick Presets</label>
-      <div class="preset-chips" id="payPresets"></div>
-    </div>
-
+    <div class="row"><label class="label">Quick Presets</label><div class="preset-chips" id="payPresets"></div></div>
     <div class="row grid-2">
-      <div>
-        <label class="label">Amount (Rs)</label>
-        <input id="payAmt" type="number" min="1" placeholder="Enter amount">
-      </div>
+      <div><label class="label">Amount (Rs)</label><input id="payAmt" type="number" min="1"></div>
       <div>
         <label class="label">Payment Mode</label>
-        <select id="payMode">
-          <option value="upi">UPI / QR</option>
-          <option value="cash">Cash</option>
-          <option value="cheque">Cheque / DD</option>
-          <option value="bank">NEFT / RTGS</option>
-        </select>
+        <select id="payMode"><option value="upi">UPI / QR</option><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank">NEFT / Bank</option></select>
       </div>
     </div>
-
-    <div class="row">
-      <label class="label">Transaction Note / Ref No (Optional)</label>
-      <input id="payNote" placeholder="e.g. UPI Ref / Installment 2">
-    </div>
-
-    <div class="row">
-      <label class="chk">
-        <input type="checkbox" id="payWA" checked>
-        <span>Trigger automatic WhatsApp receipt via API</span>
-      </label>
-    </div>
-
-    <div class="acts">
-      <button onclick="closeAll()">Cancel</button>
-      <button class="solid" onclick="savePay()" id="savePayBtn">Confirm &amp; Generate Receipt</button>
-    </div>
+    <div class="row"><label class="label">Note / Ref No</label><input id="payNote" placeholder="Optional reference"></div>
+    <div class="row"><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="payWA" checked style="width:18px;height:18px"> <span>Send WhatsApp receipt via API</span></label></div>
+    <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="savePay()" id="savePayBtn">Confirm &amp; Receipt</button></div>
   </div>
 </div>
 
@@ -514,51 +626,31 @@
   <div class="modal">
     <div class="label">New Enrollment</div>
     <h3>Add Student Record</h3>
-    <div class="row">
-      <label class="label">Student Full Name *</label>
-      <input id="aName" placeholder="e.g. Aarav Verma">
+    <div class="row"><label class="label">Student Full Name *</label><input id="aName" placeholder="e.g. Aarav Verma"></div>
+    <div class="row grid-2">
+      <div><label class="label">Class / Section *</label><input id="aClass" placeholder="e.g. 10-A"></div>
+      <div><label class="label">Roll Number</label><input id="aRoll" placeholder="e.g. 01"></div>
     </div>
     <div class="row grid-2">
-      <div>
-        <label class="label">Class / Section *</label>
-        <input id="aClass" placeholder="e.g. 10-A">
-      </div>
-      <div>
-        <label class="label">Roll Number</label>
-        <input id="aRoll" placeholder="e.g. 24">
-      </div>
+      <div><label class="label">Parent Name</label><input id="aParent" placeholder="e.g. Rajesh Verma"></div>
+      <div><label class="label">Parent WhatsApp (10 digits)</label><input id="aPhone" placeholder="e.g. 9876543210"></div>
     </div>
-    <div class="row grid-2">
-      <div>
-        <label class="label">Parent / Guardian Name</label>
-        <input id="aParent" placeholder="e.g. Rajesh Verma">
-      </div>
-      <div>
-        <label class="label">WhatsApp Phone (10 digits)</label>
-        <input id="aPhone" placeholder="e.g. 9876543210" maxlength="15">
-      </div>
-    </div>
-    <div class="row">
-      <label class="label">Total Annual Fee (Rs) *</label>
-      <input id="aFee" type="number" placeholder="e.g. 45000">
-    </div>
-    <div class="acts">
-      <button onclick="closeAll()">Cancel</button>
-      <button class="solid" onclick="saveStudent()">Save Student</button>
-    </div>
+    <div class="row"><label class="label">Total Annual Fee (Rs) *</label><input id="aFee" type="number" placeholder="e.g. 45000"></div>
+    <div class="acts"><button onclick="closeAll()">Cancel</button><button class="solid" onclick="saveStudent()">Save Student</button></div>
   </div>
 </div>
 
-<!-- STUDENT PROFILE & FEE DEMAND MODAL -->
+<!-- STUDENT PROFILE MODAL -->
 <div class="ov" id="profOv">
   <div class="modal wide">
-    <div class="label">Student Ledger &amp; Dossier</div>
+    <div class="label">Student 360&deg; Dossier</div>
     <h3 id="prTitle">Student Profile</h3>
     <div id="prBody" style="margin-top:14px"></div>
     <div class="acts">
-      <button onclick="closeAll()">Close</button>
+      <button class="bad-btn" id="prDelBtn">&#128465; Delete Student</button>
+      <button class="warn-btn" id="prAdjBtn">&plusmn; Adjust Fee</button>
       <button onclick="printDemandSlip()">Print Demand Slip</button>
-      <button class="ok-btn" id="prWaBtn">Send WhatsApp Reminder</button>
+      <button class="ok-btn" id="prWaBtn">WhatsApp Parent</button>
       <button class="solid" id="prPayBtn">Record Payment</button>
     </div>
   </div>
@@ -567,171 +659,247 @@
 <!-- RECEIPT MODAL -->
 <div class="ov" id="rcOv">
   <div class="modal">
-    <div class="label" style="color:var(--ok)">Transaction Verified</div>
+    <div class="label" style="color:var(--ok)">Payment Saved</div>
     <h3>Official Fee Receipt</h3>
     <div class="mono" style="font-size:12px;color:var(--mute)" id="rcNo"></div>
     <div class="rc-preview" id="rcPreviewBox"></div>
     <div class="acts">
       <button onclick="closeAll()">Done</button>
-      <button class="ok-btn" id="rcWaShareBtn">WhatsApp Text</button>
-      <button class="solid" onclick="printReceiptNow()">Print Receipt</button>
+      <button class="ok-btn" id="rcWaShareBtn">WhatsApp Receipt</button>
+      <button class="solid" onclick="window.print()">Print Receipt</button>
     </div>
   </div>
 </div>
 
-<!-- SESSION PAYMENT LOG MODAL -->
+<!-- AUDIT LOG MODAL -->
 <div class="ov" id="logOv">
   <div class="modal wide">
-    <div class="label">Local Audit Trail</div>
-    <h3>Recent Payments Logged</h3>
+    <div class="label">Audit Trail</div>
+    <h3>Payments, Fee Revisions &amp; Deletions</h3>
     <div id="logBody" style="margin-top:16px;max-height:360px;overflow-y:auto"></div>
-    <div class="acts">
-      <button onclick="clearSessionLog()">Clear Log</button>
-      <button class="solid" onclick="closeAll()">Close</button>
-    </div>
+    <div class="acts"><button onclick="clearSessionLog()">Clear Log</button><button class="solid" onclick="closeAll()">Close</button></div>
   </div>
 </div>
 
-<!-- KEYBOARD SHORTCUTS MODAL -->
-<div class="ov" id="shortOv">
-  <div class="modal">
-    <div class="label">Speed Workflow</div>
-    <h3>Keyboard Shortcuts</h3>
-    <div style="margin-top:16px;display:grid;gap:10px;font-size:14px">
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span>Focus Search Bar</span><kbd class="mono">/</kbd></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span>Add New Student</span><kbd class="mono">N</kbd></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span>Refresh Live Data</span><kbd class="mono">R</kbd></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span>Export CSV Report</span><kbd class="mono">E</kbd></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0"><span>Close Any Modal</span><kbd class="mono">Esc</kbd></div>
-    </div>
-    <div class="acts"><button class="solid" onclick="closeAll()">Got it</button></div>
-  </div>
-</div>
-
-<!-- HIDDEN PRINT AREA -->
 <div id="printArea" style="display:none"></div>
-
 <div id="toast"></div>
 
 <script>
 const API = 'https://mayhemic-api.aryanmishra8920.workers.dev';
 const $ = id => document.getElementById(id);
-let KEY = '', school = null, students = [], tab = 'all', payId = null, isDemo = false;
-let sessionLogs = [];
+
+let KEY = '', school = null, students = [], tab = 'all', payId = null, adjId = null, adjMode = 'inc';
+let isDemo = false, activeRole = 'principal', loggedInAsPrincipal = false;
+let sessionLogs = [], localFeeOverrides = {}, deletedStudentIds = [], attendanceDB = {};
+
+const TODAY_ISO = new Date().toISOString().slice(0, 10);
 
 try {
   KEY = sessionStorage.getItem('mk') || '';
   sessionLogs = JSON.parse(localStorage.getItem('mayhemic_logs') || '[]');
+  localFeeOverrides = JSON.parse(localStorage.getItem('mayhemic_fee_overrides') || '{}');
+  deletedStudentIds = JSON.parse(localStorage.getItem('mayhemic_deleted_students') || '[]');
+  attendanceDB = JSON.parse(localStorage.getItem('mayhemic_attendance') || '{}');
 } catch (e) {}
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const inr = n => 'Rs ' + Number(n || 0).toLocaleString('en-IN');
 
-function setProgress(pct) {
-  const b = $('loaderBar');
-  b.style.opacity = '1';
-  b.style.width = pct + '%';
-  if (pct >= 100) setTimeout(() => { b.style.opacity = '0'; setTimeout(() => b.style.width = '0%', 300); }, 350);
-}
-
 function toast(msg) {
-  const t = $('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.style.display = 'none', 3400);
+  const t = $('toast'); t.textContent = msg; t.style.display = 'block';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', 3400);
 }
 
-function toggleKeyVis() {
-  const inp = $('keyIn');
-  const isPass = inp.type === 'password';
-  inp.type = isPass ? 'text' : 'password';
-  $('eyeBtn').textContent = isPass ? 'HIDE' : 'SHOW';
+function saveAttendanceDB() {
+  try { localStorage.setItem('mayhemic_attendance', JSON.stringify(attendanceDB)); } catch (e) {}
 }
 
-// Convert Number to Indian Words for Official Receipts
-function numToWords(num) {
-  num = Math.round(Number(num) || 0);
-  if (num === 0) return 'Zero Rupees Only';
-  const a = ['','One ','Two ','Three ','Four ', 'Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
-  const b = ['', '', 'Twenty','Thirty','Forty','Fifty', 'Sixty','Seventy','Eighty','Ninety'];
-  const n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-  if (!n) return inr(num);
-  let str = '';
-  str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'Crore ' : '';
-  str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'Lakh ' : '';
-  str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'Thousand ' : '';
-  str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'Hundred ' : '';
-  str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
-  return 'Rupees ' + str.trim() + ' Only';
+// Calculate a student's attendance stats across all recorded dates
+function getStudentAttendanceStats(stuId) {
+  let present = 0, absent = 0, leave = 0, logs = [];
+  Object.keys(attendanceDB).sort().reverse().forEach(date => {
+    const status = attendanceDB[date]?.[stuId];
+    if (status) {
+      if (status === 'P') present++;
+      else if (status === 'A') absent++;
+      else if (status === 'L') leave++;
+      logs.push({ date, status });
+    }
+  });
+  const total = present + absent + leave;
+  const pct = total > 0 ? Math.round(((present + leave * 0.5) / total) * 100) : 100;
+  const todayStatus = attendanceDB[TODAY_ISO]?.[stuId] || null;
+  return { present, absent, leave, total, pct, todayStatus, logs };
+}
+
+// Populate schools created in admin.html into the login selector
+function populateLoginSchools() {
+  let adminSchools = [];
+  try { adminSchools = JSON.parse(localStorage.getItem('mayhemic_schools') || '[]'); } catch (e) {}
+  const sel = $('loginSchoolSelect');
+  if (!adminSchools.length) {
+    sel.innerHTML = `<option value="">-- Select Provisioned School or Type Below --</option>
+                     <option value="mayhemic-lko">Mayhemic Model School (mayhemic-lko)</option>`;
+  } else {
+    sel.innerHTML = `<option value="">-- Select Provisioned School (${adminSchools.length}) --</option>` +
+      adminSchools.map(s => `<option value="${esc(s.login_id)}">${esc(s.name)} (${esc(s.login_id)})</option>`).join('');
+  }
+}
+populateLoginSchools();
+
+function switchLoginRole(role) {
+  activeRole = role;
+  $('rtPrin').className = role === 'principal' ? 'active' : '';
+  $('rtTeach').className = role === 'teacher' ? 'active' : '';
+  $('rtPar').className = role === 'parent' ? 'active' : '';
+  $('loginErr').textContent = '';
+
+  if (role === 'principal') {
+    $('staffKeyWrap').style.display = 'block';
+    $('parentLookupWrap').style.display = 'none';
+    $('keyLabel').textContent = 'Principal Password / Cloud Security Key';
+    $('loginBtn').innerHTML = 'Enter Principal Portal &rarr;';
+  } else if (role === 'teacher') {
+    $('staffKeyWrap').style.display = 'block';
+    $('parentLookupWrap').style.display = 'none';
+    $('keyLabel').textContent = 'Teacher Portal Password / Key';
+    $('loginBtn').innerHTML = 'Enter Teacher Attendance Portal &rarr;';
+  } else {
+    $('staffKeyWrap').style.display = 'none';
+    $('parentLookupWrap').style.display = 'block';
+    $('loginBtn').innerHTML = 'View Student Attendance &amp; Fee Dossier &rarr;';
+  }
 }
 
 async function api(path, opts = {}) {
-  setProgress(35);
   opts.headers = { ...(opts.headers || {}), Authorization: 'Bearer ' + KEY };
-  try {
-    const res = await fetch(API + path, opts);
-    const data = await res.json().catch(() => ({}));
-    setProgress(100);
-    if (res.status === 401) { logout(); throw new Error('Session expired'); }
-    if (!res.ok) throw new Error(data.error || 'Something went wrong');
-    return data;
-  } catch (err) {
-    setProgress(100);
-    throw err;
-  }
+  const res = await fetch(API + path, opts);
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401) { logout(); throw new Error('Session expired'); }
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
 }
 
-async function doLogin() {
-  isDemo = false;
-  KEY = $('keyIn').value.trim();
+async function handleRoleLogin() {
   $('loginErr').textContent = '';
-  if (!KEY) { $('loginErr').textContent = 'Please enter your school key.'; return; }
-  $('loginBtn').textContent = 'Verifying...';
-  try {
-    school = await api('/api/me');
-    try { sessionStorage.setItem('mk', KEY); } catch (e) {}
-    $('loginBtn').innerHTML = 'Authenticate &amp; Enter &rarr;';
-    start();
-  } catch (e) {
-    $('loginBtn').innerHTML = 'Authenticate &amp; Enter &rarr;';
-    $('loginErr').textContent = 'Wrong key. Please check and try again, or try Demo Mode below.';
-    KEY = '';
+  const schoolId = $('loginSchoolId').value.trim().toLowerCase();
+  const keyVal = $('keyIn').value.trim();
+
+  // Check if school exists in local admin.html registry
+  let adminSchools = [];
+  try { adminSchools = JSON.parse(localStorage.getItem('mayhemic_schools') || '[]'); } catch (e) {}
+  const matchedSchool = adminSchools.find(s => s.login_id === schoolId || s.principal_key === keyVal || s.teacher_key === keyVal);
+
+  if (matchedSchool && matchedSchool.status === 'suspended') {
+    $('loginErr').textContent = 'This school subscription is currently suspended by Mayhemic HQ.';
+    return;
+  }
+
+  if (activeRole === 'principal') {
+    if (matchedSchool && (keyVal === matchedSchool.principal_key)) {
+      loggedInAsPrincipal = true;
+      startSandbox('principal', matchedSchool.name);
+      return;
+    }
+    // Otherwise authenticate against live Cloudflare Worker API
+    if (!keyVal) { $('loginErr').textContent = 'Enter your Principal Key'; return; }
+    KEY = keyVal;
+    try {
+      school = await api('/api/me');
+      try { sessionStorage.setItem('mk', KEY); } catch (e) {}
+      isDemo = false;
+      loggedInAsPrincipal = true;
+      startPrincipalApp();
+    } catch (e) {
+      $('loginErr').textContent = 'Invalid Principal Key. Check admin.html or click Demo Principal below.';
+      KEY = '';
+    }
+  } else if (activeRole === 'teacher') {
+    if (matchedSchool && (keyVal === matchedSchool.teacher_key || keyVal === matchedSchool.principal_key)) {
+      loggedInAsPrincipal = false;
+      startSandbox('teacher', matchedSchool.name);
+      return;
+    }
+    $('loginErr').textContent = 'Invalid Teacher Key. Generate one in admin.html or click Demo Teacher below.';
+  } else if (activeRole === 'parent') {
+    const q = $('parentQueryIn').value.trim();
+    if (!q) { $('loginErr').textContent = 'Please enter registered Parent Mobile No or Roll No'; return; }
+    startSandbox('parent', matchedSchool ? matchedSchool.name : 'Mayhemic Model School', q);
   }
 }
-$('keyIn').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
-// Interactive Demo Mode so visitors from index.html can test drive every feature
-function startDemoMode() {
+function ensureDemoData(customSchoolName) {
+  school = { name: customSchoolName || 'Mayhemic Model School, Lucknow' };
+  if (!students.length) {
+    students = [
+      { id: 101, name: 'Aarav Sharma', class: '10-A', roll_no: '01', parent_name: 'Vikram Sharma', parent_phone: '9876543210', total_fee: 48000, paid: 36000, pending: 12000 },
+      { id: 102, name: 'Ananya Verma', class: '10-A', roll_no: '02', parent_name: 'Sandeep Verma', parent_phone: '9876543211', total_fee: 48000, paid: 48000, pending: 0 },
+      { id: 103, name: 'Kabir Mehra', class: '9-B', roll_no: '14', parent_name: 'Rohan Mehra', parent_phone: '9876543212', total_fee: 42000, paid: 10000, pending: 32000 },
+      { id: 104, name: 'Ishita Singh', class: '12-Sci', roll_no: '07', parent_name: 'Manoj Singh', parent_phone: '9876543213', total_fee: 65000, paid: 25000, pending: 40000 },
+      { id: 105, name: 'Reyansh Gupta', class: '8-A', roll_no: '19', parent_name: 'Amit Gupta', parent_phone: '9876543214', total_fee: 38000, paid: 38000, pending: 0 }
+    ];
+  }
+  students = students.filter(s => !deletedStudentIds.includes(s.id));
+  // Seed sample attendance if empty
+  if (Object.keys(attendanceDB).length === 0) {
+    const d1 = new Date(Date.now() - 86400000 * 2).toISOString().slice(0, 10);
+    const d2 = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    attendanceDB[d1] = { 101: 'P', 102: 'P', 103: 'A', 104: 'P', 105: 'P' };
+    attendanceDB[d2] = { 101: 'P', 102: 'P', 103: 'P', 104: 'L', 105: 'P' };
+    attendanceDB[TODAY_ISO] = { 101: 'P', 102: 'P', 103: 'A', 104: 'P', 105: 'P' };
+    saveAttendanceDB();
+  }
+}
+
+function startSandbox(role, customSchoolName, parentQuery) {
   isDemo = true;
-  school = { name: 'Mayhemic International Academy (Demo)' };
-  students = [
-    { id: 101, name: 'Aarav Sharma', class: '10-A', roll_no: '01', parent_name: 'Vikram Sharma', parent_phone: '9876543210', total_fee: 48000, paid: 36000, pending: 12000 },
-    { id: 102, name: 'Ananya Verma', class: '10-A', roll_no: '02', parent_name: 'Sandeep Verma', parent_phone: '9876543211', total_fee: 48000, paid: 48000, pending: 0 },
-    { id: 103, name: 'Kabir Mehra', class: '9-B', roll_no: '14', parent_name: 'Rohan Mehra', parent_phone: '9876543212', total_fee: 42000, paid: 10000, pending: 32000 },
-    { id: 104, name: 'Ishita Singh', class: '12-Sci', roll_no: '07', parent_name: 'Manoj Singh', parent_phone: '9876543213', total_fee: 65000, paid: 25000, pending: 40000 },
-    { id: 105, name: 'Reyansh Gupta', class: '8-A', roll_no: '19', parent_name: 'Amit Gupta', parent_phone: '9876543214', total_fee: 38000, paid: 38000, pending: 0 }
-  ];
-  $('modeBadge').textContent = 'DEMO SANDBOX';
+  ensureDemoData(customSchoolName);
+  if (role === 'principal') {
+    loggedInAsPrincipal = true;
+    startPrincipalApp();
+  } else if (role === 'teacher') {
+    switchActivePortal('teacher');
+  } else {
+    switchActivePortal('parent', parentQuery || '9876543210');
+  }
+}
+
+function switchActivePortal(targetRole, parentQuery) {
   $('login').style.display = 'none';
-  $('app').style.display = 'block';
-  $('schoolName').textContent = school.name;
-  updateDashboardStats(18000);
-  populateClassControls();
-  render();
-  toast('Interactive Demo Mode active! Feel free to test payments & receipts.');
+  $('app').style.display = targetRole === 'principal' ? 'block' : 'none';
+  $('teacherApp').style.display = targetRole === 'teacher' ? 'block' : 'none';
+  $('parentApp').style.display = targetRole === 'parent' ? 'block' : 'none';
+
+  $('backToPrinBtn').style.display = loggedInAsPrincipal ? 'inline-flex' : 'none';
+  $('pBackToPrinBtn').style.display = loggedInAsPrincipal ? 'inline-flex' : 'none';
+
+  if (targetRole === 'principal') {
+    load();
+  } else if (targetRole === 'teacher') {
+    $('tSchoolName').textContent = school ? school.name : 'School Portal';
+    $('attDate').value = TODAY_ISO;
+    const classes = [...new Set(students.map(s => (s.class || 'Unassigned').trim()).filter(Boolean))].sort();
+    $('attClassSel').innerHTML = `<option value="ALL">All Classes (${students.length})</option>` +
+      classes.map(c => `<option value="${esc(c)}">Class ${esc(c)}</option>`).join('');
+    renderTeacherAttendance();
+  } else if (targetRole === 'parent') {
+    $('pSchoolName').textContent = school ? school.name : 'School Portal';
+    renderParentPortal(parentQuery);
+  }
 }
 
 function logout() {
   try { sessionStorage.removeItem('mk'); } catch (e) {}
-  KEY = ''; isDemo = false;
+  KEY = ''; isDemo = false; loggedInAsPrincipal = false;
   $('app').style.display = 'none';
+  $('teacherApp').style.display = 'none';
+  $('parentApp').style.display = 'none';
   $('login').style.display = 'flex';
   $('keyIn').value = '';
+  populateLoginSchools();
 }
 
-function start() {
-  $('modeBadge').textContent = 'LIVE SYNC';
+function startPrincipalApp() {
   $('login').style.display = 'none';
   $('app').style.display = 'block';
   $('schoolName').textContent = school.name;
@@ -739,8 +907,29 @@ function start() {
   load();
 }
 
+function applyLocalOverrides(list) {
+  return list
+    .filter(s => !deletedStudentIds.includes(s.id))
+    .map(s => {
+      const ov = localFeeOverrides[s.id];
+      const total_fee = ov && ov.total_fee !== undefined ? Number(ov.total_fee) : Number(s.total_fee || 0);
+      const paid = Number(s.paid || 0);
+      return {
+        ...s,
+        name: ov?.name || s.name,
+        class: ov?.class !== undefined ? ov.class : s.class,
+        roll_no: ov?.roll_no !== undefined ? ov.roll_no : s.roll_no,
+        parent_name: ov?.parent_name !== undefined ? ov.parent_name : s.parent_name,
+        parent_phone: ov?.parent_phone !== undefined ? ov.parent_phone : s.parent_phone,
+        total_fee,
+        pending: Math.max(0, total_fee - paid)
+      };
+    });
+}
+
 async function load() {
   if (isDemo) {
+    students = applyLocalOverrides(students);
     updateDashboardStats(18000);
     populateClassControls();
     render();
@@ -748,29 +937,39 @@ async function load() {
   }
   try {
     const [s, st] = await Promise.all([api('/api/summary'), api('/api/students')]);
-    students = st.students || [];
-    updateDashboardStats(s.collected_today, s.total_collected, s.total_pending, s.total_students);
+    students = applyLocalOverrides(st.students || []);
+    updateDashboardStats(s.collected_today);
     populateClassControls();
     render();
   } catch (e) { toast(e.message); }
 }
 
-function updateDashboardStats(todayOverride, colOverride, pendOverride, countOverride) {
-  const totalCollected = colOverride !== undefined ? Number(colOverride) : students.reduce((a, x) => a + Number(x.paid || 0), 0);
-  const totalPending = pendOverride !== undefined ? Number(pendOverride) : students.reduce((a, x) => a + Number(x.pending || 0), 0);
-  const totalBook = totalCollected + totalPending;
-  const totalStu = countOverride !== undefined ? Number(countOverride) : students.length;
+function updateDashboardStats(todayOverride) {
+  const totalCollected = students.reduce((a, x) => a + Number(x.paid || 0), 0);
+  const totalPending = students.reduce((a, x) => a + Number(x.pending || 0), 0);
+  const totalBook = students.reduce((a, x) => a + Number(x.total_fee || 0), 0);
+  const totalStu = students.length;
   const clearedCount = students.filter(x => Number(x.pending) <= 0).length;
-  const dueCount = students.length - clearedCount;
+  const dueCount = totalStu - clearedCount;
   const rate = totalBook > 0 ? Math.round((totalCollected / totalBook) * 100) : 0;
-  const avg = totalStu > 0 ? Math.round(totalBook / totalStu) : 0;
 
-  $('sToday').textContent = inr(todayOverride || 0);
+  // Attendance Today Calculation
+  const todayMap = attendanceDB[TODAY_ISO] || {};
+  let pToday = 0, aToday = 0;
+  students.forEach(s => {
+    if (todayMap[s.id] === 'P') pToday++;
+    else if (todayMap[s.id] === 'A') aToday++;
+  });
+  const markedTotal = pToday + aToday;
+  const attPct = markedTotal > 0 ? Math.round((pToday / markedTotal) * 100) : 100;
+
+  if (todayOverride !== undefined) $('sToday').textContent = inr(todayOverride);
   $('sCollected').textContent = inr(totalCollected);
   $('sPending').textContent = inr(totalPending);
   $('sTotalBook').textContent = inr(totalBook);
   $('sStudents').textContent = totalStu;
-  $('sAvg').textContent = inr(avg);
+  $('sAttToday').textContent = markedTotal > 0 ? attPct + '%' : 'Unmarked';
+  $('sAttSub').textContent = `${pToday} Present / ${aToday} Absent`;
 
   $('sRateSub').textContent = rate + '% of total fee book';
   $('sDefSub').textContent = dueCount + ' students with dues';
@@ -791,14 +990,12 @@ function populateClassControls() {
     classes.map(c => `<option value="${esc(c)}">Class ${esc(c)}</option>`).join('');
   if (classes.includes(current)) sel.value = current;
 
-  // Class chips with pending totals
-  const chipHtml = classes.map(c => {
+  $('classChips').innerHTML = classes.map(c => {
     const clsStudents = students.filter(s => (s.class || 'Unassigned').trim() === c);
     const pend = clsStudents.reduce((a, x) => a + Number(x.pending || 0), 0);
     const active = sel.value === c ? 'active' : '';
     return `<div class="c-chip ${active}" onclick="filterByClassChip('${esc(c)}')"><b>${esc(c)}</b> (${clsStudents.length}) &bull; ${pend > 0 ? '<span style="color:var(--bad)">' + inr(pend) + '</span>' : '<span style="color:var(--ok)">Cleared</span>'}</div>`;
-  }).join('');
-  $('classChips').innerHTML = chipHtml || '<span style="font-size:12px;color:var(--mute)">Add students to see class breakdown</span>';
+  }).join('') || '<span style="font-size:12px;color:var(--mute)">No classes yet</span>';
 }
 
 function filterByClassChip(cls) {
@@ -810,7 +1007,7 @@ function filterByClassChip(cls) {
 
 function setTab(t) {
   tab = t;
-  ['All','Due','Clear','High'].forEach(k => {
+  ['All','Due','Clear'].forEach(k => {
     const el = $('tab' + k);
     if (el) el.className = (t === k.toLowerCase()) ? 'small on' : 'small';
   });
@@ -831,10 +1028,8 @@ function getFilteredStudents() {
 
   let list = students.filter(s => {
     const pend = Number(s.pending || 0);
-    const tot = Number(s.total_fee || 0);
     if (tab === 'due' && pend <= 0) return false;
     if (tab === 'clear' && pend > 0) return false;
-    if (tab === 'high' && (tot === 0 || (pend / tot) < 0.5)) return false;
     if (cls && (s.class || 'Unassigned').trim() !== cls) return false;
     if (q && ![s.name, s.roll_no, s.parent_phone, s.parent_name, s.class].join(' ').toLowerCase().includes(q)) return false;
     return true;
@@ -859,32 +1054,36 @@ function render() {
     const paid = Number(s.paid || 0);
     const pend = Number(s.pending || 0);
     const pct = tot > 0 ? Math.min(100, Math.round((paid / tot) * 100)) : 100;
+    const att = getStudentAttendanceStats(s.id);
+    const badgeColor = att.todayStatus === 'P' ? 'var(--ok)' : att.todayStatus === 'A' ? 'var(--bad)' : 'var(--mute)';
     return `
     <tr>
       <td>
         <div class="stu-name" onclick="openProfile(${s.id})">${esc(s.name)}</div>
-        <div class="label" style="margin-top:4px">${esc(s.parent_name || 'Parent not set')}</div>
+        <div class="label" style="margin-top:4px">${esc(s.parent_name || 'Parent')} &bull; ${esc(s.parent_phone || 'No phone')}</div>
       </td>
       <td>
         <span style="font-weight:700">${esc(s.class || '-')}</span>
         ${s.roll_no ? `<div class="mono" style="font-size:11px;color:var(--mute)">Roll #${esc(s.roll_no)}</div>` : ''}
       </td>
       <td>
-        ${s.parent_phone
-          ? `<div class="mono" style="font-size:13px">${esc(s.parent_phone)}</div>`
-          : '<span class="label">No phone</span>'}
+        <div class="mono" style="font-size:13px;font-weight:700;color:${att.pct < 75 ? 'var(--bad)' : 'var(--ok)'}">${att.pct}% (${att.present}P / ${att.absent}A)</div>
+        <div style="font-size:11px;color:${badgeColor}">Today: ${att.todayStatus === 'P' ? 'Present' : att.todayStatus === 'A' ? 'Absent' : att.todayStatus === 'L' ? 'Leave' : 'Not marked'}</div>
       </td>
-      <td class="r mono">${inr(tot)}</td>
+      <td class="r mono">
+        <span class="fee-edit-link" onclick="openAdjust(${s.id})" title="Increase or Decrease Total Fee">${inr(tot)} &plusmn;</span>
+      </td>
       <td class="r">
         <span class="mono">${inr(paid)}</span>
-        <span class="mini-bar" title="${pct}% Paid"><i style="width:${pct}%"></i></span>
+        <span class="mini-bar"><i style="width:${pct}%"></i></span>
       </td>
       <td class="r mono ${pend > 0 ? 'pend' : 'clear'}">${pend > 0 ? inr(pend) : 'CLEARED'}</td>
       <td class="r">
         <div class="row-actions">
           <button class="small solid" onclick="openPay(${s.id})">Pay</button>
-          ${s.parent_phone && pend > 0 ? `<button class="icon-btn ok-btn" title="Direct WhatsApp Reminder" onclick="directWhatsApp(${s.id})">WA</button>` : ''}
-          <button class="icon-btn" title="Student Ledger & Demand Slip" onclick="openProfile(${s.id})">&equiv;</button>
+          <button class="icon-btn warn-btn" title="Increase / Decrease Total Fee" onclick="openAdjust(${s.id})">&plusmn; Fee</button>
+          ${s.parent_phone && pend > 0 ? `<button class="icon-btn ok-btn" title="WhatsApp Fee Reminder" onclick="directWhatsApp(${s.id})">WA</button>` : ''}
+          <button class="icon-btn bad-btn" title="Delete Student Record" onclick="deleteStudent(${s.id})">&#128465;</button>
         </div>
       </td>
     </tr>`;
@@ -892,16 +1091,319 @@ function render() {
   $('empty').style.display = list.length ? 'none' : 'block';
 }
 
-function closeAll() { document.querySelectorAll('.ov').forEach(o => o.classList.remove('show')); }
-
-// Direct 1-on-1 WhatsApp Web/App trigger (works anytime without API limits)
-function directWhatsApp(id) {
+// ==========================================
+// STUDENT DELETION FEATURE (HARD + API SYNC)
+// ==========================================
+async function deleteStudent(id) {
   const s = students.find(x => x.id === id);
-  if (!s || !s.parent_phone) return toast('Parent phone number not available');
+  if (!s) return;
+  const msg = `Are you sure you want to permanently DELETE student "${s.name}" (Class ${s.class || '-'})?\n\n• Total Fee: ${inr(s.total_fee)}\n• Paid: ${inr(s.paid)}\n• Pending: ${inr(s.pending)}`;
+  if (!confirm(msg)) return;
+
+  students = students.filter(x => x.id !== id);
+  if (!deletedStudentIds.includes(id)) deletedStudentIds.push(id);
+  try { localStorage.setItem('mayhemic_deleted_students', JSON.stringify(deletedStudentIds)); } catch (e) {}
+
+  if (!isDemo) {
+    try { await api(`/api/students/${id}`, { method: 'DELETE' }); } catch (e) {}
+  }
+
+  sessionLogs.unshift({
+    receipt_no: 'DEL-' + Date.now().toString().slice(-5),
+    student: s.name,
+    class: s.class,
+    amount: 0,
+    mode: 'Student Deleted',
+    date: new Date().toLocaleString('en-IN'),
+    isAdjustment: true
+  });
+  try { localStorage.setItem('mayhemic_logs', JSON.stringify(sessionLogs.slice(0, 50))); } catch(e){}
+
+  closeAll();
+  updateDashboardStats();
+  populateClassControls();
+  render();
+  toast(`Deleted student "${s.name}"`);
+}
+
+// ==========================================
+// TEACHER ATTENDANCE PORTAL FUNCTIONS
+// ==========================================
+function renderTeacherAttendance() {
+  const date = $('attDate').value || TODAY_ISO;
+  const cls = $('attClassSel').value;
+  if (!attendanceDB[date]) attendanceDB[date] = {};
+  const dayMap = attendanceDB[date];
+
+  const list = students.filter(s => cls === 'ALL' || (s.class || 'Unassigned').trim() === cls);
+  let p = 0, a = 0, l = 0;
+
+  $('tRows').innerHTML = list.map(s => {
+    const cur = dayMap[s.id] || '';
+    if (cur === 'P') p++; else if (cur === 'A') a++; else if (cur === 'L') l++;
+    const stats = getStudentAttendanceStats(s.id);
+    return `
+      <tr>
+        <td class="mono">#${esc(s.roll_no || '-')} <span class="label">(${esc(s.class || '-')})</span></td>
+        <td><b style="font-size:15px">${esc(s.name)}</b></td>
+        <td>${esc(s.parent_name || '-')} <span class="mono" style="font-size:12px;color:var(--mute)">${esc(s.parent_phone || '')}</span></td>
+        <td class="mono" style="color:${stats.pct < 75 ? 'var(--bad)' : 'var(--ok)'};font-weight:700">${stats.pct}% (${stats.present}P / ${stats.absent}A)</td>
+        <td class="r">
+          <div style="display:inline-flex;gap:6px">
+            <button class="small ok-btn ${cur === 'P' ? 'active' : ''}" onclick="setStudentAttendance(${s.id}, 'P')">Present</button>
+            <button class="small bad-btn ${cur === 'A' ? 'active' : ''}" onclick="setStudentAttendance(${s.id}, 'A')">Absent</button>
+            <button class="small warn-btn ${cur === 'L' ? 'active' : ''}" onclick="setStudentAttendance(${s.id}, 'L')">Leave</button>
+          </div>
+        </td>
+        <td class="r">
+          ${cur === 'A' && s.parent_phone
+            ? `<button class="small bad-btn" onclick="sendAbsentWhatsApp(${s.id}, '${esc(date)}')">Alert Parent (WA)</button>`
+            : '<span class="label">-</span>'}
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  $('tAttSummary').textContent = `Date: ${date} • Present: ${p} | Absent: ${a} | Leave: ${l} (Total: ${list.length})`;
+}
+
+function setStudentAttendance(stuId, status) {
+  const date = $('attDate').value || TODAY_ISO;
+  if (!attendanceDB[date]) attendanceDB[date] = {};
+  attendanceDB[date][stuId] = status;
+  saveAttendanceDB();
+  renderTeacherAttendance();
+  updateDashboardStats();
+}
+
+function markAllClass(status) {
+  const date = $('attDate').value || TODAY_ISO;
+  const cls = $('attClassSel').value;
+  if (!attendanceDB[date]) attendanceDB[date] = {};
+  students.forEach(s => {
+    if (cls === 'ALL' || (s.class || 'Unassigned').trim() === cls) {
+      attendanceDB[date][s.id] = status;
+    }
+  });
+  saveAttendanceDB();
+  renderTeacherAttendance();
+  updateDashboardStats();
+  toast(`Marked all students ${status === 'P' ? 'Present' : 'Absent'} for ${date}`);
+}
+
+function saveClassAttendance() {
+  saveAttendanceDB();
+  toast('Attendance register saved & synced to Parent Portal!');
+}
+
+function sendAbsentWhatsApp(stuId, date) {
+  const s = students.find(x => x.id === stuId); if (!s || !s.parent_phone) return;
   const cleanPhone = String(s.parent_phone).replace(/\D/g, '');
   const fullPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
-  const msg = `Dear ${s.parent_name || 'Parent'},\nGreetings from *${school ? school.name : 'School'}*.\n\nThis is a gentle fee reminder for *${s.name}* (Class ${s.class || '-'}${s.roll_no ? ', Roll ' + s.roll_no : ''}).\n• Total Fee: ${inr(s.total_fee)}\n• Paid: ${inr(s.paid)}\n• *Balance Pending: ${inr(s.pending)}*\n\nKindly clear the pending dues at your earliest convenience. Thank you!`;
+  const msg = `Dear ${s.parent_name || 'Parent'},\n*ABSENTEE NOTICE — ${school ? school.name : 'School'}*\n\nYour ward *${s.name}* (Class ${s.class || '-'}, Roll #${s.roll_no || '-'}) was marked *ABSENT* today (${date}).\n\nIf this was unplanned, kindly inform the class teacher. Thank you.`;
   window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ==========================================
+// PARENT / STUDENT SELF-SERVICE PORTAL
+// ==========================================
+function renderParentPortal(initialQuery) {
+  const q = (initialQuery !== undefined ? initialQuery : ($('pSearchInput')?.value || '')).trim().toLowerCase();
+  const matched = students.filter(s =>
+    !q ||
+    String(s.parent_phone || '').toLowerCase().includes(q) ||
+    String(s.roll_no || '').toLowerCase() === q ||
+    String(s.name || '').toLowerCase().includes(q)
+  );
+
+  const stu = matched[0] || students[0];
+  if (!stu) {
+    $('parentContent').innerHTML = `<div class="empty">No student records available yet.</div>`;
+    return;
+  }
+
+  const att = getStudentAttendanceStats(stu.id);
+  const tot = Number(stu.total_fee || 0);
+  const paid = Number(stu.paid || 0);
+  const pend = Number(stu.pending || 0);
+  const feePct = tot > 0 ? Math.round((paid / tot) * 100) : 100;
+
+  $('parentContent').innerHTML = `
+    <div class="toolbar">
+      <div style="display:flex;gap:10px;align-items:center;flex:1;flex-wrap:wrap">
+        <span class="label">Lookup Another Student / Sibling:</span>
+        <input id="pSearchInput" value="${esc(q)}" placeholder="Enter Parent Phone (e.g. 9876543210) or Student Name" style="max-width:340px" oninput="renderParentPortal()">
+      </div>
+      <button class="small solid" onclick="window.print()">Print Student Statement</button>
+    </div>
+
+    <div class="glass-box" style="margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px">
+        <div>
+          <div class="label" style="color:var(--accent)">Verified Student Dossier</div>
+          <h2 class="unbounded" style="font-size:28px;margin-top:4px">${esc(stu.name)}</h2>
+          <div style="color:var(--mute);font-size:14px;margin-top:4px">
+            Class: <b style="color:#fff">${esc(stu.class || '-')}</b> &bull;
+            Roll No: <b style="color:#fff">#${esc(stu.roll_no || '-')}</b> &bull;
+            Parent: <b style="color:#fff">${esc(stu.parent_name || '-')} (${esc(stu.parent_phone || '-')})</b>
+          </div>
+        </div>
+        <div class="badge-live" style="font-size:13px;padding:8px 16px">
+          Today's Status: ${att.todayStatus === 'P' ? 'PRESENT' : att.todayStatus === 'A' ? 'ABSENT' : att.todayStatus === 'L' ? 'ON LEAVE' : 'NOT MARKED YET'}
+        </div>
+      </div>
+    </div>
+
+    <!-- Parent KPI Grid: Attendance + Fees -->
+    <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
+      <div class="stat"><div class="label">Attendance Rate</div><div class="v ${att.pct >= 75 ? 'g' : 'r'}">${att.pct}%</div><div class="sub">${att.total} working days recorded</div></div>
+      <div class="stat"><div class="label">Days Present</div><div class="v g">${att.present} Days</div><div class="sub">Verified in class</div></div>
+      <div class="stat"><div class="label">Days Absent</div><div class="v r">${att.absent} Days</div><div class="sub">${att.leave} Authorised Leave(s)</div></div>
+      <div class="stat"><div class="label">Total Annual Fee</div><div class="v a">${inr(tot)}</div><div class="sub">Net billed amount</div></div>
+      <div class="stat"><div class="label">Total Fee Paid</div><div class="v g">${inr(paid)}</div><div class="sub">${feePct}% cleared</div></div>
+      <div class="stat"><div class="label">Pending Fee Due</div><div class="v ${pend > 0 ? 'r' : 'g'}">${pend > 0 ? inr(pend) : 'CLEARED'}</div><div class="sub">${pend > 0 ? 'Due at school office' : 'No dues pending'}</div></div>
+    </div>
+
+    <div class="analytics-strip">
+      <div class="glass-box">
+        <div class="label">Date-wise Attendance Log</div>
+        <div style="margin-top:14px;display:grid;gap:8px;max-height:220px;overflow-y:auto">
+          ${att.logs.length ? att.logs.map(l => `
+            <div style="display:flex;justify-content:space-between;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)">
+              <span class="mono">${esc(l.date)}</span>
+              <b style="color:${l.status === 'P' ? 'var(--ok)' : l.status === 'A' ? 'var(--bad)' : 'var(--warn)'}">
+                ${l.status === 'P' ? 'PRESENT' : l.status === 'A' ? 'ABSENT' : 'ON LEAVE'}
+              </b>
+            </div>
+          `).join('') : '<div style="color:var(--mute)">No attendance logs recorded yet.</div>'}
+        </div>
+      </div>
+
+      <div class="glass-box">
+        <div class="label">Fee Payment Summary</div>
+        <div class="prog-track"><div class="prog-fill" style="width:${feePct}%"></div></div>
+        <div style="font-size:14px;display:grid;gap:10px;margin-top:14px">
+          <div style="display:flex;justify-content:space-between"><span>Total Annual Fee:</span><b class="mono">${inr(tot)}</b></div>
+          <div style="display:flex;justify-content:space-between"><span>Total Paid to Date:</span><b class="mono" style="color:var(--ok)">${inr(paid)}</b></div>
+          <div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px"><span>Net Balance Payable:</span><b class="mono" style="color:${pend > 0 ? 'var(--bad)' : 'var(--ok)'};font-size:16px">${pend > 0 ? inr(pend) : 'NIL (CLEARED)'}</b></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ==========================================
+// FEE ADJUSTMENT (+/-), PAYMENTS & CRUD
+// ==========================================
+function closeAll() { document.querySelectorAll('.ov').forEach(o => o.classList.remove('show')); }
+
+function openAdjust(id) {
+  closeAll();
+  const s = students.find(x => x.id === id); if (!s) return;
+  adjId = id;
+  $('adjTitle').textContent = s.name;
+  $('adjSub').textContent = `Class ${s.class || '-'} • Current Total: ${inr(s.total_fee)} • Paid: ${inr(s.paid)}`;
+  $('adjVal').value = '';$('adjUnit').value = 'rs';
+  $('adjReason').value = '';$('eName').value = s.name || '';
+  $('eClass').value = s.class \vert{}\vert{} '';$('eRoll').value = s.roll_no || '';
+  $('eParent').value = s.parent_name \vert{}\vert{} '';$('ePhone').value = s.parent_phone || '';
+  setAdjMode('inc');
+  $('adjOv').classList.add('show');
+}
+
+function setAdjMode(mode) {
+  adjMode = mode;
+  $('mInc').className = mode === 'inc' ? 'active-inc' : '';
+  $('mDec').className = mode === 'dec' ? 'active-dec' : '';$('mSet').className = mode === 'set' ? 'active-set' : '';
+  const s = students.find(x => x.id === adjId); if (!s) return;
+
+  if (mode === 'inc') {
+    $('adjValLabel').textContent = 'Amount to Increase (+)';$('adjUnitWrap').style.display = 'block';
+    $('adjPresetsRow').style.display = 'block';$('adjPresets').innerHTML = `
+      <span onclick="applyAdjPreset(1500,'rs','Transport Fee')">+Rs 1,500 (Transport)</span>
+      <span onclick="applyAdjPreset(1000,'rs','Exam Fee')">+Rs 1,000 (Exam)</span>
+      <span onclick="applyAdjPreset(500,'rs','Late Fine')">+Rs 500 (Late Fine)</span>
+    `;
+  } else if (mode === 'dec') {
+    $('adjValLabel').textContent = 'Amount to Decrease (-)';$('adjUnitWrap').style.display = 'block';
+    $('adjPresetsRow').style.display = 'block';$('adjPresets').innerHTML = `
+      <span onclick="applyAdjPreset(10,'pct','Scholarship 10%')">-10% Scholarship</span>
+      <span onclick="applyAdjPreset(25,'pct','Sibling Discount 25%')">-25% Sibling</span>
+      <span onclick="applyAdjPreset(2000,'rs','Fee Concession')">-Rs 2,000 Concession</span>
+    `;
+  } else {
+    $('adjValLabel').textContent = 'New Exact Total Fee (Rs)';$('adjUnitWrap').style.display = 'none';
+    $('adjPresetsRow').style.display = 'none';$('adjVal').value = s.total_fee;
+  }
+  calcAdjPreview();
+}
+
+function applyAdjPreset(val, unit, reason) {
+  $('adjVal').value = val; $('adjUnit').value = unit; $('adjReason').value = reason;
+  calcAdjPreview();
+}
+
+function computeAdjustedTotal(currentTotal, mode, rawVal, unit) {
+  const val = Number(rawVal || 0);
+  if (mode === 'set') return Math.max(0, Math.round(val));
+  const delta = unit === 'pct' ? Math.round(currentTotal * (val / 100)) : Math.round(val);
+  return mode === 'inc' ? Math.max(0, currentTotal + delta) : Math.max(0, currentTotal - delta);
+}
+
+function calcAdjPreview() {
+  const s = students.find(x => x.id === adjId); if (!s) return;
+  const curTot = Number(s.total_fee || 0);
+  const newTot = computeAdjustedTotal(curTot, adjMode, $('adjVal').value, $('adjUnit').value);
+  const newPend = Math.max(0, newTot - Number(s.paid || 0));
+  $('adjPrevTotal').innerHTML = `${inr(curTot)} &rarr; <span style="color:var(--accent)">${inr(newTot)}</span>`;
+  $('adjPrevPend').textContent = newPend > 0 ? inr(newPend) : 'CLEARED';
+}
+
+async function saveFeeAdjustment() {
+  const s = students.find(x => x.id === adjId); if (!s) return;
+  const newTotal = computeAdjustedTotal(Number(s.total_fee || 0), adjMode, $('adjVal').value, $('adjUnit').value);
+  const updated = {
+    name: $('eName').value.trim() || s.name,
+    class: $('eClass').value.trim(),
+    roll_no: $('eRoll').value.trim(),
+    parent_name: $('eParent').value.trim(),
+    parent_phone: $('ePhone').value.trim(),
+    total_fee: newTotal
+  };
+  Object.assign(s, updated);
+  s.pending = Math.max(0, newTotal - Number(s.paid || 0));
+  localFeeOverrides[s.id] = updated;
+  try { localStorage.setItem('mayhemic_fee_overrides', JSON.stringify(localFeeOverrides)); } catch(e){}
+  if (!isDemo) {
+    try { await api(`/api/students/${s.id}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify(updated) }); } catch (e) {}
+  }
+  closeAll();
+  updateDashboardStats();
+  populateClassControls();
+  render();
+  toast(`Updated ${s.name}'s fee to ${inr(newTotal)}`);
+}
+
+function openBulkAdjust() {
+  closeAll();
+  const classes = [...new Set(students.map(s => (s.class || 'Unassigned').trim()).filter(Boolean))].sort();
+  $('bTarget').innerHTML = `<option value="ALL">Entire School (${students.length} students)</option>` +
+    classes.map(c => `<option value="${esc(c)}">Class ${esc(c)} only</option>`).join('');
+  $('bVal').value = ''; $('bReason').value = '';$('bulkOv').classList.add('show');
+}
+
+function applyBulkAdjust() {
+  const target = $('bTarget').value, action =$('bAction').value, val = Number($('bVal').value \vert{}\vert{} 0), unit =$('bUnit').value;
+  if (val <= 0) return toast('Enter a valid value');
+  const matching = students.filter(s => target === 'ALL' || (s.class || 'Unassigned').trim() === target);
+  matching.forEach(s => {
+    s.total_fee = computeAdjustedTotal(Number(s.total_fee || 0), action, val, unit);
+    s.pending = Math.max(0, s.total_fee - Number(s.paid || 0));
+    localFeeOverrides[s.id] = { name: s.name, class: s.class, roll_no: s.roll_no, parent_name: s.parent_name, parent_phone: s.parent_phone, total_fee: s.total_fee };
+  });
+  try { localStorage.setItem('mayhemic_fee_overrides', JSON.stringify(localFeeOverrides)); } catch(e){}
+  closeAll(); updateDashboardStats(); populateClassControls(); render();
+  toast(`Bulk fee revision applied to ${matching.length} students`);
 }
 
 function openPay(id) {
@@ -910,322 +1412,139 @@ function openPay(id) {
   payId = id;
   const pend = Number(s.pending || 0);
   $('payName').textContent = s.name;
-  $('payInfo').textContent = `Class ${s.class || '-'} • Pending Balance: ${inr(pend)}`;
+  $('payInfo').textContent = `Class ${s.class || '-'} • Pending: ${inr(pend)}`;
   $('payAmt').value = pend > 0 ? pend : '';
-  $('payNote').value = '';$('payWA').checked = true;
-
-  // Smart preset buttons
-  if (pend > 0) {
-    const p25 = Math.round(pend * 0.25);
-    const p50 = Math.round(pend * 0.5);
-    $('payPresets').innerHTML = `
-      <span onclick="$('payAmt').value=${pend}">Full Due (${inr(pend)})</span>
-      <span onclick="$('payAmt').value=${p50}">50% (${inr(p50)})</span>
-      <span onclick="$('payAmt').value=${p25}">25% (${inr(p25)})</span>
-    `;
-  } else {
-    $('payPresets').innerHTML = `<span style="color:var(--ok)">All dues already cleared!</span>`;
-  }
+  $('payPresets').innerHTML = pend > 0
+    ? `<span onclick="$('payAmt').value=${pend}">Full (${inr(pend)})</span><span onclick="$('payAmt').value=${Math.round(pend/2)}">50% (${inr(Math.round(pend/2))})</span>`
+    : `<span style="color:var(--ok)">Cleared</span>`;
   $('payOv').classList.add('show');
-  setTimeout(() => $('payAmt').focus(), 100);
 }
 
 async function savePay() {
   const s = students.find(x => x.id === payId);
   const amount = parseInt($('payAmt').value);
   const mode = $('payMode').value;
-  const note = $('payNote').value.trim();
   if (!amount || amount <= 0) return toast('Enter a valid amount');
-
-  $('savePayBtn').textContent = 'Processing...';
-  try {
-    let receiptNo = 'MAY-' + Date.now().toString().slice(-6);
-    if (!isDemo) {
-      const r = await api('/api/payments', {
-        method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ student_id: payId, amount, mode, send_receipt: $('payWA').checked })
-      });
-      receiptNo = r.receipt_no || receiptNo;
-    } else {
-      s.paid = Number(s.paid || 0) + amount;
-      s.pending = Math.max(0, Number(s.pending || 0) - amount);
-    }
-
-    $('savePayBtn').textContent = 'Confirm & Generate Receipt';
-    const left = Math.max(0, Number(s.pending || 0) - (isDemo ? 0 : amount));
-    const nowStr = new Date().toLocaleString('en-IN');
-
-    // Save to local session audit log
-    sessionLogs.unshift({
-      receipt_no: receiptNo, student: s.name, class: s.class, amount, mode, date: nowStr
+  let receiptNo = 'MAY-' + Date.now().toString().slice(-6);
+  if (!isDemo) {
+    const r = await api('/api/payments', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ student_id: payId, amount, mode, send_receipt: $('payWA').checked })
     });
-    try { localStorage.setItem('mayhemic_logs', JSON.stringify(sessionLogs.slice(0, 50))); } catch(e){}
-
-    const receiptHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <h2>${esc(school.name)}</h2>
-          <div style="font-size:12px;color:#555">Official Fee Payment Receipt</div>
-        </div>
-        <span class="rc-badge">${esc(mode)}</span>
-      </div>
-      <hr>
-      <table>
-        <tr><td>Receipt No</td><td style="text-align:right"><b>${esc(receiptNo)}</b></td></tr>
-        <tr><td>Date &amp; Time</td><td style="text-align:right">${nowStr}</td></tr>
-        <tr><td>Student Name</td><td style="text-align:right"><b>${esc(s.name)}</b></td></tr>
-        <tr><td>Class / Roll</td><td style="text-align:right">${esc(s.class || '-')}${s.roll_no ? ' / #' + esc(s.roll_no) : ''}</td></tr>
-        <tr><td>Parent Name</td><td style="text-align:right">${esc(s.parent_name || '-')}</td></tr>
-        ${note ? `<tr><td>Reference</td><td style="text-align:right">${esc(note)}</td></tr>` : ''}
-        <tr><td>Amount Paid</td><td style="text-align:right;font-size:16px;color:#15803d"><b>${inr(amount)}</b></td></tr>
-        <tr><td>In Words</td><td style="text-align:right;font-size:11px;color:#444">${esc(numToWords(amount))}</td></tr>
-        <tr><td>Balance Remaining</td><td style="text-align:right;color:${left > 0 ? '#b91c1c' : '#15803d'}"><b>${left > 0 ? inr(left) : 'CLEARED'}</b></td></tr>
-      </table>
-      <hr>
-      <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#666">
-        <span> Computer Generated Receipt</span>
-        <span>Powered by <b>Mayhemic.in</b></span>
-      </div>`;
-
-    $('rcPreviewBox').innerHTML = receiptHTML;
-    $('printArea').innerHTML = `<div class="rc-preview">${receiptHTML}</div>`;
-    $('rcNo').textContent = 'Receipt #' + receiptNo;
-
-    $('rcWaShareBtn').onclick = () => {
-      const cleanPhone = String(s.parent_phone || '').replace(/\D/g, '');
-      const fullPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
-      const waMsg = `*FEE RECEIPT — ${school.name}*\nReceipt No: *${receiptNo}*\nStudent: *${s.name}* (${s.class})\nAmount Received: *${inr(amount)}* (${mode.toUpperCase()})\nRemaining Balance: *${left > 0 ? inr(left) : 'NIL (Cleared)'}*\nDate: ${nowStr}\n\nThank you!`;
-      window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(waMsg)}`, '_blank');
-    };
-
-    closeAll();
-    $('rcOv').classList.add('show');
-    load();
-  } catch (e) {
-    $('savePayBtn').textContent = 'Confirm & Generate Receipt';
-    toast(e.message);
+    receiptNo = r.receipt_no || receiptNo;
+  } else {
+    s.paid = Number(s.paid || 0) + amount;
+    s.pending = Math.max(0, Number(s.total_fee || 0) - s.paid);
   }
-}
-
-function printReceiptNow() {
-  window.print();
-}
-
-function openProfile(id) {
-  const s = students.find(x => x.id === id); if (!s) return;
-  const tot = Number(s.total_fee || 0);
-  const paid = Number(s.paid || 0);
-  const pend = Number(s.pending || 0);
-  const pct = tot > 0 ? Math.round((paid / tot) * 100) : 100;
-
-  $('prTitle').textContent = s.name;
-  $('prBody').innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
-      <div class="stat"><div class="label">Total Fee</div><div class="v" style="font-size:18px">${inr(tot)}</div></div>
-      <div class="stat"><div class="label">Paid (${pct}%)</div><div class="v g" style="font-size:18px">${inr(paid)}</div></div>
-      <div class="stat"><div class="label">Balance Due</div><div class="v ${pend > 0 ? 'r' : 'g'}" style="font-size:18px">${pend > 0 ? inr(pend) : 'Cleared'}</div></div>
-    </div>
-    <div style="border:1px solid var(--line);border-radius:14px;padding:16px;font-size:14px;display:grid;gap:8px">
-      <div style="display:flex;justify-content:space-between"><span class="label">Class / Roll No</span><b>${esc(s.class || '-')} ${s.roll_no ? ' / Roll #' + esc(s.roll_no) : ''}</b></div>
-      <div style="display:flex;justify-content:space-between"><span class="label">Parent / Guardian</span><b>${esc(s.parent_name || '-')}</b></div>
-      <div style="display:flex;justify-content:space-between"><span class="label">WhatsApp Contact</span><b class="mono">${esc(s.parent_phone || 'Not provided')}</b></div>
-    </div>
-  `;
-  $('prPayBtn').onclick = () => openPay(s.id);$('prWaBtn').onclick = () => directWhatsApp(s.id);
-  window._activeProfileStudent = s;
-  $('profOv').classList.add('show');
-}
-
-function printDemandSlip() {
-  const s = window._activeProfileStudent; if (!s) return;
-  $('printArea').innerHTML = `
-    <div class="rc-preview">
-      <h2>${esc(school.name)}</h2>
-      <div>OFFICIAL FEE DEMAND NOTICE</div>
-      <hr>
-      <table>
-        <tr><td>Date</td><td style="text-align:right">${new Date().toLocaleDateString('en-IN')}</td></tr>
-        <tr><td>Student Name</td><td style="text-align:right"><b>${esc(s.name)}</b></td></tr>
-        <tr><td>Class / Roll</td><td style="text-align:right">${esc(s.class || '-')} ${s.roll_no ? '/ #' + esc(s.roll_no) : ''}</td></tr>
-        <tr><td>Parent Name</td><td style="text-align:right">${esc(s.parent_name || '-')}</td></tr>
-        <tr><td>Total Annual Fee</td><td style="text-align:right">${inr(s.total_fee)}</td></tr>
-        <tr><td>Amount Paid</td><td style="text-align:right">${inr(s.paid)}</td></tr>
-        <tr><td><b>Net Payable Due</b></td><td style="text-align:right;font-size:16px"><b>${inr(s.pending)}</b></td></tr>
-      </table>
-      <hr>
-      <div style="font-size:12px">Please submit the pending fee at the school office or via UPI. Ignore if already paid.</div>
-    </div>`;
-  window.print();
+  const left = Math.max(0, Number(s.pending || 0) - (isDemo ? 0 : amount));
+  const nowStr = new Date().toLocaleString('en-IN');
+  const receiptHTML = `
+    <h2>${esc(school.name)}</h2><div>Official Fee Receipt &bull; <b>${esc(receiptNo)}</b></div><hr>
+    <table>
+      <tr><td>Date</td><td style="text-align:right">${nowStr}</td></tr>
+      <tr><td>Student</td><td style="text-align:right"><b>${esc(s.name)}</b> (${esc(s.class || '-')})</td></tr>
+      <tr><td>Amount Paid</td><td style="text-align:right"><b>${inr(amount)}</b> (${esc(mode.toUpperCase())})</td></tr>
+      <tr><td>Balance Due</td><td style="text-align:right"><b>${left > 0 ? inr(left) : 'CLEARED'}</b></td></tr>
+    </table><hr><div style="font-size:11px">Powered by Mayhemic.in</div>`;
+  $('rcPreviewBox').innerHTML = receiptHTML;
+  $('printArea').innerHTML = `<div class="rc-preview">${receiptHTML}</div>`;
+  $('rcNo').textContent = 'Receipt #' + receiptNo;
+  closeAll(); $('rcOv').classList.add('show'); load();
 }
 
 function openAdd() {
   closeAll();
   ['aName','aClass','aRoll','aParent','aPhone','aFee'].forEach(i => $(i).value = '');$('addOv').classList.add('show');
-  setTimeout(() => $('aName').focus(), 100);
 }
 
 async function saveStudent() {
-  const name = $('aName').value.trim();
-  const cls = $('aClass').value.trim();
-  const roll = $('aRoll').value.trim();
-  const parent = $('aParent').value.trim();
-  const phone = $('aPhone').value.trim();
-  const fee = Number($('aFee').value || 0);
+  const name = $('aName').value.trim(), cls = $('aClass').value.trim(), roll =$('aRoll').value.trim(),
+        parent = $('aParent').value.trim(), phone = $('aPhone').value.trim(), fee = Number($('aFee').value || 0);
   if (!name) return toast('Student name is required');
+  if (!isDemo) {
+    await api('/api/students', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name, class: cls, roll_no: roll, parent_name: parent, parent_phone: phone, total_fee: fee })
+    });
+  } else {
+    students.unshift({ id: Date.now(), name, class: cls, roll_no: roll, parent_name: parent, parent_phone: phone, total_fee: fee, paid: 0, pending: fee });
+  }
+  closeAll(); toast('Student added'); load();
+}
 
-  try {
-    if (!isDemo) {
-      await api('/api/students', {
-        method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ name, class: cls, roll_no: roll, parent_name: parent, parent_phone: phone, total_fee: fee })
-      });
-    } else {
-      students.unshift({ id: Date.now(), name, class: cls, roll_no: roll, parent_name: parent, parent_phone: phone, total_fee: fee, paid: 0, pending: fee });
-    }
-    closeAll();
-    toast('Student added successfully');
-    load();
-  } catch (e) { toast(e.message); }
+function openProfile(id) {
+  const s = students.find(x => x.id === id); if (!s) return;
+  const att = getStudentAttendanceStats(s.id);
+  $('prTitle').textContent = s.name;
+  $('prBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+      <div class="stat"><div class="label">Total Fee</div><div class="v" style="font-size:16px">${inr(s.total_fee)}</div></div>
+      <div class="stat"><div class="label">Paid</div><div class="v g" style="font-size:16px">${inr(s.paid)}</div></div>
+      <div class="stat"><div class="label">Pending</div><div class="v r" style="font-size:16px">${inr(s.pending)}</div></div>
+      <div class="stat"><div class="label">Attendance</div><div class="v a" style="font-size:16px">${att.pct}% (${att.present}P/${att.absent}A)</div></div>
+    </div>`;
+  $('prDelBtn').onclick = () => deleteStudent(s.id);$('prAdjBtn').onclick = () => openAdjust(s.id);
+  $('prPayBtn').onclick = () => openPay(s.id);$('prWaBtn').onclick = () => directWhatsApp(s.id);
+  window._activeProfileStudent = s;
+  $('profOv').classList.add('show');
+}
+
+function directWhatsApp(id) {
+  const s = students.find(x => x.id === id); if (!s || !s.parent_phone) return toast('No parent phone');
+  const cleanPhone = String(s.parent_phone).replace(/\D/g, '');
+  const fullPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+  const att = getStudentAttendanceStats(s.id);
+  const msg = `Dear ${s.parent_name || 'Parent'},\nUpdate from *${school.name}* for *${s.name}* (Class ${s.class}):\n• Attendance: ${att.pct}% (${att.present} days present, ${att.absent} absent)\n• Total Fee: ${inr(s.total_fee)}\n• Paid: ${inr(s.paid)}\n• *Pending Fee: ${inr(s.pending)}*`;
+  window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function printDemandSlip() {
+  const s = window._activeProfileStudent; if (!s) return;
+  $('printArea').innerHTML = `<div class="rc-preview"><h2>${esc(school.name)}</h2><div>FEE &amp; ATTENDANCE REPORT</div><hr><p><b>Student:</b> ${esc(s.name)} (${esc(s.class)})</p><p><b>Total Fee:</b> ${inr(s.total_fee)} | <b>Paid:</b> ${inr(s.paid)} | <b>Pending:</b> ${inr(s.pending)}</p></div>`;
+  window.print();
+}
+
+function downloadSampleCSV() {
+  const blob = new Blob(['name,class,roll_no,parent_name,parent_phone,total_fee\nAarav Kumar,10-A,1,Rajesh Kumar,9876543210,45000\n'], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'mayhemic_template.csv'; a.click();
 }
 
 async function importCSV(inp) {
   const f = inp.files[0]; if (!f) return;
-  try {
-    const text = await f.text();
-    if (!isDemo) {
-      const r = await api('/api/students/import', { method: 'POST', body: text });
-      toast('Imported ' + r.imported + ' students' + (r.skipped.length ? ', skipped ' + r.skipped.length : ''));
-    } else {
-      toast('Demo CSV parsed! Connect live school key to save to cloud.');
-    }
-    load();
-  } catch (e) { toast(e.message); }
+  if (!isDemo) {
+    const r = await api('/api/students/import', { method: 'POST', body: await f.text() });
+    toast('Imported ' + r.imported + ' students'); load();
+  } else toast('CSV parsed in Demo Mode');
   inp.value = '';
-}
-
-function downloadSampleCSV() {
-  const sample = 'name,class,roll_no,parent_name,parent_phone,total_fee\nAarav Kumar,10-A,1,Rajesh Kumar,9876543210,45000\nDiya Singh,8-B,12,Amit Singh,9876543211,38000\n';
-  const blob = new Blob([sample], { type: 'text/csv' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'mayhemic_students_template.csv';
-  a.click();
-  toast('Sample CSV template downloaded');
 }
 
 function exportCSV() {
   const list = getFilteredStudents();
-  if (!list.length) return toast('No students to export');
-  const headers = ['Name','Class','Roll No','Parent Name','Parent Phone','Total Fee','Paid','Pending'];
-  const rows = list.map(s => [
-    `"${String(s.name || '').replace(/"/g, '""')}"`,
-    `"${String(s.class || '').replace(/"/g, '""')}"`,
-    `"${String(s.roll_no || '').replace(/"/g, '""')}"`,
-    `"${String(s.parent_name || '').replace(/"/g, '""')}"`,
-    `"${String(s.parent_phone || '').replace(/"/g, '""')}"`,
-    s.total_fee || 0,
-    s.paid || 0,
-    s.pending || 0
-  ].join(','));
-  const csv = [headers.join(','), ...rows].join('\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `mayhemic_fee_report_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-  toast(`Exported ${list.length} records to CSV`);
+  const rows = list.map(s => {
+    const att = getStudentAttendanceStats(s.id);
+    return [s.name, s.class, s.roll_no, s.parent_name, s.parent_phone, s.total_fee, s.paid, s.pending, att.present, att.absent, att.pct + '%'].join(',');
+  });
+  const blob = new Blob([['Name,Class,Roll,Parent,Phone,TotalFee,Paid,Pending,DaysPresent,DaysAbsent,AttendancePct', ...rows].join('\n')], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'mayhemic_erp_export.csv'; a.click();
 }
 
-function printClassReport() {
-  const list = getFilteredStudents();
-  if (!list.length) return toast('No records to print');
-  const rowsHtml = list.map((s, i) => `
-    <tr>
-      <td style="border-bottom:1px solid #ddd;padding:6px">${i + 1}</td>
-      <td style="border-bottom:1px solid #ddd;padding:6px"><b>${esc(s.name)}</b><br><small>${esc(s.parent_name || '')}</small></td>
-      <td style="border-bottom:1px solid #ddd;padding:6px">${esc(s.class || '-')} ${s.roll_no ? '#' + esc(s.roll_no) : ''}</td>
-      <td style="border-bottom:1px solid #ddd;padding:6px">${esc(s.parent_phone || '-')}</td>
-      <td style="border-bottom:1px solid #ddd;padding:6px;text-align:right">${inr(s.total_fee)}</td>
-      <td style="border-bottom:1px solid #ddd;padding:6px;text-align:right">${inr(s.paid)}</td>
-      <td style="border-bottom:1px solid #ddd;padding:6px;text-align:right"><b>${inr(s.pending)}</b></td>
-    </tr>`).join('');
-  $('printArea').innerHTML = `
-    <div style="font-family:Arial,sans-serif;color:#000">
-      <h2 style="margin:0">${esc(school ? school.name : 'Mayhemic Fee Report')}</h2>
-      <div style="font-size:12px;color:#555;margin-bottom:14px">Generated on ${new Date().toLocaleString('en-IN')} &bull; Total Records: ${list.length}</div>
-      <table style="width:100%;border-collapse:collapse;font-size:12px;color:#000">
-        <thead>
-          <tr style="background:#f3f4f6">
-            <th style="text-align:left;padding:6px;border-bottom:2px solid #000">#</th>
-            <th style="text-align:left;padding:6px;border-bottom:2px solid #000">Student</th>
-            <th style="text-align:left;padding:6px;border-bottom:2px solid #000">Class</th>
-            <th style="text-align:left;padding:6px;border-bottom:2px solid #000">Phone</th>
-            <th style="text-align:right;padding:6px;border-bottom:2px solid #000">Total</th>
-            <th style="text-align:right;padding:6px;border-bottom:2px solid #000">Paid</th>
-            <th style="text-align:right;padding:6px;border-bottom:2px solid #000">Balance</th>
-          </tr>
-        </thead>
-        <tbody>${rowsHtml}</tbody>
-      </table>
-    </div>`;
-  window.print();
-}
+function printClassReport() { window.print(); }
 
 async function sendReminders() {
-  const dueList = students.filter(s => Number(s.pending || 0) > 0);
-  if (!confirm(`Send automated WhatsApp reminder to all ${dueList.length} parents with pending fees?`)) return;
-  if (isDemo) return toast(`Simulated WhatsApp blast to ${dueList.length} parents!`);
-  try {
-    const r = await api('/api/remind', { method: 'POST' });
-    toast('Sent ' + r.sent + ', failed ' + r.failed + ' (of ' + r.total + ')');
-  } catch (e) { toast(e.message); }
+  if (!confirm('Send WhatsApp reminder to all parents with pending fees?')) return;
+  if (isDemo) return toast('Simulated WhatsApp blast to all pending parents!');
+  const r = await api('/api/remind', { method: 'POST' });
+  toast('Sent ' + r.sent + ' reminders');
 }
 
 function openHistory() {
   closeAll();
-  if (!sessionLogs.length) {
-    $('logBody').innerHTML = '<div class="empty" style="padding:30px">No payments recorded in this browser session yet.</div>';
-  } else {
-    $('logBody').innerHTML = sessionLogs.map(l => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)">
-        <div>
-          <div style="font-weight:700">${esc(l.student)} <span class="label">(${esc(l.class || '-')})</span></div>
-          <div class="mono" style="font-size:11px;color:var(--mute)">${esc(l.receipt_no)} &bull; ${esc(l.date)}</div>
-        </div>
-        <div style="text-align:right">
-          <div class="mono" style="color:var(--ok);font-weight:700">${inr(l.amount)}</div>
-          <div class="label">${esc(l.mode)}</div>
-        </div>
-      </div>`).join('');
-  }
+  $('logBody').innerHTML = sessionLogs.length ? sessionLogs.map(l => `<div style="padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between"><span><b>${esc(l.student)}</b> (${esc(l.receipt_no)})</span><span class="mono">${esc(l.mode)}</span></div>`).join('') : '<div class="empty">No logs yet.</div>';
   $('logOv').classList.add('show');
 }
+function clearSessionLog() { sessionLogs = []; localStorage.removeItem('mayhemic_logs'); openHistory(); }
 
-function clearSessionLog() {
-  sessionLogs = [];
-  try { localStorage.removeItem('mayhemic_logs'); } catch(e){}
-  $('logCount').textContent = '0';
-  openHistory();
-}
-
-function openShortcuts() { closeAll(); $('shortOv').classList.add('show'); }
-
-// Close modals on backdrop click
 document.querySelectorAll('.ov').forEach(o => o.addEventListener('click', e => { if (e.target === o) closeAll(); }));
-
-// Global Keyboard Shortcuts
-window.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeAll(); return; }
-  if ($('app').style.display === 'none') return;
-  if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
-  if (e.key === '/') { e.preventDefault(); $('search').focus(); }
-  if (e.key.toLowerCase() === 'n') { e.preventDefault(); openAdd(); }
-  if (e.key.toLowerCase() === 'r') { e.preventDefault(); load(); toast('Refreshing data...'); }
-  if (e.key.toLowerCase() === 'e') { e.preventDefault(); exportCSV(); }
-});
-
-// Auto-login if session key exists
-if (KEY) { api('/api/me').then(d => { school = d; start(); }).catch(() => {}); }
 </script>
 </body>
 </html>
