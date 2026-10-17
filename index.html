@@ -4,7 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mayhemic</title>
-<meta name="description" content="Mayhemic builds SaaS and automation tools. Our first product is a school fee platform.">
+<meta name="description" content="Mayhemic builds SaaS and automation tools. Our first product is a paperless school platform: fees, attendance, homework, marks and notices for school offices, teachers and parents.">
+<meta name="theme-color" content="#040406">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Mayhemic"><meta property="og:title" content="Mayhemic | Paperless school platform"><meta property="og:description" content="Fees, attendance, homework, marks and notices in one place, with a portal for the school office, teachers and parents.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23040406'/%3E%3Cpath d='M12 48V16l20 22 20-22v32' fill='none' stroke='%23fff' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Mayhemic","url":"https://mayhemic.in/","email":"mayhemic.9@gmail.com","founder":{"@type":"Person","name":"Aryan Mishra"},"address":{"@type":"PostalAddress","addressLocality":"Lucknow","addressCountry":"IN"},"description":"Mayhemic builds SaaS and automation tools. Its first product is a paperless school platform."}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
@@ -33,7 +37,7 @@ section{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction
 #g{position:absolute;left:50%;top:50%;width:min(92vw,92vh);height:min(92vw,92vh);transform:translate(-50%,-50%);opacity:.55}
 h1{position:relative;white-space:nowrap;font-family:Unbounded,"Arial Black",Impact,sans-serif;font-weight:900;font-size:clamp(30px,10.2vw,190px);line-height:1.1;text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.4);animation:in 1.8s var(--e) both 1.5s}
 h1::after{content:attr(data-t);position:absolute;inset:0;-webkit-text-stroke:0;background:radial-gradient(circle 280px at var(--mx,50%) var(--my,50%),#fff 0,#a9d4ff 35%,#7a63ff 65%,transparent 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-@keyframes in{from{opacity:0;filter:blur(26px);transform:scale(1.08) translateY(24px)}}
+@keyframes in{from{opacity:0;filter:blur(14px);transform:scale(1.06) translateY(20px)}}
 .sd{position:absolute;bottom:5vh;left:50%;width:1px;height:72px;background:var(--l);overflow:hidden}
 .sd::after{content:"";position:absolute;left:0;top:-32px;width:1px;height:32px;background:#fff;animation:sc 2.2s ease-in infinite}
 @keyframes sc{to{top:72px}}
@@ -41,8 +45,8 @@ h2{font-family:Unbounded,sans-serif;font-weight:600;font-size:clamp(28px,5.2vw,6
 .big{font-family:Unbounded,sans-serif;font-weight:600;font-size:clamp(22px,3.8vw,50px);line-height:1.3;max-width:28ch;letter-spacing:-.01em}
 .big .w{display:inline-block;opacity:.14}
 p.s{color:var(--m);max-width:54ch;margin-top:22px;font-size:17px}
-.rv{opacity:0;transform:translateY(46px);filter:blur(8px);transition:opacity 1.1s var(--e),transform 1.1s var(--e),filter 1.1s var(--e)}
-.rv.in{opacity:1;transform:none;filter:none}
+.rv{opacity:0;transform:translateY(40px);transition:opacity 1s var(--e),transform 1s var(--e)}
+.rv.in{opacity:1;transform:none}
 .mq{position:relative;z-index:2;overflow:hidden;white-space:nowrap;border-block:1px solid var(--l);padding:26px 0}
 .mq div{display:inline-block;animation:mq 34s linear infinite;font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(28px,5.5vw,64px);color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.55);text-transform:uppercase}
 @keyframes mq{to{transform:translateX(-50%)}}
@@ -101,7 +105,7 @@ footer{position:relative;z-index:2;padding:22px 6vw;font-size:14px;color:var(--m
 header nav{display:flex;align-items:center}
 header a.cta{border:1px solid #fff;color:#fff;padding:9px 20px;border-radius:50px;transition:background .3s,color .3s}
 header a.cta:hover{background:#fff;color:#040406}
-@media(max-width:760px){header nav a:not(.cta):not([href="#contact"]){display:none}header a.cta{margin-left:10px;padding:8px 16px}}
+
 .pv{display:grid;grid-template-columns:1fr 1.1fr;gap:5vw;align-items:center;margin-top:50px}
 .dm{border:1px solid var(--l);border-radius:20px;background:linear-gradient(160deg,#ffffff12,#ffffff04);padding:20px;box-shadow:0 30px 80px #2b52ff33}
 .dm .dt{display:flex;gap:6px;margin-bottom:16px}.dm .dt i{width:9px;height:9px;border-radius:50%;background:#ffffff40}
@@ -119,17 +123,57 @@ header a.cta:hover{background:#fff;color:#040406}
 .ft .chip{display:inline-block;font-size:11px;padding:2px 10px;margin-top:8px}
 .bt{display:flex;gap:14px;flex-wrap:wrap}
 @media(max-width:860px){.pv,.ft{grid-template-columns:1fr}}
+/* ---- upgrade: hero, paper, platform, steps, faq, menu ---- */
+#hw{display:flex;flex-direction:column;align-items:center}
+.tg{position:relative;margin-top:22px;color:var(--m);font-size:clamp(15px,1.7vw,21px);max-width:46ch;padding:0 6vw;animation:rise 1.2s var(--e) both 2.9s}
+.hb{position:relative;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:12px;animation:rise 1.2s var(--e) both 3.1s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}}
+.mb{display:none;background:none;border:1px solid var(--l);color:#fff;border-radius:10px;padding:8px 14px;font:inherit;font-size:13px;cursor:pointer}
+@media(max-width:860px){header nav{display:none;position:fixed;top:64px;left:12px;right:12px;flex-direction:column;align-items:stretch;background:#0b0b10;border:1px solid var(--l);border-radius:16px;padding:8px}
+header nav.open{display:flex}header nav a{margin:0;padding:14px;border-bottom:1px solid var(--l)}header nav a:last-child{border:0}header a.cta{margin-top:8px;text-align:center}.mb{display:block;margin-left:auto}}
+.a2{display:block}@media(max-width:760px){.a2{display:none}}
+#paper,#product,#how,#faq{min-height:auto;padding:14vh 6vw}
+#faq,#founder,#contact{content-visibility:auto;contain-intrinsic-size:auto 700px}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+.pp{position:relative;border:1px solid var(--l);border-radius:20px;padding:26px;background:rgba(255,255,255,.03);overflow:hidden;transition:transform .5s var(--e),border-color .3s}
+.pp:before{content:"";position:absolute;inset:0;background:radial-gradient(300px circle at var(--gx,50%) var(--gy,0),rgba(159,208,255,.16),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.pp:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.35)}.pp:hover:before{opacity:1}
+.pp .ar{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9fd0ff}.pp .old{color:rgba(255,255,255,.4);text-decoration:line-through;font-size:14px;margin-top:6px}
+.pp h3{font-family:Unbounded,sans-serif;font-weight:600;font-size:19px;margin:12px 0 8px}.pp p{color:var(--m);font-size:15px}
+@media(max-width:900px){.pg{grid-template-columns:1fr 1fr}}@media(max-width:560px){.pg{grid-template-columns:1fr}}
+.tb{display:flex;gap:8px;flex-wrap:wrap;margin:40px 0 0}
+.tb button{font:inherit;font-weight:700;font-size:14px;padding:12px 24px;border:1px solid var(--l);border-radius:50px;background:transparent;color:var(--m);cursor:pointer;transition:.25s}
+.tb button:hover{color:#fff;border-color:#fff}.tb button.on{background:#fff;color:#040406;border-color:#fff}
+.sp{display:none;grid-template-columns:1fr 1.1fr;gap:5vw;align-items:center;margin-top:36px}.sp.on{display:grid;animation:rise .6s var(--e) both}
+.sp ul{list-style:none;margin-top:22px;display:grid;gap:14px}.sp li{padding-left:28px;position:relative;color:var(--m)}.sp li:before{content:"";position:absolute;left:0;top:12px;width:14px;height:1px;background:#9fd0ff}.sp li b{color:#fff}
+@media(max-width:860px){.sp.on{grid-template-columns:1fr}}
+.sp .dm .ch i{animation:gw 1.1s var(--e) both;height:var(--h)}@keyframes gw{from{height:0}}
+.ar2{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--l);font-size:13px;color:var(--m)}
+.pl{display:inline-flex;gap:5px}.pl i{font-style:normal;width:26px;height:26px;border-radius:8px;border:1px solid var(--l);display:grid;place-items:center;font-size:11px;font-weight:700}
+.pl i.p{background:#4ade8024;color:#4ade80;border-color:#4ade80}.pl i.a{background:#fb718524;color:#fb7185;border-color:#fb7185}.pl i.l{background:#fbbf2424;color:#fbbf24;border-color:#fbbf24}
+.pb{height:6px;border-radius:9px;background:#ffffff14;overflow:hidden;margin:8px 0}.pb i{display:block;height:100%;background:linear-gradient(90deg,#9fd0ff,#7b3dff)}
+.stp{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:50px}.stp div{border-top:1px solid var(--l);padding-top:22px}
+.stp span{font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(44px,6vw,80px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.45)}
+.stp h3{font-family:Unbounded,sans-serif;font-weight:600;font-size:20px;margin:14px 0 8px}.stp p{color:var(--m)}
+@media(max-width:760px){.stp{grid-template-columns:1fr}}
+.fq{border-top:1px solid var(--l)}.fq:last-of-type{border-bottom:1px solid var(--l)}
+.fq summary{cursor:pointer;list-style:none;padding:24px 0;font-family:Unbounded,sans-serif;font-weight:600;font-size:clamp(16px,2vw,22px);display:flex;justify-content:space-between;gap:16px}
+.fq summary::-webkit-details-marker{display:none}.fq summary:after{content:"+";color:#9fd0ff;font-size:26px;line-height:1;transition:transform .3s}.fq[open] summary:after{transform:rotate(45deg)}
+.fq p{color:var(--m);padding:0 0 24px;max-width:62ch}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;color:#040406;padding:10px 16px;border-radius:8px;z-index:100}.skip:focus{left:8px}
+footer a{color:var(--m);text-decoration:none}footer a:hover{color:#fff}
 </style>
 </head>
 <body>
 <div id="ld"><i></i></div><div id="toast">Order restored.</div><div id="bar"></div><div class="cur" id="cur"></div>
 <div class="au a1"></div><div class="au a2"></div>
 
-<header><b>MAYHEMIC</b><nav><a href="#about">About</a><a href="#product">Product</a><a href="#plan">Plan</a><a href="#roadmap">Our goal</a><a href="#founder">Founder</a><a href="#contact">Contact</a><a class="cta" href="/fees.html">School Fees Login</a></nav></header>
+<a class="skip" href="#about">Skip to content</a>
+<header><b>MAYHEMIC</b><button class="mb" aria-label="Menu" aria-expanded="false">Menu</button><nav><a href="#about">About</a><a href="#product">Platform</a><a href="#how">How it works</a><a href="#faq">FAQ</a><a href="#founder">Founder</a><a href="#contact">Contact</a><a class="cta" href="/fees.html">School Login</a></nav></header>
 
 <section id="hero">
 <canvas id="g"></canvas>
-<div id="hw"><h1 id="t" data-t="Mayhemic">Mayhemic</h1></div>
+<div id="hw"><h1 id="t" data-t="Mayhemic">Mayhemic</h1><p class="tg">Paperless school operations. Fees, attendance, homework and marks in one place.</p><div class="hb"><a class="btn solid" href="#product">See the platform</a><a class="btn" href="/fees.html">School login</a></div></div>
 <div class="sd"></div>
 </section>
 
@@ -138,32 +182,52 @@ header a.cta:hover{background:#fff;color:#040406}
 <p class="s rv">Our first product, a school fee platform, is in early access. This page shows where we are and where we are going.</p>
 </section>
 
-<div class="mq" aria-hidden="true"><div>SaaS &nbsp;/&nbsp; Automation &nbsp;/&nbsp; Workflows &nbsp;/&nbsp; AI helpers &nbsp;/&nbsp; SaaS &nbsp;/&nbsp; Automation &nbsp;/&nbsp; Workflows &nbsp;/&nbsp; AI helpers &nbsp;/&nbsp;</div></div>
+<div class="mq" aria-hidden="true"><div>Attendance &nbsp;/&nbsp; Fees &nbsp;/&nbsp; Homework &nbsp;/&nbsp; Marks &nbsp;/&nbsp; Notices &nbsp;/&nbsp; Parent portal &nbsp;/&nbsp; Attendance &nbsp;/&nbsp; Fees &nbsp;/&nbsp; Homework &nbsp;/&nbsp; Marks &nbsp;/&nbsp; Notices &nbsp;/&nbsp; Parent portal &nbsp;/&nbsp; </div></div>
+
+<section id="paper">
+<p class="s rv" style="margin:0 0 16px">From paper to platform</p>
+<h2 class="rv">Everything that lived on paper, now in one place.</h2>
+<div class="pg rv">
+<div class="pp"><span class="ar">Replaces</span><div class="old">The attendance register</div><h3>Attendance in 3 taps</h3><p>Everyone starts present. Teachers only mark the absent and late students, and parents see it the same day.</p></div>
+<div class="pp"><span class="ar">Replaces</span><div class="old">Fee cards and receipt books</div><h3>One-click receipts</h3><p>Record a payment, print the receipt, and see collected and pending fees on one dashboard.</p></div>
+<div class="pp"><span class="ar">Replaces</span><div class="old">The circular notebook</div><h3>Instant notices</h3><p>Post to everyone, only parents, or one class. No more running from room to room.</p></div>
+<div class="pp"><span class="ar">Replaces</span><div class="old">Marks registers</div><h3>Marks with live stats</h3><p>Marks are checked against the maximum, and the class average, highest and pass rate appear as you type.</p></div>
+<div class="pp"><span class="ar">Replaces</span><div class="old">The homework diary</div><h3>Homework parents can see</h3><p>Teachers post with a due date, and parents see it in their own portal.</p></div>
+<div class="pp"><span class="ar">Replaces</span><div class="old">Phone calls to parents</div><h3>A portal for every parent</h3><p>Fees, attendance, homework, marks and teacher remarks, always up to date.</p></div>
+</div>
+</section>
 
 <section id="product">
-<p class="s rv" style="margin:0 0 16px">Our first product</p>
-<h2 class="rv">Mayhemic Fees</h2>
-<div class="pv rv">
-<div>
-<p class="s" style="margin:0">A school fee platform that replaces paper fee cards. Staff record payments in seconds, and the director sees what is collected and pending at a glance.</p>
-<div class="ft">
-<div><b>Fee dashboard</b>Collected, pending and class-wise dues on one screen.<br><span class="chip">Early access</span></div>
-<div><b>CSV import</b>Hundreds of students added in seconds, no typing.<br><span class="chip">Early access</span></div>
-<div><b>Printable receipts</b>One click after every payment.<br><span class="chip">Early access</span></div>
-<div><b>WhatsApp reminders</b>Automatic messages to parents and a daily summary to the director.<br><span class="chip">Coming soon</span></div>
-</div>
-<div class="bt"><a class="btn solid" href="/fees.html">School login</a><a class="btn" href="#contact">Get early access</a></div>
-</div>
-<div class="dm" aria-hidden="true">
-<div class="dt"><i></i><i></i><i></i></div>
+<p class="s rv" style="margin:0 0 16px">The platform, in early access</p>
+<h2 class="rv">One platform. Three portals.</h2>
+<div class="tb rv" role="tablist"><button class="on" role="tab" aria-selected="true">School office</button><button role="tab" aria-selected="false">Teachers</button><button role="tab" aria-selected="false">Parents</button></div>
+
+<div class="sp on" role="tabpanel">
+<div><p class="s" style="margin:0">The office sees the whole school: money in, money pending, and who needs a reminder.</p>
+<ul><li><b>Fee dashboard.</b> Collected, pending and class-wise dues on one screen.</li><li><b>Full control.</b> Edit or delete students, add a charge, give a discount, void a wrong payment.</li><li><b>Fast setup.</b> Import hundreds of students from one CSV file.</li><li><b>Logins in one click.</b> Create teacher logins and print login slips for every parent.</li></ul></div>
+<div class="dm" aria-hidden="true"><div class="dt"><i></i><i></i><i></i></div>
 <div class="ds"><div><small>Today</small><b>Rs 18,500</b></div><div><small>Pending</small><b>Rs 2.4L</b></div><div><small>Students</small><b>412</b></div></div>
 <div class="ch"><i style="--h:35%"></i><i style="--h:55%"></i><i style="--h:40%"></i><i style="--h:80%"></i><i style="--h:60%"></i><i style="--h:95%"></i><i style="--h:70%"></i></div>
-<div class="ls"><span>Rahul Sharma / 5A</span><em class="k1">Paid</em></div>
-<div class="ls"><span>Priya Verma / 5A</span><em class="k2">Due</em></div>
-<div class="ls"><span>Aman Singh / 6B</span><em class="k1">Paid</em></div>
-<small style="margin-top:10px">Sample data</small>
+<div class="ls"><span>Rahul Sharma / 5A</span><em class="k1">Paid</em></div><div class="ls"><span>Priya Verma / 5A</span><em class="k2">Due</em></div><small style="margin-top:10px">Sample data</small></div>
 </div>
+
+<div class="sp" role="tabpanel">
+<div><p class="s" style="margin:0">Teachers do their daily work in minutes and only see their own class.</p>
+<ul><li><b>Attendance.</b> Everyone starts present, edit past days, monthly report with a download.</li><li><b>Below 75%.</b> Students with low attendance are flagged in red.</li><li><b>My class.</b> One tap to call or WhatsApp a parent.</li><li><b>Homework, marks and remarks.</b> Posted once, visible to parents at once.</li></ul></div>
+<div class="dm" aria-hidden="true"><div class="dt"><i></i><i></i><i></i></div><small>Class 5A / Today</small>
+<div class="ar2"><span>Rahul Sharma</span><span class="pl"><i class="p">P</i><i>A</i><i>L</i></span></div><div class="ar2"><span>Priya Verma</span><span class="pl"><i>P</i><i class="a">A</i><i>L</i></span></div><div class="ar2"><span>Aman Singh</span><span class="pl"><i class="p">P</i><i>A</i><i>L</i></span></div><div class="ar2"><span>Neha Gupta</span><span class="pl"><i>P</i><i>A</i><i class="l">L</i></span></div>
+<div class="ls" style="margin-top:8px"><span>2 present, 1 absent, 1 late</span><em class="k1">Save</em></div><small style="margin-top:10px">Sample data</small></div>
 </div>
+
+<div class="sp" role="tabpanel">
+<div><p class="s" style="margin:0">Parents stop guessing and start knowing, with no app to install.</p>
+<ul><li><b>Fees.</b> Total, paid, pending and every receipt.</li><li><b>Attendance.</b> This month at a glance, plus the last 30 days.</li><li><b>Homework and marks.</b> What is due and how the child is doing.</li><li><b>Teacher remarks and notices.</b> Straight from the school.</li></ul></div>
+<div class="dm" aria-hidden="true"><div class="dt"><i></i><i></i><i></i></div><b style="font-size:17px">Rahul Sharma</b><small>Class 5A</small>
+<div class="ls" style="margin-top:10px"><span>Fees paid</span><span>Rs 18,000 of 24,000</span></div><div class="pb"><i style="width:75%"></i></div>
+<div class="ls"><span>Attendance this month</span><span>94%</span></div><div class="ls"><span>Homework</span><span>Maths ex 4.2, due Fri</span></div><div class="ls"><span>Unit Test 1 / Maths</span><span>18 / 20</span></div><small style="margin-top:10px">Sample data</small></div>
+</div>
+
+<div class="bt rv" style="margin-top:44px"><a class="btn solid" href="/fees.html">School login</a><a class="btn" href="#contact">Get early access</a></div>
 </section>
 
 <section id="plan">
@@ -177,6 +241,16 @@ header a.cta:hover{background:#fff;color:#040406}
 
 <section class="hs" id="mayhem"><div class="pin"><div id="tiles"></div><div class="msg2"><h2 id="w1">Work is mayhem.</h2><h2 id="w2">We make it order.</h2></div></div></section>
 
+<section id="how">
+<p class="s rv" style="margin:0 0 16px">How it works</p>
+<h2 class="rv">Live in a day, not a semester.</h2>
+<div class="stp rv">
+<div><span>01</span><h3>We set up your school</h3><p>Mayhemic creates your school office login. You choose the ID and password.</p></div>
+<div><span>02</span><h3>Import your students</h3><p>Upload one CSV file. Teacher logins and parent logins are created in one click, with printable slips.</p></div>
+<div><span>03</span><h3>Go paperless</h3><p>Teachers mark attendance, the office collects fees, and parents see everything on their phone.</p></div>
+</div>
+</section>
+
 <section id="roadmap">
 <p class="s rv" style="margin:0 0 16px">Our goal for you</p>
 <div class="name rv">1 hour back</div>
@@ -184,6 +258,19 @@ header a.cta:hover{background:#fff;color:#040406}
 <div class="row"><h3>The problem</h3><p>Your day is full of small, repeating work.</p><span class="chip">Today</span></div>
 <div class="row"><h3>What we build</h3><p>We are building tools that quietly take it off your hands.</p><span class="chip">Next</span></div>
 <div class="row"><h3>What you get</h3><p>So your time goes back to the things you love.</p><span class="chip">Goal</span></div>
+</div>
+</section>
+
+<section id="faq">
+<p class="s rv" style="margin:0 0 16px">Questions</p>
+<h2 class="rv">Good to know.</h2>
+<div class="rv" style="margin-top:44px">
+<details class="fq"><summary>Do parents and teachers need to install an app?</summary><p>No. The platform works in the browser on any phone, tablet or computer. There is nothing to download.</p></details>
+<details class="fq"><summary>Is our data safe?</summary><p>Passwords are stored hashed, a login locks for 15 minutes after 5 wrong tries, and each school's data is kept separate. A teacher sees only their class and a parent sees only their own children.</p></details>
+<details class="fq"><summary>What about WhatsApp reminders?</summary><p>They are built in and coming soon. Fee reminders, receipts and absent alerts switch on once WhatsApp Business approval is complete. Everything else works today.</p></details>
+<details class="fq"><summary>What does it cost?</summary><p>Pricing is not announced yet because we are in early access. Schools that join early help shape it. Write to us and we will talk.</p></details>
+<details class="fq"><summary>Can we bring our existing student data?</summary><p>Yes. Save your Excel sheet as a CSV file and upload it. Duplicates are skipped automatically.</p></details>
+<details class="fq"><summary>How do we get started?</summary><p>Send us a message below with your school name, number of students and city. We will set up a login so you can try it with your own data.</p></details>
 </div>
 </section>
 
@@ -208,11 +295,11 @@ header a.cta:hover{background:#fff;color:#040406}
 </section>
 
 <div class="fw" aria-hidden="true">Mayhemic</div>
-<footer><span>&copy; 2026 Mayhemic</span><span>Psst. Type &ldquo;mayhem&rdquo; on your keyboard.</span></footer>
+<footer><span>&copy; 2026 Mayhemic. Lucknow, India.</span><span><a href="/fees.html">School login</a> &nbsp;/&nbsp; <a href="mailto:mayhemic.9@gmail.com">Email us</a> &nbsp;/&nbsp; Psst. Type &ldquo;mayhem&rdquo; on your keyboard.</span></footer>
 
 <div id="ring"></div>
 <div id="wl" role="status"><button aria-label="Close">&times;</button><span id="wt"></span><small>Tap to chat</small></div>
-<script src="chatbot.js"></script>
+<script src="chatbot.js" defer></script>
 <script>
 // words light up as you scroll
 var st=document.getElementById('stmt');st.innerHTML=st.textContent.split(' ').map(function(w){return '<span class="w">'+w+'&nbsp;</span>'}).join('');
@@ -251,16 +338,17 @@ var cur=document.getElementById('cur'),h1=document.getElementById('t'),cx=0,cy=0
 addEventListener('pointermove',function(e){px=e.clientX;py=e.clientY;last=performance.now();ttx=(px/innerWidth-.5)*.9;tty=(py/innerHeight-.5)*.6});
 document.querySelectorAll('a,button,input,textarea,.row').forEach(function(e){e.addEventListener('mouseenter',function(){cur.classList.add('big')});e.addEventListener('mouseleave',function(){cur.classList.remove('big')})});
 // sphere + one single animation loop for everything
-var gc=document.getElementById('g'),gx=gc.getContext('2d'),N=innerWidth<700?360:560,pts=[],ay=0,tx=0,ty=0,d=Math.min(innerWidth,innerHeight)*.92*DP;
+var gc=document.getElementById('g'),gx=gc.getContext('2d'),N=(innerWidth<700||(navigator.hardwareConcurrency||8)<=4)?320:520,pts=[],ay=0,tx=0,ty=0,d=Math.min(innerWidth,innerHeight)*.92*DP;
 gc.width=gc.height=d;
 for(var i=0;i<N;i++){var y=1-2*i/(N-1),r=Math.sqrt(1-y*y),th=i*2.399963;pts.push([Math.cos(th)*r,y,Math.sin(th)*r])}
+var pt=0;
 function fr(t){
 if(dirty){dirty=false;sc()}
 if(Math.abs(px-cx)>.1||Math.abs(py-cy)>.1){cx+=(px-cx)*.18;cy+=(py-cy)*.18;cur.style.transform='translate('+cx+'px,'+cy+'px)'}
 if(vh){
 var b=h1.getBoundingClientRect(),mx,my;
 if(t-last<2500){mx=px-b.left;my=py-b.top}else{mx=b.width*(.5+.42*Math.sin(t/1700));my=b.height*(.5+.3*Math.sin(t/1150))}
-h1.style.setProperty('--mx',mx+'px');h1.style.setProperty('--my',my+'px');
+if(t-last<2500||t-pt>48){h1.style.setProperty('--mx',mx+'px');h1.style.setProperty('--my',my+'px');pt=t}
 tx+=(ttx-tx)*.05;ty+=(tty-ty)*.05;ay+=.0032;
 var s=gc.width,R=s*.43,cY=Math.cos(ay+tx),sY=Math.sin(ay+tx),cX=Math.cos(.3+ty),sX=Math.sin(.3+ty);
 gx.clearRect(0,0,s,s);
@@ -271,6 +359,12 @@ requestAnimationFrame(fr)}
 requestAnimationFrame(fr);
 // magnetic buttons
 document.querySelectorAll('.btn').forEach(function(b){b.addEventListener('mousemove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+(e.clientX-r.left-r.width/2)*.2+'px,'+(e.clientY-r.top-r.height/2)*.3+'px)'});b.addEventListener('mouseleave',function(){b.style.transform=''})});
+// tabs, mobile menu, card glow
+(function(){var tbs=[].slice.call(document.querySelectorAll('.tb button')),sps=[].slice.call(document.querySelectorAll('.sp'));
+tbs.forEach(function(b,i){b.addEventListener('click',function(){tbs.forEach(function(x,j){x.classList.toggle('on',i===j);x.setAttribute('aria-selected',i===j)});sps.forEach(function(p,j){p.classList.toggle('on',i===j)})})});
+var mb=document.querySelector('.mb'),nv=document.querySelector('header nav');mb.onclick=function(){var o=nv.classList.toggle('open');mb.setAttribute('aria-expanded',o)};
+nv.addEventListener('click',function(e){if(e.target.tagName==='A'){nv.classList.remove('open');mb.setAttribute('aria-expanded',false)}});
+document.querySelectorAll('.pp').forEach(function(c){c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--gx',(e.clientX-r.left)+'px');c.style.setProperty('--gy',(e.clientY-r.top)+'px')})})})();
 // chatbot welcome
 (function(){
 var wl=document.getElementById('wl'),wt=document.getElementById('wt'),ring=document.getElementById('ring'),L=null,done=false,tries=0;
