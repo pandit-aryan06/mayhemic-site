@@ -62,12 +62,36 @@ th{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute
 main{margin:0;padding:20px 16px 100px}.stats{grid-template-columns:1fr 1fr}.row2,.row3{grid-template-columns:1fr}.hd h2{font-size:22px}}
 @media(max-width:900px){.side nav button{font-size:9px}.side nav{overflow-x:auto}}
 
-#app{display:none}</style></head><body>
+#app{display:none}.lnk{display:inline-block;padding:6px 11px;font-size:12px;border:1px solid var(--line);border-radius:9px;color:#fff;text-decoration:none;margin:4px 6px 0 0;background:rgba(255,255,255,.05)}.lnk:hover{background:rgba(255,255,255,.14)}
+.banner{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px;border-radius:16px;margin-bottom:16px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.35);color:#fbbf24}
+.qa{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fg .w{grid-column:1/-1}
+.mk{width:96px;text-align:right;padding:9px}.mk.bad{border-color:#fb7185;background:rgba(251,113,133,.12)}
+.ex{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 0;border-bottom:1px solid var(--line)}.ex:last-child{border:0}
+.kd{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}.kd.good{background:rgba(74,222,128,.15);color:#4ade80}.kd.concern{background:rgba(251,113,133,.15);color:#fb7185}.kd.note{background:rgba(255,255,255,.1);color:#cfcfd8}
+textarea.t{width:100%;background:rgba(0,0,0,.45);border:1px solid var(--line);color:#fff;padding:13px;border-radius:10px;font:inherit;font-size:14px}
+@media(max-width:900px){.side nav button{font-size:9px}.side nav{overflow-x:auto}.fg{grid-template-columns:1fr}}</style></head><body>
 <div id="app"><aside class="side"><div class="logo">MAYHEMIC</div><div class="sn" id="sname"></div>
-<nav><button data-v="att" class="on"><i>&#10003;</i>Attendance</button><button data-v="notice"><i>&#9993;</i>Notices</button></nav>
+<nav><button data-v="home" class="on"><i>&#9702;</i>Home</button><button data-v="att"><i>&#10003;</i>Attendance</button><button data-v="cls"><i>&#9776;</i>My class</button><button data-v="hw"><i>&#9998;</i>Homework</button><button data-v="marks"><i>&#9733;</i>Marks</button><button data-v="notice"><i>&#9993;</i>Notices</button><button data-v="me"><i>&#9881;</i>Profile</button></nav>
 <div class="bot"><a href="/">&larr; Website</a><button onclick="logout()">Log out</button></div></aside>
-<main><section class="view on" id="v-att"><div class="hd"><div><div class="lb" id="tcls"></div><h2 id="greet">Attendance</h2></div></div><div id="attBox"></div></section>
-<section class="view" id="v-notice"><div class="hd"><div><div class="lb">Circulars</div><h2>Notices</h2></div></div><div id="noticeBox"></div></section></main></div>
+<main>
+<section class="view on" id="v-home"><div class="hd"><div><div class="lb" id="hdate"></div><h2 id="greet">Hello</h2></div></div><div id="hBanner"></div>
+<div class="stats"><div class="st glass"><div class="lb">Students</div><div class="v" id="s1">-</div></div><div class="st glass"><div class="lb">Present today</div><div class="v g" id="s2">-</div></div><div class="st glass"><div class="lb">Absent today</div><div class="v r" id="s3">-</div></div><div class="st glass"><div class="lb">Below 75% this month</div><div class="v" id="s4">-</div></div></div>
+<div class="qa"><button class="p" onclick="go('att')">Mark attendance</button><button onclick="go('hw')">Post homework</button><button onclick="go('marks')">Enter marks</button><button onclick="go('notice')">Send notice</button></div>
+<div class="row3"><div class="box glass"><h4>Class attendance, last 7 days</h4><div class="bars" id="wk"></div></div><div class="box glass"><h4>Recent homework</h4><div id="hRecent"></div></div></div></section>
+<section class="view" id="v-att"><div class="hd"><div><div class="lb" id="tcls"></div><h2>Attendance</h2></div></div><div id="attBox"></div></section>
+<section class="view" id="v-cls"><div class="hd"><div><div class="lb" id="cl2"></div><h2>My class</h2></div></div><div class="tools"><input id="cq" placeholder="Search student" oninput="paintCls()"></div>
+<div class="tbl glass"><table><thead><tr><th>Student</th><th>Parent</th><th>Attendance this month</th><th></th></tr></thead><tbody id="ct"></tbody></table><div class="empty" id="ce" style="display:none">No students in your class yet.</div></div></section>
+<section class="view" id="v-hw"><div class="hd"><div><div class="lb">Class diary</div><h2>Homework</h2></div></div>
+<div class="glass box" style="margin-bottom:16px"><h4>Post homework</h4><div class="fg"><input id="hS" placeholder="Subject, e.g. Maths"><input id="hD" type="date"><input class="w" id="hT" placeholder="Title, e.g. Exercise 4.2 questions 1 to 10"><textarea class="t w" id="hB" rows="3" placeholder="Details (optional)"></textarea></div><button class="p" style="margin-top:12px" onclick="postHw()">Post homework</button></div>
+<div class="glass" style="padding:6px 22px" id="hList"></div></section>
+<section class="view" id="v-marks"><div class="hd"><div><div class="lb">Exams and results</div><h2>Marks</h2></div></div><div id="mkBox"></div></section>
+<section class="view" id="v-notice"><div class="hd"><div><div class="lb">Circulars</div><h2>Notices</h2></div></div><div id="noticeBox"></div></section>
+<section class="view" id="v-me"><div class="hd"><h2>Profile</h2></div><div class="row2" style="grid-template-columns:1fr 1fr"><div class="box glass"><h4>Your details</h4><div class="li"><span class="lb">Name</span><b id="pn"></b></div><div class="li"><span class="lb">Class</span><b id="pc"></b></div><div class="li"><span class="lb">School</span><b id="ps"></b></div></div>
+<div class="box glass"><h4>Change password</h4><input id="o1" type="password" placeholder="Current password"><input id="n1" type="password" placeholder="New password (min 6)" style="margin-top:10px"><input id="n2" type="password" placeholder="Repeat new password" style="margin-top:10px"><button class="p" style="width:100%;margin-top:12px" onclick="chPw()">Update password</button></div></div></section>
+</main></div>
+<div class="ov" id="rmOv"><div class="mod"><h3 id="rmN"></h3><div class="lb">Remarks are visible to the parent</div><div id="rmL" style="margin:12px 0"></div>
+<div class="rw"><select id="rmK"><option value="good">Good work</option><option value="concern">Concern</option><option value="note">Note</option></select></div><div class="rw"><textarea class="t" id="rmT" rows="3" placeholder="Write a short remark"></textarea></div>
+<div class="acts"><button onclick="closeAll()">Close</button><button class="p" onclick="addRm()">Add remark</button></div></div></div>
 <div id="toast"></div><script src="att.js"></script>
 <script>
 const API='https://mayhemic-api.aryanmishra8920.workers.dev',$=i=>document.getElementById(i);
@@ -75,11 +99,59 @@ let TOK='';try{TOK=sessionStorage.getItem('mt')||''}catch(e){}
 if(!TOK)location.replace('/fees.html');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const inr=n=>'Rs '+Number(n||0).toLocaleString('en-IN');
+const fd=t=>t?new Date(String(t).length>10?t.replace(' ','T')+'Z':t+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'';
 function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3400)}
 async function api(p,o={}){o.headers={...(o.headers||{}),Authorization:'Bearer '+TOK};const r=await fetch(API+p,o);const d=await r.json().catch(()=>({}));if(r.status===401){logout(true);throw new Error('Please log in again')}if(!r.ok)throw new Error(d.error||'Something went wrong');return d}
 function logout(quiet){if(TOK&&!quiet)fetch(API+'/api/logout',{method:'POST',headers:{Authorization:'Bearer '+TOK}}).catch(()=>{});try{sessionStorage.clear()}catch(e){}location.replace('/fees.html')}
-document.querySelectorAll('.side nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+b.dataset.v));document.querySelectorAll('.side nav button').forEach(x=>x.classList.toggle('on',x===b))});
-api('/api/me').then(d=>{if(d.role!=='teacher'){location.replace('/fees.html');return}
-$('app').style.display='block';$('sname').textContent=d.name;$('greet').textContent='Hello'+(d.user_name?', '+d.user_name:'');$('tcls').textContent=d.cls?'Class '+d.cls+' register':'No class assigned yet';
-AttUI.mount($('attBox'),'teacher');NoticeUI.mount($('noticeBox'),'teacher')}).catch(()=>{});
+const J={'content-type':'application/json'};
+const ini=n=>String(n).trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const avc=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;return `background:hsla(${h},70%,55%,.18);color:hsl(${h},80%,70%)`};
+const localDay=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+let ME=null,CLS=[],EX=null,RID=null,ME_ID=0;const loaded={};
+function closeAll(){document.querySelectorAll('.ov').forEach(o=>o.classList.remove('show'))}
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeAll()}));
+document.querySelectorAll('.side nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+function go(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));document.querySelectorAll('.side nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));window.scrollTo(0,0);
+if(v==='home')loadHome();if(v==='att'&&!loaded.a){loaded.a=1;AttUI.mount($('attBox'),'teacher')}if(v==='cls')loadCls();if(v==='hw')loadHw();if(v==='marks')showExams();if(v==='notice'&&!loaded.n){loaded.n=1;NoticeUI.mount($('noticeBox'),'teacher')}}
+/* ---------- home ---------- */
+async function loadHome(){try{const d=await api('/api/teacher/home'),m=d.att.marked;
+if(!d.class){$('hBanner').innerHTML='<div class="banner"><span>No class is assigned to your login yet. Please ask your school office.</span></div>'}
+else if(!m){$('hBanner').innerHTML='<div class="banner"><span>Attendance is not marked yet today for class '+esc(d.class)+'.</span><button class="p sm" onclick="go(\'att\')">Mark now</button></div>'}else $('hBanner').innerHTML='';
+$('s1').textContent=d.students;$('s2').textContent=m?d.att.p+d.att.l:'-';$('s3').textContent=m?d.att.a:'-';$('s4').textContent=d.low;
+const days=[];for(let i=6;i>=0;i--){const x=new Date();x.setDate(x.getDate()-i);days.push(x)}const mp={};d.week.forEach(w=>mp[w.d]=w);
+$('wk').innerHTML=days.map(x=>{const w=mp[localDay(x)],t=w?w.p+w.a+w.l:0,pc=t?Math.round((w.p+w.l)/t*100):0;return `<div><span>${t?pc+'%':''}</span><i data-h="${pc}" style="${t&&pc<75?'background:linear-gradient(#fb7185,#fbbf24)':''}"></i><span>${x.toLocaleDateString('en-IN',{weekday:'short'}).slice(0,3)}</span></div>`}).join('');
+setTimeout(()=>document.querySelectorAll('#wk i').forEach(b=>b.style.height=Math.max(b.dataset.h,3)+'%'),60);
+$('hRecent').innerHTML=d.homework.length?d.homework.map(h=>`<div class="li"><div>${esc(h.title)}<div class="lb">${esc(h.subject)}${h.due?' / due '+fd(h.due):''}</div></div></div>`).join(''):'<div class="empty" style="padding:24px">No homework posted yet</div>'}catch(e){toast(e.message)}}
+/* ---------- my class ---------- */
+async function loadCls(){try{CLS=(await api('/api/roster')).students;paintCls()}catch(e){toast(e.message)}}
+function paintCls(){const q=$('cq').value.toLowerCase(),l=CLS.filter(s=>!q||(s.name+' '+s.roll_no).toLowerCase().includes(q));
+$('ct').innerHTML=l.map(s=>{const t=s.p+s.a+s.l,pc=t?Math.round((s.p+s.l)/t*100):0,ph=(s.parent_phone||'');return `<tr><td><div class="who"><div class="av" style="${avc(s.name)}">${esc(ini(s.name))}</div><div>${esc(s.name)}<div class="lb">Roll ${esc(s.roll_no||'-')}</div></div></div></td>
+<td>${esc(s.parent_name)||'<span class="lb">-</span>'}<div>${ph?`<a class="lnk" href="tel:+${ph}">Call</a><a class="lnk" target="_blank" rel="noopener" href="https://wa.me/${ph}">WhatsApp</a>`:'<span class="lb">no phone</span>'}</div></td>
+<td>${t?`<div style="display:flex;gap:8px;align-items:center"><div class="pbar"><i style="width:${pc}%;background:${pc<75?'#fb7185':'#4ade80'}"></i></div><b style="color:${pc<75?'#fb7185':'inherit'}">${pc}%</b></div><div class="lb">${s.p} present, ${s.a} absent, ${s.l} late</div>`:'<span class="lb">Not marked yet</span>'}</td>
+<td class="rt"><button class="sm" onclick="openRm(${s.id})">Remarks${s.remarks?' ('+s.remarks+')':''}</button></td></tr>`}).join('');$('ce').style.display=l.length?'none':'block'}
+async function openRm(id){RID=id;const s=CLS.find(x=>x.id===id);$('rmN').textContent=s.name;$('rmT').value='';$('rmOv').classList.add('show');await loadRm()}
+async function loadRm(){try{const d=await api('/api/remarks?student_id='+RID);ME_ID=d.me;$('rmL').innerHTML=d.remarks.length?d.remarks.map(r=>`<div class="li" style="align-items:flex-start"><div><span class="kd ${r.kind}">${r.kind==='good'?'Good work':r.kind==='concern'?'Concern':'Note'}</span><div style="margin-top:6px;font-size:14px">${esc(r.text)}</div><div class="lb" style="margin-top:4px">${esc(r.author_name)} / ${fd(r.created_at)}</div></div>${r.author===ME_ID?`<button class="sm" onclick="delRm(${r.id})">Delete</button>`:''}</div>`).join(''):'<div class="lb">No remarks yet.</div>'}catch(e){toast(e.message)}}
+async function addRm(){try{await api('/api/remarks',{method:'POST',headers:J,body:JSON.stringify({student_id:RID,kind:$('rmK').value,text:$('rmT').value})});$('rmT').value='';toast('Remark added');await loadRm();loadCls()}catch(e){toast(e.message)}}
+async function delRm(id){if(!confirm('Delete this remark?'))return;try{await api('/api/remarks/'+id,{method:'DELETE'});await loadRm();loadCls()}catch(e){toast(e.message)}}
+/* ---------- homework ---------- */
+async function loadHw(){try{const d=await api('/api/homework'),today=localDay(new Date());$('hList').innerHTML=d.homework.length?d.homework.map(h=>`<div class="nf"><div style="display:flex;justify-content:space-between;gap:10px"><h5>${esc(h.title)}</h5><button class="sm" onclick="delHw(${h.id})">Delete</button></div><div class="lb">${esc(h.subject)}${h.subject?' / ':''}posted ${fd(h.created_at)}${h.due?' / <span style="color:'+(h.due<today?'#fb7185':'#fbbf24')+'">due '+fd(h.due)+'</span>':''}</div>${h.body?'<p>'+esc(h.body)+'</p>':''}</div>`).join(''):'<div class="empty">No homework posted yet.</div>'}catch(e){toast(e.message)}}
+async function postHw(){try{await api('/api/homework',{method:'POST',headers:J,body:JSON.stringify({subject:$('hS').value,title:$('hT').value,body:$('hB').value,due:$('hD').value})});['hS','hT','hB','hD'].forEach(i=>$(i).value='');toast('Homework posted. Parents can see it now.');loadHw()}catch(e){toast(e.message)}}
+async function delHw(id){if(!confirm('Delete this homework?'))return;try{await api('/api/homework/'+id,{method:'DELETE'});loadHw()}catch(e){toast(e.message)}}
+/* ---------- marks ---------- */
+async function showExams(){EX=null;try{const d=await api('/api/exams');$('mkBox').innerHTML=`<div class="glass box" style="margin-bottom:16px"><h4>New exam</h4><div class="fg"><input id="xN" placeholder="Exam name, e.g. Unit Test 1"><input id="xS" placeholder="Subject"><input id="xM" type="number" min="1" placeholder="Maximum marks"><input id="xD" type="date"></div><button class="p" style="margin-top:12px" onclick="newExam()">Create exam</button></div>
+<div class="glass" style="padding:6px 22px">${d.exams.length?d.exams.map(e=>`<div class="ex"><div><b>${esc(e.name)}</b> <span class="lb">/ ${esc(e.subject)}</span><div class="lb" style="margin-top:4px">Out of ${e.max_marks}${e.exam_date?' / '+fd(e.exam_date):''} / ${e.entered} of ${e.total} entered</div></div><div><button class="sm p" onclick="openEx(${e.id})">${e.entered?'Edit marks':'Enter marks'}</button> <button class="sm" onclick="delEx(${e.id})">Delete</button></div></div>`).join(''):'<div class="empty">No exams yet. Create one above.</div>'}</div>`}catch(e){toast(e.message)}}
+async function newExam(){try{const r=await api('/api/exams',{method:'POST',headers:J,body:JSON.stringify({name:$('xN').value,subject:$('xS').value,max_marks:$('xM').value,exam_date:$('xD').value})});toast('Exam created');openEx(r.id)}catch(e){toast(e.message)}}
+async function delEx(id){if(!confirm('Delete this exam and all its marks?'))return;try{await api('/api/exams/'+id,{method:'DELETE'});showExams()}catch(e){toast(e.message)}}
+async function openEx(id){try{EX=await api('/api/exams/'+id);const e=EX.exam;$('mkBox').innerHTML=`<div class="tools"><button class="sm" onclick="showExams()">&larr; All exams</button></div><div class="glass box" style="margin-bottom:14px"><h4 style="margin:0">${esc(e.name)} / ${esc(e.subject)}</h4><div class="lb" style="margin-top:6px">Maximum marks ${e.max_marks}. Leave blank if not taken.</div><div class="sumbar" id="mkS" style="margin:14px 0 0"></div></div>
+<div class="tbl glass"><table><thead><tr><th>Student</th><th class="rt">Marks / ${e.max_marks}</th></tr></thead><tbody>${EX.students.map(s=>`<tr><td><div class="who"><div class="av" style="${avc(s.name)}">${esc(ini(s.name))}</div><div>${esc(s.name)}<div class="lb">Roll ${esc(s.roll_no||'-')}</div></div></div></td><td class="rt"><input class="mk" type="number" min="0" max="${e.max_marks}" step="0.5" data-id="${s.id}" value="${s.marks===null?'':s.marks}"></td></tr>`).join('')}</tbody></table></div>
+<div class="tools" style="margin-top:14px"><button class="p" style="margin-left:auto" onclick="saveMk()">Save marks</button></div>`;
+const ins=[...document.querySelectorAll('.mk')];ins.forEach((i,k)=>{i.addEventListener('input',mkStats);i.addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();(ins[k+1]||i).focus()}})});mkStats()}catch(er){toast(er.message)}}
+function mkStats(){const mx=EX.exam.max_marks,v=[];let bad=0;document.querySelectorAll('.mk').forEach(i=>{i.classList.remove('bad');if(i.value==='')return;const n=Number(i.value);if(n<0||n>mx||isNaN(n)){i.classList.add('bad');bad++}else v.push(n)});
+$('mkS').innerHTML=v.length?`<span>Entered <b>${v.length}</b> of ${EX.students.length}</span><span>Average <b>${(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1)}</b></span><span>Highest <b style="color:#4ade80">${Math.max(...v)}</b></span><span>Lowest <b style="color:#fb7185">${Math.min(...v)}</b></span><span>Pass (33%+) <b>${Math.round(v.filter(n=>n>=mx*.33).length/v.length*100)}%</b></span>`+(bad?`<span style="color:#fb7185">${bad} invalid</span>`:''):'<span>No marks entered yet</span>'}
+async function saveMk(){if(document.querySelector('.mk.bad'))return toast('Fix the red marks first');try{const r=await api('/api/exams/'+EX.exam.id+'/marks',{method:'POST',headers:J,body:JSON.stringify({records:[...document.querySelectorAll('.mk')].map(i=>({student_id:+i.dataset.id,marks:i.value}))})});toast('Marks saved for '+r.saved+' students')}catch(e){toast(e.message)}}
+/* ---------- profile ---------- */
+async function chPw(){if($('n1').value!==$('n2').value)return toast('The new passwords do not match');try{await api('/api/change-password',{method:'POST',headers:J,body:JSON.stringify({old_password:$('o1').value,new_password:$('n1').value})});['o1','n1','n2'].forEach(i=>$(i).value='');toast('Password updated')}catch(e){toast(e.message)}}
+api('/api/me').then(d=>{if(d.role!=='teacher'){location.replace('/fees.html');return}ME=d;$('app').style.display='block';$('sname').textContent=d.name;
+const h=new Date().getHours();$('greet').textContent=(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+(d.user_name?', '+d.user_name:'');$('hdate').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+$('tcls').textContent=d.cls?'Class '+d.cls+' register':'No class assigned yet';$('cl2').textContent=d.cls?'Class '+d.cls:'';$('pn').textContent=d.user_name||'-';$('pc').textContent=d.cls||'Not assigned';$('ps').textContent=d.name;loadHome()}).catch(()=>{});
 </script></body></html>
