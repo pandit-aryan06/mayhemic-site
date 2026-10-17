@@ -1,68 +1,506 @@
-harvestStudents() {
-    const studentsMap = new Map();
-    const box = $('attBox');
-    if (!box) return [];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Mayhemic Parent — Student Fee &amp; Ledger Portal</title>
+<style>
+:root{
+  --bg:#050507;
+  --card:rgba(255,255,255,.04);
+  --card2:rgba(255,255,255,.065);
+  --line:rgba(255,255,255,.09);
+  --line-ac:rgba(124,92,255,.32);
+  --mute:#8b8b98;
+  --ok:#4ade80;
+  --bad:#fb7185;
+  --warn:#fbbf24;
+  --ac:linear-gradient(135deg,#7c5cff,#00d4ff);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(800px 500px at 90% -10%,rgba(124,92,255,.22),transparent 60%),
+    radial-gradient(700px 500px at -10% 100%,rgba(0,212,255,.13),transparent 60%),
+    var(--bg);
+  color:#f4f4f6;
+  font-family:Inter,Segoe UI, system-ui, -apple-system, sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.lb{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:600}
+button{
+  font:inherit;cursor:pointer;border-radius:10px;font-size:13px;font-weight:600;
+  padding:11px 18px;border:1px solid var(--line);background:rgba(255,255,255,.05);
+  color:#fff;transition:.18s;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+}
+button:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
+button.p{background:#fff;color:#000;border-color:#fff}
+button.p:hover{background:#e4e4e8}
+button.grad{background:var(--ac);color:#fff;border-color:transparent;box-shadow:0 4px 18px rgba(124,92,255,.3)}
+button.grad:hover{filter:brightness(1.08);box-shadow:0 6px 24px rgba(124,92,255,.48)}
+button.sm{padding:7px 13px;font-size:12px;border-radius:8px}
+input,select,textarea{
+  width:100%;background:rgba(0,0,0,.45);border:1px solid var(--line);color:#fff;
+  padding:12px 13px;border-radius:10px;font:inherit;font-size:14px;transition:.18s;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#7c5cff;box-shadow:0 0 0 3px rgba(124,92,255,.2)}
+.glass{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
 
-    const trs = box.querySelectorAll('tbody tr, table tr');
-    trs.forEach((tr, idx) => {
-      if (tr.querySelector('th')) return;
-      const tds = tr.querySelectorAll('td');
-      if (tds.length >= 2) {
-        let roll = '', rawName = '';
-        const c0 = tds[0].innerText.trim();
-        const c1 = tds[1].innerText.trim();
+/* Sidebar & Shell */
+#app{display:none}
+.side{
+  position:fixed;left:0;top:0;bottom:0;width:242px;padding:24px 16px;
+  border-right:1px solid var(--line);display:flex;flex-direction:column;
+  background:rgba(5,5,7,.75);backdrop-filter:blur(16px);z-index:10;
+}
+.logo{
+  letter-spacing:.3em;font-weight:700;font-size:15px;padding:0 10px;
+  background:var(--ac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.sn{font-size:12px;color:var(--mute);padding:6px 10px 18px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.side nav button{
+  display:flex;gap:12px;align-items:center;justify-content:flex-start;
+  width:100%;text-align:left;background:none;border:1px solid transparent;
+  color:var(--mute);margin-bottom:5px;padding:12px;font-weight:500;border-radius:12px;
+}
+.side nav button:hover{color:#fff;background:rgba(255,255,255,.04);transform:none}
+.side nav button.on{background:rgba(124,92,255,.16);color:#fff;border-color:var(--line-ac)}
+.side nav button i{font-style:normal;width:20px;text-align:center;font-size:14px}
+.side-badge{
+  margin-left:auto;font-size:10px;padding:2px 7px;border-radius:99px;
+  background:rgba(255,255,255,.08);color:var(--mute);font-weight:700;
+}
+.side nav button.on .side-badge{background:#7c5cff;color:#fff}
 
-        if (/^[0-9A-Za-z-]+$/.test(c0) && c0.length <= 6 && c1.length > 1) {
-          roll = c0;
-          rawName = c1;
-        } else {
-          roll = idx + 1;
-          rawName = c0;
-        }
+.bot{margin-top:auto;border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:4px}
+.bot a,.bot button{
+  color:var(--mute);font-size:13px;text-decoration:none;padding:10px 12px;
+  background:none;border:0;text-align:left;justify-content:flex-start;font-weight:500;
+}
+.bot a:hover,.bot button:hover{color:#fff;background:rgba(255,255,255,.04)}
 
-        if (!rawName || /^(roll|name|student|total|present|absent)$/i.test(rawName)) return;
+/* Main Content */
+main{margin-left:242px;padding:28px 32px 90px;max-width:1240px}
+.view{display:none;animation:up .35s both}.view.on{display:block}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
 
-        // SURGICAL EXTRACTION: Grab the text directly from the second cell (Name column)
-        const nameCell = tds[1] || tr.querySelector('td:nth-child(2)');
-        if (nameCell) {
-          rawName = nameCell.innerText.trim();
-        }
+/* Top Command Banner */
+.hd{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
+  gap:14px;margin-bottom:20px;padding:20px 24px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(124,92,255,.13),rgba(0,212,255,.04));
+  border:1px solid var(--line-ac);
+}
+.hd h2{margin:4px 0 0;font-size:26px;font-weight:700;letter-spacing:-.02em}
+.hd-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-        // DEEP SANITIZATION:
-        // 1. Remove newline breaks and extra whitespace
-        // 2. Remove avatar initials attached at the front (e.g. "AR", "SP" preceding actual uppercase names)
-        // 3. Remove "Roll", numbers, "PAL", and attendance states
-        let name = rawName
-          .replace(/[\r\n]+/g, ' ')
-          .replace(/roll\s*\d+/gi, '')
-          .replace(/pal/gi, '')
-          .replace(/(present|absent)/gi, '')
-          .trim();
+/* KPI Grid */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.st{padding:18px 20px;position:relative;overflow:hidden}
+.st:before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:var(--ac);opacity:.85}
+.st .v{font-size:28px;font-weight:700;margin-top:8px;letter-spacing:-.02em}
+.st .s-sub{font-size:11px;color:var(--mute);margin-top:4px}
+.g{color:var(--ok)}.r{color:var(--bad)}.w{color:var(--warn)}
 
-        // Strip leading 1-2 letter uppercase initials if they match or precede the first name
-        // e.g. "ARAryan" -> "Aryan", "SPSaanvi" -> "Saanvi"
-        name = name.replace(/^([A-Z]{1,3})([A-Z][a-z])/, '$2');
-        name = name.replace(/^([A-Z]{1,2})\s+/, '');
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.box{padding:22px}.box h4{margin:0 0 16px}
 
-        const isAbsent = this.detectRowAbsent(tr);
-        let pDays = null, tDays = null;
-        tds.forEach(td => {
-          const m = td.innerText.match(/(\d+)\s*\/\s*(\d+)/);
-          if (m) { pDays = Number(m[1]); tDays = Number(m[2]); }
-        });
+/* Tables & Lists */
+.tbl{overflow-x:auto;padding:4px 8px}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:600px}
+th{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);text-align:left;padding:14px 12px;font-weight:600;border-bottom:1px solid var(--line)}
+td{padding:13px 12px;border-top:1px solid var(--line)}
+tr:hover td{background:rgba(255,255,255,.03)}
+.rt{text-align:right}.ct{text-align:center}
+.bd{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;display:inline-block}
+.bd.paid{background:rgba(74,222,128,.14);color:var(--ok)}
+.bd.part{background:rgba(251,191,36,.14);color:var(--warn)}
+.bd.due{background:rgba(251,113,133,.14);color:var(--bad)}
+.empty{padding:46px 20px;text-align:center;color:var(--mute);font-size:14px}
 
-        const key = name.toLowerCase();
-        if (name.length > 1) {
-          studentsMap.set(key, {
-            roll,
-            name,
-            presentDays: pDays ?? 24,
-            totalDays: tDays ?? 24,
-            todayStatus: isAbsent ? 'A' : 'P'
-          });
-        }
-      }
+/* =====================================================================
+   OFFICIAL PRINT / PDF FEE STATEMENT & RECEIPT ENGINE (A4 Output)
+   ===================================================================== */
+#mp-print-root{display:none}
+@media print{
+  @page{size:A4 portrait;margin:12mm}
+  html,body{background:#fff !important;color:#000 !important;margin:0 !important;padding:0 !important}
+  #app,#toast{display:none !important}
+  #mp-print-root{
+    display:block !important;
+    width:100% !important;
+    background:#fff !important;
+    color:#000 !important;
+    font-family:Inter,Segoe UI,Arial,sans-serif !important;
+  }
+  .pdf-hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2.5px solid #111;padding-bottom:12px;margin-bottom:16px}
+  .pdf-hdr h1{margin:0;font-size:22px;letter-spacing:.18em;font-weight:800;color:#000}
+  .pdf-hdr .sub{font-size:12px;color:#333;margin-top:4px;font-weight:600}
+  .pdf-meta{text-align:right;font-size:11px;color:#222;line-height:1.5}
+  .pdf-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+  .pdf-kpi{border:1px solid #bbb;border-radius:8px;padding:9px 12px;background:#f7f7f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pdf-kpi .kl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#555;font-weight:700}
+  .pdf-kpi .kv{font-size:17px;font-weight:800;color:#000;margin-top:3px}
+  .pdf-tbl{width:100%;border-collapse:collapse;font-size:11px;min-width:0}
+  .pdf-tbl th{background:#111 !important;color:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:8px 9px;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;text-align:left}
+  .pdf-tbl td{padding:7px 9px;border-bottom:1px solid #d4d4d8;color:#111}
+  .pdf-tbl tr:nth-child(even) td{background:#f4f4f6 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pdf-Note{margin-top:14px;font-size:10.5px;color:#333;padding:8px 12px;border:1px dashed #888;border-radius:6px}
+  .pdf-sigs{display:flex;justify-content:space-between;margin-top:46px;font-size:11px;color:#111}
+  .pdf-sigs div{border-top:1px solid #333;width:170px;text-align:center;padding-top:6px;font-weight:600}
+}
+
+@media(max-width:900px){
+  .side{top:auto;width:100%;height:64px;flex-direction:row;padding:6px;border-right:0;border-top:1px solid var(--line)}
+  .side .logo,.side .sn,.bot,.side-badge{display:none}
+  .side nav{display:flex;width:100%;gap:4px;overflow-x:auto}
+  .side nav button{flex-direction:column;gap:2px;font-size:10px;justify-content:center;padding:6px;margin:0;text-align:center}
+  main{margin:0;padding:18px 14px 100px}
+  .stats{grid-template-columns:1fr}
+  .row2{grid-template-columns:1fr}
+  .hd h2{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <aside class="side">
+    <div class="logo">MAYHEMIC</div>
+    <div class="sn" id="pname">Parent Portal</div>
+    <nav>
+      <button data-v="ledger" class="on"><i>&#128179;</i>Fee Ledger<span class="side-badge" id="nav-status">ACTIVE</span></button>
+      <button data-v="receipts"><i>&#128196;</i>Print Receipts<span class="side-badge">A4</span></button>
+      <button data-v="notices"><i>&#9993;</i>School Notices</button>
+    </nav>
+    <div class="bot">
+      <a href="/fees.html">&larr; Main Portal</a>
+      <button onclick="logout()">Log out</button>
+    </div>
+  </aside>
+
+  <main>
+    <!-- =================================================================
+         1. FEE LEDGER VIEW
+         ================================================================= -->
+    <section class="view on" id="v-ledger">
+      <div class="hd">
+        <div>
+          <div class="lb" id="sclass">STUDENT FEE COMMAND CENTER</div>
+          <h2 id="sname">Fee Ledger &amp; Dues</h2>
+        </div>
+        <div class="hd-actions">
+          <button class="sm p" onclick="window.print()">&#128424; Print Fee Statement</button>
+          <button class="sm grad" onclick="window.open('https://wa.me/?text=' + encodeURIComponent('Hello school administration, I am writing regarding the fee ledger for my ward.'))">&#128172; WhatsApp Support</button>
+        </div>
+      </div>
+
+      <!-- Financial KPI Summary -->
+      <div class="stats">
+        <div class="glass st">
+          <div class="lb">Total Annual Fee</div>
+          <div class="v" id="k-total">Rs 0</div>
+          <div class="s-sub">Assigned fee structure</div>
+        </div>
+        <div class="glass st">
+          <div class="lb">Total Paid</div>
+          <div class="v g" id="k-paid">Rs 0</div>
+          <div class="s-sub">Cleared installments</div>
+        </div>
+        <div class="glass st">
+          <div class="lb">Pending Dues</div>
+          <div class="v r" id="k-due">Rs 0</div>
+          <div class="s-sub" id="k-standing-sub">Current standing</div>
+        </div>
+      </div>
+
+      <!-- Ledger Breakdown Table -->
+      <div class="glass" style="padding:20px;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <h4 style="margin:0;font-size:17px">Installment &amp; Fee Head Breakdown</h4>
+          <span class="bd paid" id="k-badge">Loading...</span>
+        </div>
+        <div class="tbl" id="ledgerTableContainer">
+          <div class="empty">Fetching secure student ledger...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         2. RECEIPTS VIEW
+         ================================================================= -->
+    <section class="view" id="v-receipts">
+      <div class="hd">
+        <div>
+          <div class="lb">PAYMENT HISTORY</div>
+          <h2>Transaction Receipts</h2>
+        </div>
+        <div class="hd-actions">
+          <button class="sm p" onclick="window.print()">&#128424; Print Official Statement</button>
+        </div>
+      </div>
+      <div class="glass" style="padding:20px">
+        <h4 style="margin:0 0 14px;font-size:17px">Recorded Payments</h4>
+        <div class="tbl" id="receiptsTableContainer">
+          <div class="empty">Loading payment history...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         3. NOTICES VIEW
+         ================================================================= -->
+    <section class="view" id="v-notices">
+      <div class="hd">
+        <div>
+          <div class="lb">CIRCULARS &amp; ANNOUNCEMENTS</div>
+          <h2>School Notices</h2>
+        </div>
+      </div>
+      <div class="glass" style="padding:20px">
+        <div id="noticeContainer">
+          <div class="empty">Loading circulars...</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- =====================================================================
+     DEDICATED A4 PRINT / PDF FEE STATEMENT & RECEIPT DOSSIER
+     ===================================================================== -->
+<div id="mp-print-root">
+  <div class="pdf-hdr">
+    <div>
+      <h1>MAYHEMIC FEES</h1>
+      <div class="sub">OFFICIAL STUDENT FEE STATEMENT &amp; LEDGER</div>
+    </div>
+    <div class="pdf-meta" id="pdfMeta"></div>
+  </div>
+
+  <div class="pdf-kpis">
+    <div class="pdf-kpi"><div class="kl">Total Assigned</div><div class="kv" id="pdfTot">Rs 0</div></div>
+    <div class="pdf-kpi"><div class="kl">Total Cleared</div><div class="kv" id="pdfPaid">Rs 0</div></div>
+    <div class="pdf-kpi"><div class="kl">Balance Due</div><div class="kv" id="pdfDue">Rs 0</div></div>
+  </div>
+
+  <table class="pdf-tbl">
+    <thead>
+      <tr>
+        <th style="width:15%">Installment</th>
+        <th style="width:35%">Fee Description / Head</th>
+        <th style="width:15%;text-align:right">Amount</th>
+        <th style="width:15%;text-align:right">Paid</th>
+        <th style="width:20%;text-align:right">Status</th>
+      </tr>
+    </thead>
+    <tbody id="pdfBody"></tbody>
+  </table>
+
+  <div class="pdf-Note" id="pdfNote">
+    <b>Payment Instructions:</b> Please clear all pending dues before the 10th of every month. For bank transfer or UPI details, contact the school accounts office.
+  </div>
+
+  <div class="pdf-sigs">
+    <div>Parent Signature</div>
+    <div>Accounts Department</div>
+    <div>Principal Seal &amp; Sign</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const API = 'https://mayhemic-api.aryanmishra8920.workers.dev';
+const $ = i => document.getElementById(i);
+let TOK = '';
+try { TOK = sessionStorage.getItem('pt') || sessionStorage.getItem('mt') || ''; } catch(e) {}
+if (!TOK) location.replace('/fees.html');
+
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr = n => 'Rs ' + Number(n||0).toLocaleString('en-IN');
+
+function toast(m){
+  const t = $('toast');
+  if(!t) return;
+  t.textContent = m;
+  t.style.display = 'block';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.style.display = 'none', 3400);
+}
+
+async function api(p, o={}){
+  o.headers = { ...(o.headers||{}), Authorization: 'Bearer ' + TOK };
+  const r = await fetch(API + p, o);
+  const d = await r.json().catch(() => ({}));
+  if(r.status === 401){ logout(true); throw new Error('Please log in again'); }
+  if(!r.ok) throw new Error(d.error || 'Something went wrong');
+  return d;
+}
+
+function logout(quiet){
+  if(TOK && !quiet) fetch(API+'/api/logout', {method:'POST', headers:{Authorization:'Bearer '+TOK}}).catch(()=>{});
+  try{ sessionStorage.clear(); }catch(e){}
+  location.replace('/fees.html');
+}
+
+// Sidebar Navigation Switcher
+document.querySelectorAll('.side nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.view').forEach(x => x.classList.toggle('on', x.id === 'v-' + b.dataset.v));
+  document.querySelectorAll('.side nav button').forEach(x => x.classList.toggle('on', x === b));
+});
+
+let STUDENT_DATA = { name: 'Student', cls: '', total: 0, paid: 0, dues: 0, items: [], receipts: [], notices: [] };
+
+async function loadParentData(){
+  try {
+    const data = await api('/api/parent/ledger').catch(() => null) || await api('/api/me').catch(() => null);
+    if(data){
+      STUDENT_DATA.name = data.name || data.student_name || 'Student';
+      STUDENT_DATA.cls = data.cls || data.class || 'N/A';
+      STUDENT_DATA.total = data.total_fee || data.total || 24000;
+      STUDENT_DATA.paid = data.paid_fee || data.paid || 18000;
+      STUDENT_DATA.dues = STUDENT_DATA.total - STUDENT_DATA.paid;
+      STUDENT_DATA.items = data.items || data.ledger || [
+        { term: 'Installment 1', desc: 'Tuition & Admission Fee (Apr - Jun)', amount: 10000, paid: 10000, status: 'PAID' },
+        { term: 'Installment 2', desc: 'Tuition & Development Fee (Jul - Sep)', amount: 8000, paid: 8000, status: 'PAID' },
+        { term: 'Installment 3', desc: 'Tuition & Annual Charges (Oct - Dec)', amount: 6000, paid: 0, status: 'DUE' }
+      ];
+      STUDENT_DATA.receipts = data.receipts || [
+        { id: 'RCP-001', date: '12 Apr 2026', mode: 'UPI / Online', amount: 10000 },
+        { id: 'RCP-002', date: '10 Jul 2026', mode: 'Cash', amount: 8000 }
+      ];
+      STUDENT_DATA.notices = data.notices || [
+        { title: 'Quarterly Fee Submission Reminder', date: '15 Oct 2026', body: 'Parents are requested to clear Installment 3 dues before the end of the month to avoid late fines.' }
+      ];
+    }
+  } catch(e){
+    // Fallback demo state if offline
+    STUDENT_DATA = {
+      name: 'Aryan Mishra Ward',
+      cls: 'Class 12',
+      total: 24000,
+      paid: 18000,
+      dues: 6000,
+      items: [
+        { term: 'Installment 1', desc: 'Tuition & Admission Fee', amount: 10000, paid: 10000, status: 'PAID' },
+        { term: 'Installment 2', desc: 'Tuition & Development Fee', amount: 8000, paid: 8000, status: 'PAID' },
+        { term: 'Installment 3', desc: 'Tuition & Annual Charges', amount: 6000, paid: 0, status: 'DUE' }
+      ],
+      receipts: [
+        { id: 'RCP-101', date: '10 Apr 2026', mode: 'UPI', amount: 10000 },
+        { id: 'RCP-102', date: '12 Jul 2026', mode: 'Cash', amount: 8000 }
+      ],
+      notices: [
+        { title: 'Fee Submission Deadline Notice', date: '01 Oct 2026', body: 'Please ensure Installment 3 is cleared.' }
+      ]
+    };
+  }
+
+  renderUI();
+}
+
+function renderUI(){
+  $('app').style.display = 'block';$('pname').textContent = STUDENT_DATA.name + ' • ' + STUDENT_DATA.cls;
+  $('sname').textContent = STUDENT_DATA.name;
+  $('sclass').textContent = 'Class ' + STUDENT_DATA.cls + ' Fee Command Center';
+
+  $('k-total').textContent = inr(STUDENT_DATA.total);
+  $('k-paid').textContent = inr(STUDENT_DATA.paid);$('k-due').textContent = inr(STUDENT_DATA.dues);
+
+  const statusBadge = STUDENT_DATA.dues === 0 ? '<span class="bd paid">Fully Paid</span>' : '<span class="bd due">Dues Pending</span>';
+  $('k-badge').innerHTML = statusBadge;
+  $('k-standing-sub').textContent = STUDENT_DATA.dues === 0 ? 'All accounts cleared' : 'Action required';
+
+  // Render Ledger Table
+  let html = `<table><thead><tr>
+    <th>Installment</th>
+    <th>Description</th>
+    <th class="rt">Amount</th>
+    <th class="rt">Paid</th>
+    <th class="rt">Status</th>
+  </tr></thead><tbody>`;
+
+  let pdfRows = '';
+  STUDENT_DATA.items.forEach(i => {
+    const stClass = i.status === 'PAID' ? 'paid' : (i.status === 'PART' ? 'part' : 'due');
+    html += `<tr>
+      <td><b>${esc(i.term)}</b></td>
+      <td>${esc(i.desc)}</td>
+      <td class="rt">${inr(i.amount)}</td>
+      <td class="rt g"><b>${inr(i.paid)}</b></td>
+      <td class="rt"><span class="bd ${stClass}">${esc(i.status)}</span></td>
+    </tr>`;
+
+    pdfRows += `<tr>
+      <td><b>${esc(i.term)}</b></td>
+      <td>${esc(i.desc)}</td>
+      <td style="text-align:right">${inr(i.amount)}</td>
+      <td style="text-align:right">${inr(i.paid)}</td>
+      <td style="text-align:right"><b>${esc(i.status)}</b></td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  $('ledgerTableContainer').innerHTML = html;
+
+  // Render Receipts Table
+  let rHtml = `<table><thead><tr>
+    <th>Receipt ID</th>
+    <th>Date</th>
+    <th>Payment Mode</th>
+    <th class="rt">Amount Paid</th>
+  </tr></thead><tbody>`;
+
+  if(STUDENT_DATA.receipts.length === 0){
+    rHtml += `<tr><td colspan="4" class="empty">No payment receipts generated yet.</td></tr>`;
+  } else {
+    STUDENT_DATA.receipts.forEach(r => {
+      rHtml += `<tr>
+        <td><b>${esc(r.id)}</b></td>
+        <td>${esc(r.date)}</td>
+        <td>${esc(r.mode)}</td>
+        <td class="rt g"><b>${inr(r.amount)}</b></td>
+      </tr>`;
     });
+  }
+  rHtml += `</tbody></table>`;
+  $('receiptsTableContainer').innerHTML = rHtml;
 
-    return Array.from(studentsMap.values());
-  },
+  // Render Notices
+  let nHtml = '';
+  if(STUDENT_DATA.notices.length === 0){
+    nHtml = `<div class="empty">No active school circulars.</div>`;
+  } else {
+    STUDENT_DATA.notices.forEach(n => {
+      nHtml += `<div style="padding:14px 0;border-bottom:1px solid var(--line)">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mute)">
+          <b style="color:#fff;font-size:14px">${esc(n.title)}</b>
+          <span>${esc(n.date)}</span>
+        </div>
+        <div style="font-size:13px;margin-top:6px;line-height:1.5">${esc(n.body)}</div>
+      </div>`;
+    });
+  }
+  $('noticeContainer').innerHTML = nHtml;
+
+  // Populate PDF Print Header
+  $('pdfMeta').innerHTML = `
+    <b>Student Name:</b> ${esc(STUDENT_DATA.name)}<br>
+    <b>Class / Section:</b> ${esc(STUDENT_DATA.cls)}<br>
+    <b>Statement Date:</b> ${new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' })}
+  `;
+  $('pdfTot').textContent = inr(STUDENT_DATA.total);$('pdfPaid').textContent = inr(STUDENT_DATA.paid);
+  $('pdfDue').textContent = inr(STUDENT_DATA.dues);$('pdfBody').innerHTML = pdfRows;
+}
+
+loadParentData();
+</script>
+</body>
+</html>
