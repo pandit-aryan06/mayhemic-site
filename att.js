@@ -15,7 +15,7 @@
   window.AttUI = {
     mount: function (box, role) {
       var S = {}, list = [];
-      box.innerHTML = '<div class="tools"><input type="date" id="atD" value="' + today() + '" style="max-width:190px"><select id="atC" style="max-width:170px"></select>' +
+      box.innerHTML = '<div class="tools"><button class="sm" id="atPrev" title="Previous day">&larr;</button><input type="date" id="atD" value="' + today() + '" max="' + today() + '" style="max-width:170px"><button class="sm" id="atNext" title="Next day">&rarr;</button><select id="atC" style="max-width:170px"></select>' +
         '<button class="sm" id="atP">All present</button><button class="sm" id="atR">Monthly report</button></div>' +
         '<div class="glass" style="padding:8px 20px"><div id="atL"></div></div><div class="sumbar" id="atS"></div>' +
         '<div class="tools"><label class="chk" style="display:flex;gap:8px;align-items:center;color:var(--mute);font-size:13px"><input type="checkbox" id="atN" style="width:auto"> WhatsApp the parents of absent students</label>' +
@@ -49,6 +49,9 @@
         [].forEach.call(b.parentNode.children, function (x) { x.classList.toggle('on', x === b); }); sumbar();
       });
       box.querySelector('#atP').onclick = function () { list.forEach(function (s) { S[s.id] = 'P'; }); draw(); };
+      function shift(n) { var d = new Date(D.value + 'T00:00:00'); d.setDate(d.getDate() + n); var v = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); if (v > today()) return toast('That day has not come yet'); D.value = v; load(); }
+      box.querySelector('#atPrev').onclick = function () { shift(-1); };
+      box.querySelector('#atNext').onclick = function () { shift(1); };
       D.onchange = load; C.onchange = load;
       box.querySelector('#atSave').onclick = async function () {
         if (!list.length) return toast('No students to save');
@@ -61,7 +64,11 @@
         try {
           var r = await api('/api/attendance/report?month=' + D.value.slice(0, 7) + '&class=' + encodeURIComponent(C.value));
           box.querySelector('#atRep').innerHTML = '<h4 style="margin:24px 0 10px">Report for ' + D.value.slice(0, 7) + (C.value ? ' / Class ' + esc(C.value) : '') + '</h4><div class="tbl glass"><table><thead><tr><th>Student</th><th>Class</th><th class="rt">Present</th><th class="rt">Absent</th><th class="rt">Late</th><th>Attendance</th></tr></thead><tbody>' +
-            r.rows.map(function (s) { var t = s.p + s.a + s.l, pc = t ? Math.round((s.p + s.l) / t * 100) : 0; return '<tr><td>' + esc(s.name) + '</td><td>' + esc(s.class) + '</td><td class="rt">' + s.p + '</td><td class="rt r">' + s.a + '</td><td class="rt">' + s.l + '</td><td><div style="display:flex;gap:8px;align-items:center"><div class="pbar"><i style="width:' + pc + '%"></i></div>' + (t ? pc + '%' : '-') + '</div></td></tr>'; }).join('') + '</tbody></table></div>';
+            r.rows.map(function (s) { var t = s.p + s.a + s.l, pc = t ? Math.round((s.p + s.l) / t * 100) : 0; return '<tr><td>' + esc(s.name) + '</td><td>' + esc(s.class) + '</td><td class="rt">' + s.p + '</td><td class="rt r">' + s.a + '</td><td class="rt">' + s.l + '</td><td><div style="display:flex;gap:8px;align-items:center"><div class="pbar"><i style="width:' + pc + '%;background:' + (t && pc < 75 ? '#fb7185' : '#4ade80') + '"></i></div><span style="color:' + (t && pc < 75 ? '#fb7185' : 'inherit') + '">' + (t ? pc + '%' : '-') + '</span>' + '</div></td></tr>'; }).join('') + '</tbody></table></div><div class="lb" style="margin-top:10px">Red means below 75% attendance</div><button class="sm" id="atCsv" style="margin-top:10px">Download CSV</button>';
+          box.querySelector('#atCsv').onclick = function () {
+            var csv = 'Name,Class,Roll,Present,Absent,Late,Percent\n' + r.rows.map(function (s) { var t = s.p + s.a + s.l; return ['"' + String(s.name).replace(/"/g, '') + '"', s.class, s.roll_no, s.p, s.a, s.l, t ? Math.round((s.p + s.l) / t * 100) : ''].join(','); }).join('\n');
+            var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'attendance-' + D.value.slice(0, 7) + '.csv'; a.click();
+          };
         } catch (e) { toast(e.message); }
       };
       load();
