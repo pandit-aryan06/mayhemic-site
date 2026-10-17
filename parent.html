@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>Mayhemic Parent</title>
+<style>
+:root{--bg:#050507;--card:rgba(255,255,255,.04);--line:rgba(255,255,255,.09);--mute:#8b8b98;--ok:#4ade80;--bad:#fb7185;--warn:#fbbf24;--ac:linear-gradient(135deg,#7c5cff,#00d4ff)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(800px 500px at 90% -10%,rgba(124,92,255,.22),transparent 60%),radial-gradient(700px 500px at -10% 100%,rgba(0,212,255,.13),transparent 60%),var(--bg);color:#f4f4f6;font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+.lb{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+button{font:inherit;cursor:pointer;border-radius:10px;font-size:13px;font-weight:600;padding:11px 18px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;transition:.18s}
+button:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}button.p{background:#fff;color:#000;border-color:#fff}button.p:hover{background:#e4e4e8}button.sm{padding:7px 13px;font-size:12px}
+input,select{width:100%;background:rgba(0,0,0,.45);border:1px solid var(--line);color:#fff;padding:13px;border-radius:10px;font:inherit;font-size:14px}
+input:focus,select:focus{outline:none;border-color:#7c5cff;box-shadow:0 0 0 3px rgba(124,92,255,.2)}
+.glass{background:var(--card);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+/* login */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+.orb{position:absolute;width:420px;height:420px;border-radius:50%;background:var(--ac);filter:blur(110px);opacity:.28;animation:fl 9s ease-in-out infinite alternate}
+@keyframes fl{to{transform:translate(90px,-60px) scale(1.2)}}
+.lc{position:relative;width:100%;max-width:400px;padding:36px 30px;text-align:center;animation:up .6s both}
+.lc h1{font-weight:300;letter-spacing:.35em;font-size:28px;margin:8px 0 6px;text-indent:.35em}
+.lc .f{text-align:left;margin-top:18px}.lc .f .lb{display:block;margin-bottom:7px}
+.pw{position:relative}.pw span{position:absolute;right:13px;top:13px;font-size:12px;color:var(--mute);cursor:pointer}
+#lerr{color:var(--bad);font-size:13px;min-height:18px;margin:12px 0 4px}.back{display:block;margin-top:18px;color:var(--mute);font-size:13px;text-decoration:none}.back:hover{color:#fff}
+/* shell */
+#app{display:none}.side{position:fixed;left:0;top:0;bottom:0;width:230px;padding:24px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;background:rgba(5,5,7,.6);backdrop-filter:blur(14px);z-index:5}
+.logo{letter-spacing:.3em;font-weight:300;font-size:15px;padding:0 10px}.sn{font-size:12px;color:var(--mute);padding:4px 10px 22px}
+.side nav button{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:none;border:0;color:var(--mute);margin-bottom:4px;padding:12px;font-weight:500}
+.side nav button.on{background:rgba(124,92,255,.16);color:#fff}.side nav button i{font-style:normal;width:18px;text-align:center}
+.bot{margin-top:auto;display:flex;flex-direction:column;gap:6px}.bot a,.bot button{color:var(--mute);font-size:13px;text-decoration:none;padding:10px;background:none;border:0;text-align:left;font-weight:500}.bot a:hover,.bot button:hover{color:#fff}
+main{margin-left:230px;padding:30px 32px 90px;max-width:1180px}
+.view{display:none;animation:up .45s both}.view.on{display:block}@keyframes up{from{opacity:0;transform:translateY(14px)}}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:24px}.hd h2{margin:0;font-size:28px;font-weight:600;letter-spacing:-.02em}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.st{padding:20px;position:relative;overflow:hidden}.st:before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:var(--ac);opacity:.7}
+.st .v{font-size:28px;font-weight:600;margin-top:12px;letter-spacing:-.02em}.g{color:var(--ok)}.r{color:var(--bad)}
+.row2{display:grid;grid-template-columns:1fr 1.5fr;gap:14px;margin-bottom:14px}.row3{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}
+.box{padding:22px}.box h4{margin:0 0 18px}
+.ring{display:flex;align-items:center;gap:22px}.ring svg{transform:rotate(-90deg)}.ring .c{position:relative}
+.ring .pc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:26px;font-weight:600}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px}
+.bars{display:flex;gap:12px;align-items:flex-end;height:150px}.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:11px;color:var(--mute);gap:6px}
+.bars i{display:block;width:100%;border-radius:8px 8px 3px 3px;background:var(--ac);height:0;transition:height .9s cubic-bezier(.2,.8,.2,1);min-height:3px;opacity:.9}
+.li{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px;gap:10px}.li:last-child{border:0}
+.cb{margin-bottom:14px;font-size:13px}.cb .t{display:flex;justify-content:space-between;margin-bottom:6px}.cb .tr{height:7px;background:rgba(255,255,255,.07);border-radius:9px;overflow:hidden}.cb .tr i{display:block;height:100%;background:linear-gradient(90deg,#fb7185,#fbbf24);width:0;transition:width .9s}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.tools input{flex:1;min-width:200px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.chip{padding:7px 14px;font-size:12px;border-radius:20px}.chip.on{background:#fff;color:#000;border-color:#fff}
+.tbl{overflow-x:auto;padding:4px 8px}table{width:100%;border-collapse:collapse;font-size:14px;min-width:680px}
+th{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);text-align:left;padding:14px 12px;font-weight:500}td{padding:13px 12px;border-top:1px solid var(--line)}tr:hover td{background:rgba(255,255,255,.03)}
+.rt{text-align:right}.who{display:flex;align-items:center;gap:12px}.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.bd{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600}.bd.paid{background:rgba(74,222,128,.14);color:var(--ok)}.bd.part{background:rgba(251,191,36,.14);color:var(--warn)}.bd.due{background:rgba(251,113,133,.14);color:var(--bad)}
+.empty{padding:50px;text-align:center;color:var(--mute)}
+.drop{border:2px dashed rgba(255,255,255,.18);border-radius:18px;padding:60px 20px;text-align:center;cursor:pointer;transition:.2s}.drop:hover,.drop.h{border-color:#7c5cff;background:rgba(124,92,255,.08)}
+.drop b{font-size:18px;display:block;margin:8px 0}code{background:rgba(255,255,255,.08);padding:3px 8px;border-radius:6px;font-size:12px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.ov.show{display:flex}
+.mod{background:#0e0e12;border:1px solid var(--line);border-radius:20px;padding:26px;width:100%;max-width:430px;max-height:92vh;overflow:auto;animation:pop .25s both}@keyframes pop{from{opacity:0;transform:scale(.95)}}
+.mod h3{margin:0 0 4px;font-size:20px}.rw{margin-top:14px}.rw .lb{display:block;margin-bottom:6px}.acts{display:flex;gap:10px;margin-top:22px}.acts button{flex:1}
+.chk{display:flex;gap:9px;align-items:center;font-size:13px;color:var(--mute)}.chk input{width:auto}
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:12px 22px;border-radius:12px;font-size:13px;font-weight:600;display:none;z-index:50}
+#receipt{display:none}.rc{color:#000;background:#fff;padding:26px;font-family:Arial,sans-serif}.rc h2{margin:0}.rc hr{border:0;border-top:1px dashed #999;margin:14px 0}.rc table{min-width:0;color:#000}.rc td{border:0;padding:5px 0}
+@media print{body *{visibility:hidden}#receipt,#receipt *{visibility:visible}#receipt{display:block;position:absolute;left:0;top:0;width:100%}}
+@media(max-width:900px){.side{top:auto;width:100%;height:64px;flex-direction:row;padding:6px;border-right:0;border-top:1px solid var(--line)}.side .logo,.side .sn,.bot{display:none}.side nav{display:flex;width:100%;gap:4px}.side nav button{flex-direction:column;gap:2px;font-size:10px;justify-content:center;padding:6px;margin:0;text-align:center}
+main{margin:0;padding:20px 16px 100px}.stats{grid-template-columns:1fr 1fr}.row2,.row3{grid-template-columns:1fr}.hd h2{font-size:22px}}
+@media(max-width:900px){.side nav button{font-size:9px}.side nav{overflow-x:auto}}
+
+#app{display:none}</style></head><body>
+<div id="app"><main style="margin:0 auto;max-width:880px;padding:26px 18px 60px">
+<div class="top" style="display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:26px"><div><div class="logo" style="padding:0">MAYHEMIC</div><div class="sn" id="sname" style="padding:4px 0 0"></div></div><div style="display:flex;gap:8px"><a href="/"><button class="sm">Website</button></a><button class="sm" onclick="logout()">Log out</button></div></div>
+<div class="lb">Parent portal</div><h2 id="hello" style="margin:6px 0 22px;font-size:28px;font-weight:600;letter-spacing:-.02em"></h2>
+<div id="kids"></div>
+<div class="box glass" style="margin-top:6px"><h4>Notices from school</h4><div id="notes"></div></div></main></div>
+<div id="toast"></div><script src="att.js"></script>
+<script>
+const API='https://mayhemic-api.aryanmishra8920.workers.dev',$=i=>document.getElementById(i);
+let TOK='';try{TOK=sessionStorage.getItem('mt')||''}catch(e){}
+if(!TOK)location.replace('/fees.html');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'Rs '+Number(n||0).toLocaleString('en-IN');
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3400)}
+async function api(p,o={}){o.headers={...(o.headers||{}),Authorization:'Bearer '+TOK};const r=await fetch(API+p,o);const d=await r.json().catch(()=>({}));if(r.status===401){logout(true);throw new Error('Please log in again')}if(!r.ok)throw new Error(d.error||'Something went wrong');return d}
+function logout(quiet){if(TOK&&!quiet)fetch(API+'/api/logout',{method:'POST',headers:{Authorization:'Bearer '+TOK}}).catch(()=>{});try{sessionStorage.clear()}catch(e){}location.replace('/fees.html')}
+const fd=t=>new Date(t.replace(' ','T')+'Z').toLocaleDateString('en-IN');
+function kid(k){const tot=Math.max(k.total_fee,1),pc=Math.min(100,Math.round(k.paid/tot*100)),m=k.month,mt=m.p+m.a+m.l,ap=mt?Math.round((m.p+m.l)/mt*100):0;
+const col={P:'#4ade80',A:'#fb7185',L:'#fbbf24'};
+return `<div class="box glass" style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div><h3 style="margin:0;font-size:22px">${esc(k.name)}</h3><div class="lb">Class ${esc(k.class)}${k.roll_no?' / Roll '+esc(k.roll_no):''}</div></div><span class="bd ${k.pending<=0?'paid':k.paid>0?'part':'due'}">${k.pending<=0?'Fees cleared':k.pending>0&&k.paid>0?'Partly paid':'Fees due'}</span></div>
+<div class="stats" style="margin:18px 0 8px;grid-template-columns:repeat(3,1fr)"><div class="st glass"><div class="lb">Total fee</div><div class="v" style="font-size:20px">${inr(k.total_fee)}</div></div><div class="st glass"><div class="lb">Paid</div><div class="v g" style="font-size:20px">${inr(k.paid)}</div></div><div class="st glass"><div class="lb">Pending</div><div class="v ${k.pending>0?'r':'g'}" style="font-size:20px">${k.pending>0?inr(k.pending):'Nil'}</div></div></div>
+<div class="pbar" style="height:8px"><i style="width:${pc}%"></i></div>
+<h4 style="margin:26px 0 6px">Attendance this month</h4><div style="font-size:14px;color:var(--mute)">${mt?`<b style="color:#fff;font-size:22px">${ap}%</b> &nbsp;${m.p} present, ${m.a} absent, ${m.l} late`:'No attendance marked yet this month'}</div>
+<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:12px">${k.days.slice().reverse().map(d=>`<span title="${d.date}: ${d.status}" style="width:16px;height:16px;border-radius:4px;background:${col[d.status]};opacity:.85"></span>`).join('')}</div>
+<h4 style="margin:26px 0 4px">Payments</h4>${k.payments.length?k.payments.map(p=>`<div class="li"><div>${inr(p.amount)}<div class="lb">${esc(p.mode)} / ${esc(p.receipt_no)}</div></div><span class="lb">${fd(p.paid_at)}</span></div>`).join(''):'<div class="lb" style="padding:10px 0">No payments yet</div>'}</div>`}
+api('/api/me').then(async d=>{if(d.role!=='parent'){location.replace('/fees.html');return}
+$('app').style.display='block';$('sname').textContent=d.name;$('hello').textContent='Welcome';
+const [o,n]=await Promise.all([api('/api/parent/overview'),api('/api/notices')]);
+$('kids').innerHTML=o.kids.length?o.kids.map(kid).join(''):'<div class="box glass empty">No student is linked to this login yet.</div>';
+if(o.kids.length)$('hello').textContent='Hello, parent of '+o.kids.map(k=>k.name.split(' ')[0]).join(' and ');
+NoticeUI.render($('notes'),n.notices)}).catch(e=>toast(e.message));
+</script></body></html>
