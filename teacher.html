@@ -493,28 +493,6 @@ document.querySelectorAll('.side nav button').forEach(b=>b.onclick=()=>{
 });
 
 /* =======================================================================
-   NETWORK INTERCEPTOR (Captures exact student/attendance payloads from att.js)
-   ======================================================================= */
-const __NET_LOG = [];
-(function(){
-  const _f = window.fetch;
-  window.fetch = async function(...args){
-    const r = await _f.apply(this, args);
-    try {
-      const url = typeof args[0] === 'string' ? args[0] : (args[0]?.url || '');
-      r.clone().json().then(d => {
-        if (d) {
-          __NET_LOG.unshift({ url, data: d, time: Date.now() });
-          if (__NET_LOG.length > 40) __NET_LOG.pop();
-          setTimeout(() => CTO.updateBadge(), 200);
-        }
-      }).catch(()=>{});
-    } catch(e){}
-    return r;
-  };
-})();
-
-/* =======================================================================
    BOOT PORTAL & MOUNT NATIVE MODULES
    ======================================================================= */
 let ME = { name: 'Teacher', user_name: '', cls: '' };
@@ -530,7 +508,6 @@ api('/api/me').then(d=>{
   try { NoticeUI.mount($('noticeBox'),'teacher'); } catch(e) { console.error(e); }
   setTimeout(() => CTO.updateBadge(), 900);
 }).catch(err=>{
-  // Fallback so page never stays blank on network hiccup
   $('app').style.display='block';
   $('sname').textContent='Offline / Reconnecting';
   toast(err.message || 'Check connection');
@@ -547,9 +524,17 @@ const CTO = {
     $('repMonth').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
     this.renderDiary();
 
-    // Observe #attBox mutations so whenever teacher clicks Present/Absent in att.js, our counts stay live
-    const obs = new MutationObserver(() => this.updateBadge());
-    if ($('attBox')) obs.observe($('attBox'), { childList: true, subtree: true, attributes: true });
+    // Real-time MutationObserver: Instantly adapts to any roster changes or attendance toggles
+    const box = $('attBox');
+    if (box) {
+      const obs = new MutationObserver(() => {
+        this.updateBadge();
+        if (document.getElementById('v-reports').classList.contains('on')) {
+          this.syncReport();
+        }
+      });
+      obs.observe(box, { childList: true, subtree: true, characterData: true });
+    }
 
     // Keyboard shortcuts
     window.addEventListener('keydown', e => {
@@ -566,78 +551,51 @@ const CTO = {
   },
 
   /* -------------------------------------------------------------------
-     LIVE DATA HARVESTER (Combines att.js API traffic + live DOM state)
+     LIVE DOM HARVESTER (Direct DOM-driven, adaptive to roster changes)
      ------------------------------------------------------------------- */
   harvestStudents() {
-    const byKey = new Map();
+    const studentsMap = new Map();
+    const box = $('attBox');
+    if (!box) return [];
 
-    // 1. Inspect JSON responses received by att.js
-    for (const entry of __NET_LOG) {
-      const d = entry.data;
-      const arr = Array.isArray(d) ? d : (d.students || d.records || d.rows || d.list || d.attendance || d.data);
-      if (Array.isArray(arr) && arr.length > 0) {
-        arr.forEach((s, idx) => {
-          const name = s.name || s.student_name || s.full_name;
-          if (!name) return;
-          const roll = s.roll || s.roll_no || s.adm_no || s.id || (idx + 1);
-          const key = String(name).toLowerCase().trim();
-          const prev = byKey.get(key) || {};
-          byKey.set(key, {
-            id: s.id || prev.id || roll,
-            roll: roll,
-            name: String(name).trim(),
-            presentDays: s.present_days ?? s.present ?? s.p ?? prev.presentDays,
-            absentDays: s.absent_days ?? s.absent ?? s.a ?? prev.absentDays,
-            totalDays: s.total_days ?? s.working_days ?? s.total ?? prev.totalDays,
-            pct: s.pct ?? s.percentage ?? s.attendance_rate ?? prev.pct,
-            todayStatus: s.status ? (String(s.status).toLowerCase().startsWith('a') ? 'A' : 'P') : (prev.todayStatus || 'P')
-          });
+    // 1. Scan Table rows rendered by att.js
+    const trs = box.querySelectorAll('tbody tr, table tr');
+    trs.forEach((tr, idx) => {
+      if (tr.querySelector('th')) return;
+      const tds = tr.querySelectorAll('td');
+      if (tds.length >= 2) {
+        let roll = '', name = '';
+        const c0 = tds[0].innerText.trim();
+        const c1 = tds[1].innerText.trim();
+        if (/^[0-9A-Za-z-]+$/.test(c0) && c0.length <= 6 && c1.length > 1) {
+          roll = c0;
+          name = c1.split('\n')[0].trim();
+        } else {
+          roll = idx + 1;
+          name = c0.split('\n')[0].trim();
+        }
+        if (!name || /^(roll|name|student|total|present|absent)$/i.test(name)) return;
+
+        const isAbsent = this.detectRowAbsent(tr);
+        let pDays = null, tDays = null;
+        tds.forEach(td => {
+          const m = td.innerText.match(/(\d+)\s*\/\s*(\d+)/);
+          if (m) { pDays = Number(m[1]); tDays = Number(m[2]); }
+        });
+
+        const key = name.toLowerCase();
+        studentsMap.set(key, {
+          roll,
+          name,
+          presentDays: pDays ?? 24,
+          totalDays: tDays ?? 24,
+          todayStatus: isAbsent ? 'A' : 'P'
         });
       }
-    }
+    });
 
-    // 2. Inspect live DOM inside #attBox so any real-time clicks by teacher override stale cache
-    const box = $('attBox');
-    if (box) {
-      // Case A: Table rows rendered by att.js
-      const trs = box.querySelectorAll('tbody tr, table tr');
-      trs.forEach((tr, idx) => {
-        if (tr.querySelector('th')) return;
-        const tds = tr.querySelectorAll('td');
-        if (tds.length >= 2) {
-          let roll = '', name = '';
-          const c0 = tds[0].innerText.trim();
-          const c1 = tds[1].innerText.trim();
-          if (/^[0-9A-Za-z-]+$/.test(c0) && c0.length <= 6 && c1.length > 1) {
-            roll = c0;
-            name = c1.split('\n')[0].trim();
-          } else {
-            roll = idx + 1;
-            name = c0.split('\n')[0].trim();
-          }
-          if (!name || /^(roll|name|student|total|present|absent)$/i.test(name)) return;
-
-          const isAbsent = this.detectRowAbsent(tr);
-          let pDays = null, tDays = null;
-          tds.forEach(td => {
-            const m = td.innerText.match(/(\d+)\s*\/\s*(\d+)/);
-            if (m) { pDays = Number(m[1]); tDays = Number(m[2]); }
-          });
-
-          const key = name.toLowerCase();
-          const prev = byKey.get(key) || {};
-          byKey.set(key, {
-            ...prev,
-            roll: prev.roll || roll,
-            name,
-            presentDays: pDays ?? prev.presentDays,
-            totalDays: tDays ?? prev.totalDays,
-            todayStatus: isAbsent ? 'A' : 'P'
-          });
-        }
-      });
-
-      // Case B: Flex/Card rows (.li or custom student items) rendered by att.js
+    // 2. Scan Flex/Card items if table format is not used
+    if (studentsMap.size === 0) {
       const items = box.querySelectorAll('.li, [data-student-id], [data-id], .stu-row');
       items.forEach((el, idx) => {
         if (el.tagName === 'TR') return;
@@ -651,29 +609,26 @@ const CTO = {
 
         const isAbsent = this.detectRowAbsent(el);
         const key = name.toLowerCase();
-        const prev = byKey.get(key) || {};
-        byKey.set(key, {
-          ...prev,
-          roll: prev.roll || roll,
+        studentsMap.set(key, {
+          roll,
           name,
+          presentDays: 24,
+          totalDays: 24,
           todayStatus: isAbsent ? 'A' : 'P'
         });
       });
     }
 
-    return Array.from(byKey.values());
+    return Array.from(studentsMap.values());
   },
 
   detectRowAbsent(el) {
-    // Check select dropdown
     const sel = el.querySelector('select');
     if (sel) return String(sel.value).toLowerCase().startsWith('a');
 
-    // Check checkbox
     const chk = el.querySelector('input[type="checkbox"]');
     if (chk) return !chk.checked;
 
-    // Check active toggle buttons or badges inside row
     const activeBtns = el.querySelectorAll('button.on, button.active, .chip.on, .bd, [aria-pressed="true"]');
     for (const b of activeBtns) {
       const t = b.innerText.trim().toLowerCase();
@@ -685,7 +640,6 @@ const CTO = {
       }
     }
 
-    // Check inline style / class indicators
     if (el.classList.contains('absent') || el.classList.contains('is-absent') || el.dataset.status === 'absent' || el.dataset.status === 'A') {
       return true;
     }
@@ -709,13 +663,11 @@ const CTO = {
     if (!box) return;
     let changed = 0;
 
-    // 1. Checkboxes
     box.querySelectorAll('input[type="checkbox"]').forEach(chk => {
       const wantChecked = targetStatus === 'P';
       if (chk.checked !== wantChecked) { chk.click(); changed++; }
     });
 
-    // 2. Selects
     box.querySelectorAll('select').forEach(sel => {
       Array.from(sel.options).forEach(opt => {
         if (targetStatus === 'P' && /^p/i.test(opt.value || opt.text)) {
@@ -726,7 +678,6 @@ const CTO = {
       });
     });
 
-    // 3. Present buttons inside rows
     box.querySelectorAll('button').forEach(btn => {
       const txt = btn.innerText.trim().toUpperCase();
       if (targetStatus === 'P' && (txt === 'P' || txt === 'PRESENT') && !btn.classList.contains('on')) {
@@ -775,35 +726,13 @@ const CTO = {
     const month = $('repMonth').value;
     $('repMonthBox').style.display = scope === 'monthly' ? 'block' : 'none';
 
-    // Probe backend monthly/session summary endpoints if supported by Worker
-    const cls = ME.cls || '';
-    const probePaths = [
-      `/api/attendance/report?scope=${scope}&month=${month}&cls=${encodeURIComponent(cls)}`,
-      `/api/attendance/monthly?month=${month}&cls=${encodeURIComponent(cls)}`,
-      `/api/attendance?month=${month}&cls=${encodeURIComponent(cls)}`
-    ];
-    for (const p of probePaths) {
-      try { await api(p); break; } catch(e) {}
-    }
-
     const students = this.harvestStudents();
     const defaultWorking = scope === 'monthly' ? 24 : 192;
 
     this.records = students.map((s, idx) => {
       const total = Number(s.totalDays || defaultWorking);
-      let present;
-      if (s.presentDays != null) {
-        present = Number(s.presentDays);
-        if (scope === 'session' && total === 192 && present <= 31) {
-          // Scale monthly count proportionally if session endpoint isn't separate
-          present = Math.min(total, Math.round((present / 24) * total));
-        }
-      } else {
-        present = s.todayStatus === 'A' ? Math.max(0, total - 1) : total;
-      }
-      const absent = s.absentDays != null && scope === 'monthly'
-        ? Number(s.absentDays)
-        : Math.max(0, total - present);
+      let present = s.todayStatus === 'A' ? Math.max(0, total - 1) : total;
+      const absent = Math.max(0, total - present);
       const pct = total > 0 ? Math.round((present / total) * 100) : 100;
 
       return {
@@ -1016,7 +945,6 @@ const CTO = {
     const body = $('abBody').value.trim();
     if (!title || !body) { toast('Please enter both title and notice text'); return; }
 
-    // Try direct API broadcast across standard NoticeUI routes
     const routes = ['/api/notices', '/api/notice', '/api/teacher/notices', '/api/circulars'];
     let posted = false;
     for (const r of routes) {
@@ -1046,7 +974,6 @@ const CTO = {
       toast('Daily Absentee Notice published to Noticeboard!');
       try { NoticeUI.mount($('noticeBox'), 'teacher'); } catch(e) {}
     } else {
-      // Auto-populate NoticeUI's native inputs and trigger submit if available
       setTimeout(() => {
         const box = $('noticeBox');
         if (!box) return;
