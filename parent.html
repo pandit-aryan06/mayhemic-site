@@ -22,7 +22,7 @@ input:focus,select:focus{outline:none;border-color:#7c5cff;box-shadow:0 0 0 3px 
 .pw{position:relative}.pw span{position:absolute;right:13px;top:13px;font-size:12px;color:var(--mute);cursor:pointer}
 #lerr{color:var(--bad);font-size:13px;min-height:18px;margin:12px 0 4px}.back{display:block;margin-top:18px;color:var(--mute);font-size:13px;text-decoration:none}.back:hover{color:#fff}
 /* shell */
-#app{display:none}.side{position:fixed;left:0;top:0;bottom:0;width:230px;padding:24px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;background:rgba(5,5,7,.6);backdrop-filter:blur(14px);z-index:5}
+#app{display:none}.kd{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}.kd.good{background:rgba(74,222,128,.15);color:#4ade80}.kd.concern{background:rgba(251,113,133,.15);color:#fb7185}.kd.note{background:rgba(255,255,255,.1);color:#cfcfd8}.side{position:fixed;left:0;top:0;bottom:0;width:230px;padding:24px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;background:rgba(5,5,7,.6);backdrop-filter:blur(14px);z-index:5}
 .logo{letter-spacing:.3em;font-weight:300;font-size:15px;padding:0 10px}.sn{font-size:12px;color:var(--mute);padding:4px 10px 22px}
 .side nav button{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:none;border:0;color:var(--mute);margin-bottom:4px;padding:12px;font-weight:500}
 .side nav button.on{background:rgba(124,92,255,.16);color:#fff}.side nav button i{font-style:normal;width:18px;text-align:center}
@@ -64,10 +64,11 @@ main{margin:0;padding:20px 16px 100px}.stats{grid-template-columns:1fr 1fr}.row2
 
 #app{display:none}</style></head><body>
 <div id="app"><main style="margin:0 auto;max-width:880px;padding:26px 18px 60px">
-<div class="top" style="display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:26px"><div><div class="logo" style="padding:0">MAYHEMIC</div><div class="sn" id="sname" style="padding:4px 0 0"></div></div><div style="display:flex;gap:8px"><a href="/"><button class="sm">Website</button></a><button class="sm" onclick="logout()">Log out</button></div></div>
+<div class="top" style="display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:26px"><div><div class="logo" style="padding:0">MAYHEMIC</div><div class="sn" id="sname" style="padding:4px 0 0"></div></div><div style="display:flex;gap:8px"><a href="/"><button class="sm">Website</button></a><button class="sm" onclick="chpw()">Password</button><button class="sm" onclick="logout()">Log out</button></div></div>
 <div class="lb">Parent portal</div><h2 id="hello" style="margin:6px 0 22px;font-size:28px;font-weight:600;letter-spacing:-.02em"></h2>
 <div id="kids"></div>
-<div class="box glass" style="margin-top:6px"><h4>Notices from school</h4><div id="notes"></div></div></main></div>
+<div class="box glass" style="margin-top:6px"><h4>Homework</h4><div id="hwb"></div></div>
+<div class="box glass" style="margin-top:16px"><h4>Notices from school</h4><div id="notes"></div></div></main></div>
 <div id="toast"></div><script src="att.js"></script>
 <script>
 const API='https://mayhemic-api.aryanmishra8920.workers.dev',$=i=>document.getElementById(i);
@@ -78,7 +79,8 @@ const inr=n=>'Rs '+Number(n||0).toLocaleString('en-IN');
 function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3400)}
 async function api(p,o={}){o.headers={...(o.headers||{}),Authorization:'Bearer '+TOK};const r=await fetch(API+p,o);const d=await r.json().catch(()=>({}));if(r.status===401){logout(true);throw new Error('Please log in again')}if(!r.ok)throw new Error(d.error||'Something went wrong');return d}
 function logout(quiet){if(TOK&&!quiet)fetch(API+'/api/logout',{method:'POST',headers:{Authorization:'Bearer '+TOK}}).catch(()=>{});try{sessionStorage.clear()}catch(e){}location.replace('/fees.html')}
-const fd=t=>new Date(t.replace(' ','T')+'Z').toLocaleDateString('en-IN');
+const fd=t=>t?new Date(String(t).length>10?t.replace(' ','T')+'Z':t+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'';
+const J={'content-type':'application/json'};
 function kid(k){const tot=Math.max(k.total_fee,1),pc=Math.min(100,Math.round(k.paid/tot*100)),m=k.month,mt=m.p+m.a+m.l,ap=mt?Math.round((m.p+m.l)/mt*100):0;
 const col={P:'#4ade80',A:'#fb7185',L:'#fbbf24'};
 return `<div class="box glass" style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div><h3 style="margin:0;font-size:22px">${esc(k.name)}</h3><div class="lb">Class ${esc(k.class)}${k.roll_no?' / Roll '+esc(k.roll_no):''}</div></div><span class="bd ${k.pending<=0?'paid':k.paid>0?'part':'due'}">${k.pending<=0?'Fees cleared':k.pending>0&&k.paid>0?'Partly paid':'Fees due'}</span></div>
@@ -86,11 +88,14 @@ return `<div class="box glass" style="margin-bottom:16px"><div style="display:fl
 <div class="pbar" style="height:8px"><i style="width:${pc}%"></i></div>
 <h4 style="margin:26px 0 6px">Attendance this month</h4><div style="font-size:14px;color:var(--mute)">${mt?`<b style="color:#fff;font-size:22px">${ap}%</b> &nbsp;${m.p} present, ${m.a} absent, ${m.l} late`:'No attendance marked yet this month'}</div>
 <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:12px">${k.days.slice().reverse().map(d=>`<span title="${d.date}: ${d.status}" style="width:16px;height:16px;border-radius:4px;background:${col[d.status]};opacity:.85"></span>`).join('')}</div>
+${k.marks.length?`<h4 style="margin:26px 0 6px">Exam marks</h4>${k.marks.map(m=>{const pc=Math.round(m.marks/m.max_marks*100);return `<div class="li"><div>${esc(m.subject)}<div class="lb">${esc(m.name)}${m.exam_date?' / '+fd(m.exam_date):''}</div></div><div style="text-align:right"><b>${m.marks}</b> / ${m.max_marks}<div class="pbar" style="margin-top:5px"><i style="width:${pc}%;background:${pc<33?'#fb7185':pc<60?'#fbbf24':'#4ade80'}"></i></div></div></div>`}).join('')}`:''}
+${k.remarks.length?`<h4 style="margin:26px 0 6px">Teacher remarks</h4>${k.remarks.map(r=>`<div class="li" style="align-items:flex-start"><div><span class="kd ${r.kind}">${r.kind==='good'?'Good work':r.kind==='concern'?'Concern':'Note'}</span><div style="margin-top:6px;font-size:14px">${esc(r.text)}</div><div class="lb" style="margin-top:4px">${esc(r.author_name)} / ${fd(r.created_at)}</div></div></div>`).join('')}`:''}
 <h4 style="margin:26px 0 4px">Payments</h4>${k.payments.length?k.payments.map(p=>`<div class="li"><div>${inr(p.amount)}<div class="lb">${esc(p.mode)} / ${esc(p.receipt_no)}</div></div><span class="lb">${fd(p.paid_at)}</span></div>`).join(''):'<div class="lb" style="padding:10px 0">No payments yet</div>'}</div>`}
 api('/api/me').then(async d=>{if(d.role!=='parent'){location.replace('/fees.html');return}
 $('app').style.display='block';$('sname').textContent=d.name;$('hello').textContent='Welcome';
-const [o,n]=await Promise.all([api('/api/parent/overview'),api('/api/notices')]);
+const [o,n,h]=await Promise.all([api('/api/parent/overview'),api('/api/notices'),api('/api/homework')]);
 $('kids').innerHTML=o.kids.length?o.kids.map(kid).join(''):'<div class="box glass empty">No student is linked to this login yet.</div>';
 if(o.kids.length)$('hello').textContent='Hello, parent of '+o.kids.map(k=>k.name.split(' ')[0]).join(' and ');
-NoticeUI.render($('notes'),n.notices)}).catch(e=>toast(e.message));
+NoticeUI.render($('notes'),n.notices);const td=new Date().toISOString().slice(0,10);$('hwb').innerHTML=h.homework.length?h.homework.map(x=>`<div class="nf"><h5>${esc(x.title)}</h5><div class="lb">${esc(x.subject)}${x.subject?' / ':''}Class ${esc(x.class)} / posted ${fd(x.created_at)}${x.due?' / <span style="color:'+(x.due<td?'#fb7185':'#fbbf24')+'">due '+fd(x.due)+'</span>':''}</div>${x.body?'<p>'+esc(x.body)+'</p>':''}</div>`).join(''):'<div class="empty" style="padding:24px">No homework right now.</div>'}).catch(e=>toast(e.message));
+async function chpw(){const o=prompt('Your current password');if(o===null)return;const n=prompt('New password (at least 6 characters)');if(n===null)return;try{await api('/api/change-password',{method:'POST',headers:J,body:JSON.stringify({old_password:o,new_password:n})});toast('Password updated')}catch(e){toast(e.message)}}
 </script></body></html>
