@@ -473,6 +473,7 @@ tr:hover td{background:rgba(255,255,255,.03)}
 <div id="toast"></div>
 
 <script src="att.js"></script>
+<script src="notice.js"></script>
 <script>
 /* =======================================================================
    COREGLOBALS (Preserved 1:1 with original teacher.html for att.js safety)
@@ -549,7 +550,7 @@ const CTO = {
   },
 
   /* -------------------------------------------------------------------
-     LIVE DOM HARVESTER WITH ADVANCED REGEX SANITIZATION
+     LIVE DOM HARVESTER (Precise Node Isolation, No Avatar Initials Prefix)
      ------------------------------------------------------------------- */
   harvestStudents() {
     const studentsMap = new Map();
@@ -575,6 +576,12 @@ const CTO = {
 
         if (!rawName || /^(roll|name|student|total|present|absent)$/i.test(rawName)) return;
 
+        // PRECISE ISOLATION: Specifically extract text from name container, excluding avatar (.av)
+        const nameNode = tr.querySelector('.who div:not(.av), .who span:not(.av), td:nth-child(2) b, td:nth-child(2) div');
+        if (nameNode) {
+          rawName = nameNode.innerText.trim();
+        }
+
         // SANITIZATION: Strip out trailing artifacts like "Roll XX", "PAL", status tokens
         let name = rawName
           .replace(/roll\s*\d+/gi, '')
@@ -583,7 +590,14 @@ const CTO = {
           .replace(/[\r\n]+/g, ' ')
           .trim();
 
-        name = name.replace(/^([A-Z]{1,2})\s*/, '');
+        // Fallback cleanup if initials still attached
+        const words = name.split(' ');
+        if (words.length > 1 && words[0].length <= 2 && /^[A-Z]{1,2}$/.test(words[0])) {
+          if (words[1].toUpperCase().startsWith(words[0])) {
+            words.shift();
+            name = words.join(' ');
+          }
+        }
 
         const isAbsent = this.detectRowAbsent(tr);
         let pDays = null, tDays = null;
