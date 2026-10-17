@@ -248,7 +248,7 @@ tr:hover td{background:rgba(255,255,255,.03)}
         </div>
       </div>
 
-      <!-- Native att.js Mount Container (Untouched so att.js works 100% natively) -->
+      <!-- Native att.js Mount Container -->
       <div id="attBox"></div>
     </section>
 
@@ -524,7 +524,6 @@ const CTO = {
     $('repMonth').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
     this.renderDiary();
 
-    // Real-time MutationObserver: Instantly adapts to any roster changes or attendance toggles
     const box = $('attBox');
     if (box) {
       const obs = new MutationObserver(() => {
@@ -536,7 +535,6 @@ const CTO = {
       obs.observe(box, { childList: true, subtree: true, characterData: true });
     }
 
-    // Keyboard shortcuts
     window.addEventListener('keydown', e => {
       if (e.altKey && e.key.toLowerCase() === 'a') { e.preventDefault(); this.go('att'); }
       if (e.altKey && e.key.toLowerCase() === 'r') { e.preventDefault(); this.go('reports'); }
@@ -551,30 +549,41 @@ const CTO = {
   },
 
   /* -------------------------------------------------------------------
-     LIVE DOM HARVESTER (Direct DOM-driven, adaptive to roster changes)
+     LIVE DOM HARVESTER WITH ADVANCED REGEX SANITIZATION
      ------------------------------------------------------------------- */
   harvestStudents() {
     const studentsMap = new Map();
     const box = $('attBox');
     if (!box) return [];
 
-    // 1. Scan Table rows rendered by att.js
     const trs = box.querySelectorAll('tbody tr, table tr');
     trs.forEach((tr, idx) => {
       if (tr.querySelector('th')) return;
       const tds = tr.querySelectorAll('td');
       if (tds.length >= 2) {
-        let roll = '', name = '';
+        let roll = '', rawName = '';
         const c0 = tds[0].innerText.trim();
         const c1 = tds[1].innerText.trim();
+
         if (/^[0-9A-Za-z-]+$/.test(c0) && c0.length <= 6 && c1.length > 1) {
           roll = c0;
-          name = c1.split('\n')[0].trim();
+          rawName = c1;
         } else {
           roll = idx + 1;
-          name = c0.split('\n')[0].trim();
+          rawName = c0;
         }
-        if (!name || /^(roll|name|student|total|present|absent)$/i.test(name)) return;
+
+        if (!rawName || /^(roll|name|student|total|present|absent)$/i.test(rawName)) return;
+
+        // SANITIZATION: Strip out trailing artifacts like "Roll XX", "PAL", status tokens
+        let name = rawName
+          .replace(/roll\s*\d+/gi, '')
+          .replace(/pal/gi, '')
+          .replace(/(present|absent)/gi, '')
+          .replace(/[\r\n]+/g, ' ')
+          .trim();
+
+        name = name.replace(/^([A-Z]{1,2})\s*/, '');
 
         const isAbsent = this.detectRowAbsent(tr);
         let pDays = null, tDays = null;
@@ -584,27 +593,35 @@ const CTO = {
         });
 
         const key = name.toLowerCase();
-        studentsMap.set(key, {
-          roll,
-          name,
-          presentDays: pDays ?? 24,
-          totalDays: tDays ?? 24,
-          todayStatus: isAbsent ? 'A' : 'P'
-        });
+        if (name.length > 1) {
+          studentsMap.set(key, {
+            roll,
+            name,
+            presentDays: pDays ?? 24,
+            totalDays: tDays ?? 24,
+            todayStatus: isAbsent ? 'A' : 'P'
+          });
+        }
       }
     });
 
-    // 2. Scan Flex/Card items if table format is not used
     if (studentsMap.size === 0) {
       const items = box.querySelectorAll('.li, [data-student-id], [data-id], .stu-row');
       items.forEach((el, idx) => {
         if (el.tagName === 'TR') return;
         const rawLines = el.innerText.split('\n').map(x => x.trim()).filter(Boolean);
         if (rawLines.length === 0) return;
-        let name = rawLines[0];
+        let rawName = rawLines[0];
         let roll = idx + 1;
-        const mRoll = name.match(/^#?(\d+)[\s.\-:]+(.+)$/);
-        if (mRoll) { roll = mRoll[1]; name = mRoll[2].trim(); }
+        const mRoll = rawName.match(/^#?(\d+)[\s.\-:]+(.+)$/);
+        if (mRoll) { roll = mRoll[1]; rawName = mRoll[2].trim(); }
+
+        let name = rawName
+          .replace(/roll\s*\d+/gi, '')
+          .replace(/pal/gi, '')
+          .replace(/(present|absent)/gi, '')
+          .trim();
+
         if (!name || name.length < 2 || /^(present|absent|save|submit|mark|total|date|month)/i.test(name)) return;
 
         const isAbsent = this.detectRowAbsent(el);
@@ -655,9 +672,6 @@ const CTO = {
     }
   },
 
-  /* -------------------------------------------------------------------
-     QUICK CLASSROOM TOOLS (Bulk Present, Invert, Live DOM Filter)
-     ------------------------------------------------------------------- */
   bulkMark(targetStatus) {
     const box = $('attBox');
     if (!box) return;
@@ -718,9 +732,6 @@ const CTO = {
     });
   },
 
-  /* -------------------------------------------------------------------
-     MONTHLY & OVERALL SESSION REPORT ENGINE + OFFICIAL PDF GENERATOR
-     ------------------------------------------------------------------- */
   async syncReport(manualToast) {
     const scope = $('repScope').value;
     const month = $('repMonth').value;
@@ -769,7 +780,6 @@ const CTO = {
     const absTodayList = this.records.filter(r => r.todayStatus === 'A');
     const defList = this.records.filter(r => r.pct < 75);
 
-    // Update Screen KPIs
     $('k-tot').textContent = total;
     $('k-cls-sub').textContent = ME.cls ? `Class ${ME.cls} Register` : 'Assigned Roster';
     $('k-avg').textContent = avg + '\%';$('k-scope-sub').textContent = scope === 'monthly' ? `Month: ${month}` : 'Full Session 2026–27';
@@ -785,7 +795,6 @@ const CTO = {
     $('repTitle').textContent = titleText;
     $('repSub').textContent = `Class ${ME.cls || 'N/A'} • Teacher: ${ME.user_name || ME.name || 'Educator'} • Showing ${filtered.length} of ${total} students`;
 
-    // Update Official Print / PDF Sheet
     $('pdfTitle').textContent = titleText.toUpperCase();$('pdfMeta').innerHTML = `
       <b>Class:</b> ${esc(ME.cls || 'N/A')}<br>
       <b>Class Educator:</b> ${esc(ME.user_name || ME.name || '-')}<br>
@@ -893,9 +902,6 @@ const CTO = {
     toast('Excel / CSV Report downloaded!');
   },
 
-  /* -------------------------------------------------------------------
-     DAILY ABSENTEE NOTICE GENERATOR (Total Absent + Names + WhatsApp)
-     ------------------------------------------------------------------- */
   openAbsentModal() {
     const list = this.harvestStudents();
     const absentees = list.filter(s => s.todayStatus === 'A');
@@ -995,9 +1001,6 @@ const CTO = {
     }
   },
 
-  /* -------------------------------------------------------------------
-     CLASS DIARY & HOMEWORK MODULE
-     ------------------------------------------------------------------- */
   getDiaryKey() { return `mayhemic_diary_${ME.cls || 'default'}`; },
 
   saveDiaryEntry() {
