@@ -3,69 +3,89 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><title>Mayhemic Admin</title>
 <style>
-:root{--bg:#000;--card:#0d0d0f;--line:#232326;--mute:#8b8b93;--ok:#4ade80;--bad:#f87171;--ac:linear-gradient(135deg,#7c5cff,#00d4ff)}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 10% -10%,#1a1440 0,transparent 60%),#000;color:#f2f2f2;font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh}
-.wrap{max-width:980px;margin:auto;padding:26px 18px 80px}.lb{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
-button{font:inherit;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:6px;padding:10px 16px;border:1px solid #444;background:transparent;color:#fff;transition:.15s}
-button:hover{border-color:#fff}button.s{background:#fff;color:#000;border-color:#fff}button.s:hover{background:#ddd}button.sm{padding:6px 10px;font-size:10px}button.d{color:var(--bad);border-color:#4a2222}
-input{width:100%;background:#000;border:1px solid #2c2c30;color:#fff;padding:12px;border-radius:6px;font:inherit;font-size:14px}input:focus{outline:none;border-color:#7c5cff}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.logo{letter-spacing:.3em;font-weight:300}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px;animation:up .4s both}
-@keyframes up{from{opacity:0;transform:translateY(10px)}}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-top:14px}
-.sc{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.sc h3{margin:0;font-weight:500}
-.tag{font-size:10px;letter-spacing:.12em;padding:3px 8px;border-radius:20px;border:1px solid var(--line);color:var(--mute);margin-left:8px;text-transform:uppercase}.tag.on{color:var(--ok);border-color:#1d4a2e}
-.u{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line);margin-top:10px}
-.u code{background:#16161a;padding:4px 8px;border-radius:5px;font-size:13px}.acts{display:flex;gap:6px;flex-wrap:wrap}
-#login{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-#login h1{font-weight:300;letter-spacing:.3em;margin:6px 0 30px;font-size:30px}#login .bx{width:100%;max-width:340px}#login button{width:100%;margin-top:12px}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:18px;z-index:9}.ov.show{display:flex}
-.mod{background:#111114;border:1px solid #2c2c30;border-radius:14px;padding:26px;width:100%;max-width:400px}
-.cred{background:#000;border:1px dashed #444;border-radius:8px;padding:14px;margin:14px 0;font-size:15px;line-height:1.9}.cred b{color:#7ee0ff}
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:11px 18px;border-radius:6px;font-size:13px;display:none;z-index:20}
-@media(max-width:700px){.grid{grid-template-columns:1fr}}
+:root{--line:rgba(255,255,255,.1);--mute:#8b8b98;--ok:#4ade80;--bad:#fb7185}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 10% -10%,rgba(124,92,255,.22),transparent 60%),#050507;color:#f2f2f2;font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:1040px;margin:auto;padding:26px 18px 90px}.lb{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+button{font:inherit;font-size:12px;font-weight:600;cursor:pointer;border-radius:9px;padding:9px 15px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;transition:.15s}
+button:hover{background:rgba(255,255,255,.13)}button.p{background:#fff;color:#000;border-color:#fff}button.p:hover{background:#ddd}button.sm{padding:6px 11px;font-size:11px}button.d{color:var(--bad);border-color:rgba(251,113,133,.3)}
+input{width:100%;background:rgba(0,0,0,.5);border:1px solid var(--line);color:#fff;padding:12px;border-radius:9px;font:inherit;font-size:14px}input:focus{outline:none;border-color:#7c5cff}
+.glass{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.logo{letter-spacing:.3em;font-weight:300}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}.st{padding:16px}.st .v{font-size:26px;font-weight:600;margin-top:8px}
+.bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}.bar input{flex:1;min-width:200px}
+.card{padding:20px;margin-bottom:12px;animation:up .35s both}@keyframes up{from{opacity:0;transform:translateY(8px)}}
+.sh{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}.sh h3{margin:0 0 8px;font-weight:600;font-size:18px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.ch{font-size:12px;padding:4px 11px;border-radius:20px;background:rgba(255,255,255,.07);color:#cfcfd8}
+.tag{font-size:10px;letter-spacing:.12em;padding:3px 9px;border-radius:20px;margin-left:10px;text-transform:uppercase;vertical-align:middle}.tag.on{background:rgba(74,222,128,.14);color:var(--ok)}.tag.off{background:rgba(251,113,133,.14);color:var(--bad)}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+details{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}summary{cursor:pointer;color:var(--mute);font-size:13px;padding:4px 0}
+.u{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line);margin-top:8px}.u code{background:rgba(255,255,255,.08);padding:4px 9px;border-radius:6px;font-size:13px}
+#login{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}#login h1{font-weight:300;letter-spacing:.3em;margin:6px 0 30px;font-size:30px}#login .bx{width:100%;max-width:340px}#login button{width:100%;margin-top:12px;padding:13px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px;z-index:9}.ov.show{display:flex}
+.mod{background:#0e0e12;border:1px solid var(--line);border-radius:18px;padding:26px;width:100%;max-width:420px;max-height:92vh;overflow:auto}.mod h3{margin:0 0 4px}.rw{margin-top:14px}.rw .lb{display:block;margin-bottom:6px}.ma{display:flex;gap:8px;margin-top:20px}.ma button{flex:1;padding:11px}
+.cred{background:#000;border:1px dashed #444;border-radius:10px;padding:14px;margin:14px 0;font-size:15px;line-height:1.9}.cred b{color:#7ee0ff}
+.hint{font-size:12px;margin-top:6px;min-height:15px}#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;display:none;z-index:20}
+.empty{padding:40px;text-align:center;color:var(--mute)}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}}
 </style></head><body>
 <div id="login"><div class="lb">Admin portal</div><h1>MAYHEMIC</h1>
-<div class="bx"><input id="pw" type="password" placeholder="Admin password"><button class="s" onclick="enter()">Enter</button><div id="err" style="color:var(--bad);font-size:13px;margin-top:10px;min-height:18px"></div></div></div>
+<div class="bx"><input id="pw" type="password" placeholder="Admin password"><button class="p" onclick="enter()">Enter</button><div id="err" style="color:var(--bad);font-size:13px;margin-top:10px;min-height:18px"></div></div></div>
 
 <div id="app" class="wrap" style="display:none">
-<div class="top"><div><div class="logo">MAYHEMIC</div><div class="lb" style="margin-top:4px">Admin portal</div></div><button class="sm" onclick="out()">Log out</button></div>
-<div class="card"><div class="lb">New school</div>
-<div class="grid"><input id="n" placeholder="School name"><input id="o" placeholder="Owner / director name"><input id="p" placeholder="Owner WhatsApp (optional)"><button class="s" onclick="create()">Create + generate login</button></div></div>
+<div class="top"><div><div class="logo">MAYHEMIC</div><div class="lb" style="margin-top:4px">Admin portal</div></div><div class="acts"><button class="p sm" onclick="openNew()">+ New school</button><button class="sm" onclick="out()">Log out</button></div></div>
+<div class="stats"><div class="st glass"><div class="lb">Schools</div><div class="v" id="k1">0</div></div><div class="st glass"><div class="lb">Active</div><div class="v" id="k2" style="color:var(--ok)">0</div></div><div class="st glass"><div class="lb">Students</div><div class="v" id="k3">0</div></div><div class="st glass"><div class="lb">Teachers</div><div class="v" id="k4">0</div></div><div class="st glass"><div class="lb">Parents</div><div class="v" id="k5">0</div></div></div>
+<div class="bar"><input id="sq" placeholder="Search schools" oninput="draw()"></div>
 <div id="list"></div></div>
 
-<div class="ov" id="ov"><div class="mod"><h3 style="margin:0;font-weight:500" id="mt">Login created</h3>
-<div class="lb" style="margin-top:6px">Save this now. The password is shown only once.</div>
-<div class="cred" id="cr"></div>
-<div style="display:flex;gap:8px"><button class="s" style="flex:1" onclick="copyCred()">Copy</button><button style="flex:1" onclick="wa()">WhatsApp</button><button style="flex:1" onclick="document.getElementById('ov').classList.remove('show')">Close</button></div></div></div>
+<div class="ov" id="newOv"><div class="mod"><h3>New school</h3><div class="lb">You decide the first login</div>
+<div class="rw"><span class="lb">School name</span><input id="n" autocomplete="off"><div class="hint" id="nS"></div></div>
+<div class="rw"><span class="lb">Owner or director name</span><input id="o"></div>
+<div class="rw"><span class="lb">Owner WhatsApp (optional)</span><input id="p" placeholder="10 digit number"></div>
+<div class="rw"><span class="lb">Login ID (optional)</span><input id="li" autocapitalize="off" autocomplete="off"><div class="hint" id="liS"></div></div>
+<div class="rw"><span class="lb">Password (optional, min 6)</span><input id="pw2" autocomplete="off"></div>
+<div class="lb" style="margin-top:14px;text-transform:none;letter-spacing:.02em">Leave Login ID and Password empty to auto-generate. They are saved once and never change unless you reset them.</div>
+<div class="ma"><button onclick="closeAll()">Cancel</button><button class="p" onclick="create()">Create school</button></div></div></div>
+
+<div class="ov" id="edOv"><div class="mod"><h3>Edit school</h3>
+<div class="rw"><span class="lb">School name</span><input id="e1"></div><div class="rw"><span class="lb">Owner or director name</span><input id="e2"></div><div class="rw"><span class="lb">Owner WhatsApp</span><input id="e3"></div>
+<div class="ma"><button onclick="closeAll()">Cancel</button><button class="p" onclick="saveEdit()">Save</button></div></div></div>
+
+<div class="ov" id="ov"><div class="mod"><h3 id="mt">Login created</h3><div class="lb" style="margin-top:6px">Save this now. The password is shown only once.</div><div class="cred" id="cr"></div>
+<div class="ma"><button class="p" onclick="copyCred()">Copy</button><button onclick="wa()">WhatsApp</button><button onclick="closeAll()">Close</button></div></div></div>
 <div id="toast"></div>
 
 <script>
 const API='https://mayhemic-api.aryanmishra8920.workers.dev',$=i=>document.getElementById(i);
-let SEC='';try{SEC=sessionStorage.getItem('as')||''}catch(e){}
+let SEC='',D={schools:[],users:[]},EID=null,last='';try{SEC=sessionStorage.getItem('as')||''}catch(e){}
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3000)}
-async function api(p,o={}){o.headers={...(o.headers||{}),'x-admin-secret':SEC,'content-type':'application/json'};const r=await fetch(API+p,o);const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'Error');return d}
-async function enter(){SEC=$('pw').value;$('err').textContent='';try{await api('/api/admin/schools');try{sessionStorage.setItem('as',SEC)}catch(e){}show()}catch(e){$('err').textContent=e.message;SEC=''}}
+function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3200)}
+async function api(p,o={}){o.headers={...(o.headers||{}),'x-admin-secret':SEC,'content-type':'application/json'};const r=await fetch(API+p,o);const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error((d.error||'Error')+(d.detail?' ('+d.detail+')':''));return d}
+function closeAll(){document.querySelectorAll('.ov').forEach(o=>o.classList.remove('show'))}
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeAll()}));
+async function enter(){SEC=$('pw').value;$('err').textContent='';try{D=await api('/api/admin/schools');try{sessionStorage.setItem('as',SEC)}catch(e){}show()}catch(e){$('err').textContent=e.message;SEC=''}}
 $('pw').addEventListener('keydown',e=>{if(e.key==='Enter')enter()});
 function out(){try{sessionStorage.removeItem('as')}catch(e){}SEC='';$('app').style.display='none';$('login').style.display='flex';$('pw').value=''}
-function show(){$('login').style.display='none';$('app').style.display='block';load()}
-async function load(){try{const d=await api('/api/admin/schools');
-$('list').innerHTML=d.schools.length?d.schools.map(s=>`<div class="card"><div class="sc"><div><h3>${esc(s.name)}<span class="tag ${s.active?'on':''}">${s.active?'active':'paused'}</span></h3>
-<div class="lb" style="margin-top:6px">${s.students} students${s.owner_name?' / '+esc(s.owner_name):''}</div></div>
-<div class="acts"><button class="sm" onclick="addUser(${s.id})">+ Login</button><button class="sm" onclick="tg('schools',${s.id})">${s.active?'Pause':'Resume'}</button><button class="sm d" onclick="del(${s.id},'${esc(s.name).replace(/'/g,'')}')">Delete</button></div></div>
-${d.users.filter(u=>u.school_id===s.id).map(u=>`<div class="u"><div><code>${esc(u.login_id)}</code><span class="tag ${u.active?'on':''}">${u.active?'active':'off'}</span></div>
-<div class="acts"><button class="sm" onclick="reset(${u.id})">Reset password</button><button class="sm" onclick="tg('users',${u.id})">${u.active?'Disable':'Enable'}</button></div></div>`).join('')}</div>`).join(''):'<div class="card lb">No schools yet. Create your first one above.</div>'}catch(e){toast(e.message)}}
-let last='';
-function cred(t,r){const url=location.origin+'/fees.html';last=`Mayhemic School Fees\nWebsite: ${url}\nLogin ID: ${r.login_id}\nPassword: ${r.password}`;
-$('mt').textContent=t;$('cr').innerHTML=`Website: <b>${esc(url)}</b><br>Login ID: <b>${esc(r.login_id)}</b><br>Password: <b>${esc(r.password)}</b>`;$('ov').classList.add('show')}
-function copyCred(){navigator.clipboard.writeText(last).then(()=>toast('Copied'),()=>toast('Copy failed, select and copy manually'))}
+function show(){$('login').style.display='none';$('app').style.display='block';draw()}
+async function load(){try{D=await api('/api/admin/schools');draw()}catch(e){toast(e.message)}}
+function draw(){const S=D.schools;$('k1').textContent=S.length;$('k2').textContent=S.filter(s=>s.active).length;$('k3').textContent=S.reduce((a,s)=>a+s.students,0);$('k4').textContent=S.reduce((a,s)=>a+s.teachers,0);$('k5').textContent=S.reduce((a,s)=>a+s.parents,0);
+const q=$('sq').value.trim().toLowerCase(),L=S.filter(s=>!q||(s.name+' '+(s.owner_name||'')).toLowerCase().includes(q));
+$('list').innerHTML=L.length?L.map(s=>{const us=D.users.filter(u=>u.school_id===s.id);return `<div class="card glass"><div class="sh"><div><h3>${esc(s.name)}<span class="tag ${s.active?'on':'off'}">${s.active?'Active':'Paused'}</span></h3>
+<div class="chips"><span class="ch">${s.students} students</span><span class="ch">${s.teachers} teachers</span><span class="ch">${s.parents} parents</span>${s.owner_name?`<span class="ch">Owner: ${esc(s.owner_name)}</span>`:''}<span class="ch">Since ${new Date(s.created_at.replace(' ','T')+'Z').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span></div></div>
+<div class="acts"><button class="sm" onclick="addUser(${s.id})">+ Login</button><button class="sm" onclick="openEdit(${s.id})">Edit</button><button class="sm" onclick="tg('schools',${s.id})">${s.active?'Pause':'Resume'}</button><button class="sm d" onclick="del(${s.id})">Delete</button></div></div>
+<details><summary>Office logins (${us.length})</summary>${us.map(u=>`<div class="u"><div><code>${esc(u.login_id)}</code> <span class="tag ${u.active?'on':'off'}">${u.active?'Active':'Off'}</span></div><div class="acts"><button class="sm" onclick="reset(${u.id})">Reset password</button><button class="sm" onclick="tg('users',${u.id})">${u.active?'Disable':'Enable'}</button></div></div>`).join('')||'<div class="lb" style="padding:8px 0">No office login</div>'}</details></div>`}).join(''):`<div class="empty">${S.length?'No school matches your search.':'No schools yet. Click + New school to create the first one.'}</div>`}
+function cred(t,r){const u=location.origin+'/fees.html';last='Mayhemic School Portal\nWebsite: '+u+'\nLogin ID: '+r.login_id+'\nPassword: '+r.password;$('mt').textContent=t;$('cr').innerHTML='Website: <b>'+esc(u)+'</b><br>Login ID: <b>'+esc(r.login_id)+'</b><br>Password: <b>'+esc(r.password)+'</b>';closeAll();$('ov').classList.add('show')}
+function copyCred(){navigator.clipboard.writeText(last).then(()=>toast('Copied'),()=>toast('Copy failed, select and copy by hand'))}
 function wa(){window.open('https://wa.me/?text='+encodeURIComponent(last),'_blank')}
-async function create(){if(!$('n').value.trim())return toast('Enter school name');try{const r=await api('/api/admin/schools',{method:'POST',body:JSON.stringify({name:$('n').value,owner_name:$('o').value,owner_phone:$('p').value})});
-$('n').value=$('o').value=$('p').value='';cred('School created',r);load()}catch(e){toast(e.message)}}
-async function addUser(id){try{cred('New login created',await api('/api/admin/users',{method:'POST',body:JSON.stringify({school_id:id})}));load()}catch(e){toast(e.message)}}
-async function reset(id){if(!confirm('Reset this password? The old one stops working.'))return;try{cred('Password reset',await api('/api/admin/users/'+id+'/reset',{method:'POST'}))}catch(e){toast(e.message)}}
+function openNew(){['n','o','p','li','pw2'].forEach(i=>$(i).value='');$('nS').textContent=$('liS').textContent='';$('newOv').classList.add('show');setTimeout(()=>$('n').focus(),50)}
+async function create(){if(!$('n').value.trim())return toast('Enter the school name');try{const r=await api('/api/admin/schools',{method:'POST',body:JSON.stringify({name:$('n').value,owner_name:$('o').value,owner_phone:$('p').value,login_id:$('li').value,password:$('pw2').value})});cred('School created',r);load()}catch(e){toast(e.message)}}
+let tm;function chk(inp,out,q,okT,badT){clearTimeout(tm);const v=inp.value.trim();if(!v){out.textContent='';return}tm=setTimeout(async()=>{try{const d=await api('/api/admin/check?'+q+'='+encodeURIComponent(v));out.textContent=d.available?okT:(d.reason==='format'?'Use 4 to 30 letters, numbers, . - _':badT);out.style.color=d.available?'#4ade80':'#fb7185'}catch(e){}},400)}
+$('li').addEventListener('input',()=>chk($('li'),$('liS'),'login_id','Available','Already taken'));
+$('n').addEventListener('input',()=>chk($('n'),$('nS'),'name','Name is free','A school with this name already exists'));
+async function addUser(id){const li=prompt('Login ID for the new office login (leave empty to auto-generate)');if(li===null)return;const pw=prompt('Password (leave empty to auto-generate, min 6 characters)');if(pw===null)return;try{cred('New login created',await api('/api/admin/users',{method:'POST',body:JSON.stringify({school_id:id,login_id:li,password:pw})}));load()}catch(e){toast(e.message)}}
+async function reset(id){const pw=prompt('New password (leave empty to auto-generate, min 6 characters). The old password stops working.');if(pw===null)return;try{cred('Password reset',await api('/api/admin/users/'+id+'/reset',{method:'POST',body:JSON.stringify({password:pw})}))}catch(e){toast(e.message)}}
 async function tg(k,id){try{await api('/api/admin/'+k+'/'+id+'/toggle',{method:'POST'});load()}catch(e){toast(e.message)}}
-async function del(id,n){if(!confirm('Delete "'+n+'" with ALL its students, payments and logins? This cannot be undone.'))return;try{await api('/api/admin/schools/'+id,{method:'DELETE'});toast('Deleted');load()}catch(e){toast(e.message)}}
-if(SEC)api('/api/admin/schools').then(show).catch(()=>{SEC=''});
+function openEdit(id){const s=D.schools.find(x=>x.id===id);EID=id;$('e1').value=s.name;$('e2').value=s.owner_name||'';$('e3').value=(s.owner_phone||'').slice(-10);$('edOv').classList.add('show')}
+async function saveEdit(){try{await api('/api/admin/schools/'+EID,{method:'PUT',body:JSON.stringify({name:$('e1').value,owner_name:$('e2').value,owner_phone:$('e3').value})});closeAll();toast('Saved');load()}catch(e){toast(e.message)}}
+async function del(id){const s=D.schools.find(x=>x.id===id);const t=prompt('This deletes "'+s.name+'" with ALL its students, payments, attendance, marks and logins for ever.\n\nType the school name to confirm:');if(t===null)return;if(t.trim().toLowerCase()!==s.name.trim().toLowerCase())return toast('Name did not match. Nothing was deleted.');try{await api('/api/admin/schools/'+id,{method:'DELETE'});toast('School deleted');load()}catch(e){toast(e.message)}}
+if(SEC)api('/api/admin/schools').then(d=>{D=d;show()}).catch(()=>{SEC=''});
 </script></body></html>
