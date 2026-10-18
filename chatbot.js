@@ -137,7 +137,7 @@
 
   var panel = document.createElement('div');
   panel.id = 'mxp'; panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-label', 'Mayhemic assistant');
-  panel.innerHTML = '<header><span class="dot"></span><div><b>MAYHEMIC</b><small>Ask about our school platform</small></div><button aria-label="Close">&times;</button></header>' +
+  panel.innerHTML = '<header><img src="/assets/logo-mark.webp" width="30" height="24" alt=""><div><b>MAYHEMIC</b><small>Ask about our school platform</small></div><button aria-label="Close">&times;</button></header>' +
     '<div id="mxm"></div><div id="mxc"></div><form id="mxf"><input id="mxi" placeholder="Type your question" autocomplete="off" maxlength="200"><button type="submit">Send</button></form>';
   document.body.appendChild(panel);
   document.body.appendChild(btn);
