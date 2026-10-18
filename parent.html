@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex"><title>Mayhemic Parent</title>
+<meta name="robots" content="noindex"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><title>Mayhemic Parent</title>
 <style>
 :root{--bg:#050507;--card:rgba(255,255,255,.04);--line:rgba(255,255,255,.09);--mute:#8b8b98;--ok:#4ade80;--bad:#fb7185;--warn:#fbbf24;--ac:linear-gradient(135deg,#7c5cff,#00d4ff)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -62,9 +62,10 @@ th{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute
 main{margin:0;padding:20px 16px 100px}.stats{grid-template-columns:1fr 1fr}.row2,.row3{grid-template-columns:1fr}.hd h2{font-size:22px}}
 @media(max-width:900px){.side nav button{font-size:9px}.side nav{overflow-x:auto}}
 
-#app{display:none}</style></head><body>
+#app{display:none}.logo{display:flex;align-items:center;gap:10px}.logo-img{width:28px;height:auto}
+</style></head><body>
 <div id="app"><main style="margin:0 auto;max-width:880px;padding:26px 18px 60px">
-<div class="top" style="display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:26px"><div><div class="logo" style="padding:0">MAYHEMIC</div><div class="sn" id="sname" style="padding:4px 0 0"></div></div><div style="display:flex;gap:8px"><a href="/"><button class="sm">Website</button></a><button class="sm" onclick="chpw()">Password</button><button class="sm" onclick="logout()">Log out</button></div></div>
+<div class="top" style="display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:26px"><div><div class="logo" style="padding:0"><img class="logo-img" src="/assets/logo-mark.webp" width="28" height="23" alt="">MAYHEMIC</div><div class="sn" id="sname" style="padding:4px 0 0"></div></div><div style="display:flex;gap:8px"><a href="/"><button class="sm">Website</button></a><button class="sm" onclick="chpw()">Password</button><button class="sm" onclick="logout()">Log out</button></div></div>
 <div class="lb">Parent portal</div><h2 id="hello" style="margin:6px 0 22px;font-size:28px;font-weight:600;letter-spacing:-.02em"></h2>
 <div id="kids"></div>
 <div class="box glass" style="margin-top:6px"><h4>Homework</h4><div id="hwb"></div></div>
