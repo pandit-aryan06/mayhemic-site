@@ -1,0 +1,24 @@
+# Mayhemic
+
+> Mayhemic is a software company from Lucknow, India, building SaaS and automation tools. Its first product, the Mayhemic School Platform, is a paperless school management system for the school office, teachers and parents. It is in early access.
+
+## Main page
+- [Mayhemic home](https://mayhemic.in/): what the platform does, how it works, FAQ and contact form
+
+## What the school platform does
+- School office: student records, fee collection and receipts, pending fee dashboard, fee adjustments and discounts, CSV import of students, teacher and parent login management, notices.
+- Teachers: daily attendance (present, absent, late) with monthly reports, class list with parent contact, homework with due dates, exam marks entry with class statistics, remarks on students, notices to parents of their class.
+- Parents: fees paid and pending with payment history, attendance, homework, exam marks, teacher remarks and school notices for each child.
+
+## Key facts
+- Status: early access. Pricing has not been announced.
+- No app to install: works in any web browser on phone, tablet or computer.
+- Logins: created for each school by Mayhemic; the school office creates teacher logins and generates parent logins (the parent's login ID is their phone number).
+- Security: passwords are stored hashed, logins lock for 15 minutes after 5 wrong attempts, each school's data is separate, teachers see only their class and parents only their own children.
+- WhatsApp fee reminders, receipts and absent alerts: built in, coming soon after WhatsApp Business approval.
+- Planned next: printable report cards, online fee payment by UPI, timetable, staff leave and salary.
+- Founder: Aryan Mishra, Founder and CEO, Lucknow, India.
+
+## Contact
+- Email: mayhemic.9@gmail.com
+- Website: https://mayhemic.in/
