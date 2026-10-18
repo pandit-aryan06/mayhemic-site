@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex"><title>Mayhemic Teacher</title>
+<meta name="robots" content="noindex"><link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><title>Mayhemic Teacher</title>
 <style>
 :root{--bg:#050507;--card:rgba(255,255,255,.04);--line:rgba(255,255,255,.09);--mute:#8b8b98;--ok:#4ade80;--bad:#fb7185;--warn:#fbbf24;--ac:linear-gradient(135deg,#7c5cff,#00d4ff)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
@@ -69,8 +69,9 @@ main{margin:0;padding:20px 16px 100px}.stats{grid-template-columns:1fr 1fr}.row2
 .ex{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 0;border-bottom:1px solid var(--line)}.ex:last-child{border:0}
 .kd{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}.kd.good{background:rgba(74,222,128,.15);color:#4ade80}.kd.concern{background:rgba(251,113,133,.15);color:#fb7185}.kd.note{background:rgba(255,255,255,.1);color:#cfcfd8}
 textarea.t{width:100%;background:rgba(0,0,0,.45);border:1px solid var(--line);color:#fff;padding:13px;border-radius:10px;font:inherit;font-size:14px}
-@media(max-width:900px){.side nav button{font-size:9px}.side nav{overflow-x:auto}.fg{grid-template-columns:1fr}}</style></head><body>
-<div id="app"><aside class="side"><div class="logo">MAYHEMIC</div><div class="sn" id="sname"></div>
+@media(max-width:900px){.side nav button{font-size:9px}.side nav{overflow-x:auto}.fg{grid-template-columns:1fr}}.logo{display:flex;align-items:center;gap:10px}.logo-img{width:28px;height:auto}
+</style></head><body>
+<div id="app"><aside class="side"><div class="logo"><img class="logo-img" src="/assets/logo-mark.webp" width="28" height="23" alt="">MAYHEMIC</div><div class="sn" id="sname"></div>
 <nav><button data-v="home" class="on"><i>&#9702;</i>Home</button><button data-v="att"><i>&#10003;</i>Attendance</button><button data-v="cls"><i>&#9776;</i>My class</button><button data-v="hw"><i>&#9998;</i>Homework</button><button data-v="marks"><i>&#9733;</i>Marks</button><button data-v="notice"><i>&#9993;</i>Notices</button><button data-v="me"><i>&#9881;</i>Profile</button></nav>
 <div class="bot"><a href="/">&larr; Website</a><button onclick="logout()">Log out</button></div></aside>
 <main>
