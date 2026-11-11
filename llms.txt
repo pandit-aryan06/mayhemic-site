@@ -1,0 +1,17 @@
+# KEO AI
+
+> KEO is an AI agent that works on your own computer, in your own apps, by voice. It asks before it acts, checks its own work, creates helper agents for long tasks, and keeps up with WhatsApp, Instagram and email. It is built for creators and business owners as well as developers.
+
+## Key facts
+- Works on the user's own computer, not in a cloud browser
+- Voice in and out, one account, no API keys
+- WhatsApp-first: keeps live conversations and reaches out when something needs attention
+- Asks for approval before doing anything
+- Creators can clone their own voice and rebuild viral video formats for faceless channels
+- Builds websites, presentations, games, apps and documents
+- Status: early access
+
+## Pages
+- [Home and features](https://YOUR-DOMAIN.com/)
+- [Frequently asked questions](https://YOUR-DOMAIN.com/#faq)
+- [Join early access](https://YOUR-DOMAIN.com/#access)
